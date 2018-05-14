@@ -1,0 +1,34 @@
+{
+  "name": "wsbackend",
+  "version": "1.0.0",
+  "description": "WSBackEnd",
+  "main": "app.js",
+  "scripts": {
+    "knex": "knex",
+    "start": "node ./src/app.js",
+    "dev": "nodemon ./src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/claudialigidakis/WSBackEnd.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/claudialigidakis/WSBackEnd/issues"
+  },
+  "homepage": "https://github.com/claudialigidakis/WSBackEnd#readme",
+  "dependencies": {
+    "bcrypt": "^2.0.1",
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "dotenv": "^5.0.1",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.2.1",
+    "knex": "^0.14.6",
+    "morgan": "^1.9.0",
+    "pg": "^7.4.3",
+    "shortid": "^2.2.8"
+  }
+}
