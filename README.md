@@ -1,5 +1,5 @@
 # WrightStream (Back-end)
-Back-end for https://github.com/vika-claudia/wrightstream-frontend
+Back-end for https://github.com/wrightaim/wrightstream-frontend
 
 ### Installation
 - Fork and clone
