@@ -1,6 +1,6 @@
 const path = require('path')
 
-const DB_NAME = 'example'
+const DB_NAME = 'wrightstream'
 
 module.exports = {
 
