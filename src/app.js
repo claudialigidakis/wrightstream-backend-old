@@ -67,26 +67,47 @@ app.use(bodyParser.json())
 
 //user routes
 app.use('/shops', require('./routes/shops'))
+app.use('/auth', require('./routes/auth'))
 
-//default route
+
+//////////////////////////////////////////////////////////////////////////////
+// example routes, not part of an organized application
+//////////////////////////////////////////////////////////////////////////////
+app.get('/protected',
+        authController.isAuthenticated,
+        function(req, res, next){ res.send({ id: req.claim.id, message: "For authenticated eyes only" }) })
+
+app.get('/protected/:userId',
+        authController.isAuthenticated,
+        authController.isSelf,
+        function(req, res, next){ res.send({ id: req.claim.id, message: "For your eyes only"}) })
+
+
+//////////////////////////////////////////////////////////////////////////////
+// Default Route
+//////////////////////////////////////////////////////////////////////////////
 app.use(function(req, res, next){
   next({status: 404, message: 'Route not found' })
 })
 
-//error handling
+//////////////////////////////////////////////////////////////////////////////
+// Error Handling
+//////////////////////////////////////////////////////////////////////////////
 app.use(function(err, req, res, next){
-  const errorMessage = {}
+const errorMessage = {}
 
-  if(process.env.NODE_ENV !== 'production' && err.stack)
-    errorMessage.stack = err.stack
+if(process.env.NODE_ENV !== 'production' && err.stack)
+errorMessage.stack = err.stack
 
-  errorMessage.status = err.status || 500
-  errorMessage.message = err.message || 'Internal Server Error'
+errorMessage.status = err.status || 500
+errorMessage.message = err.message || 'Internal Server Error'
 
-  res.status(errorMessage.status).send(errorMessage)
+res.status(errorMessage.status).send(errorMessage)
 })
 
-//start Server
+//////////////////////////////////////////////////////////////////////////////
+// Starting Server
+//////////////////////////////////////////////////////////////////////////////
 const port = process.env.PORT || 3000
 
 app.listen(port, function(){

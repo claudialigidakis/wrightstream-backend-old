@@ -66,7 +66,6 @@ function getStaffByEmail(email) {
 }
 
 function createStaff(body, newShopId) {
-  console.log("made it to create staff", body, newShopId)
   let password = body.password
   let first_name = body.fname
   let last_name = body.lname
@@ -91,13 +90,15 @@ function createStaff(body, newShopId) {
       photo: photo_url
     }).returning('*'))
   })
+  .then(function([{ password, ...data }]) {
+    return data
+  })
 }
 
 function getOneStaff(staffId, shopId) {
-  console.log("made it to get one staff models")
   return (
     knex('staff')
-  .where({
+    .where({
     id: staffId,
     shops_id: shopId
   })
