@@ -1,5 +1,6 @@
-const knex = require('../../db/knex');
-const bcrypt = require('bcrypt')
+const knex = require('../../db');
+const bcrypt = require('bcrypt-as-promised')
+
 
 function getShopByName(shopName) {
   return (knex('shops')
@@ -19,9 +20,7 @@ function createShop(body) {
   let logo_url = body.logoURL
   let email = body.email
   var newShopId = ''
-
   return getShopByName(shopName).then(data => {
-    console.log("made it back from getShopByName")
     if (data) throw {status : 400, message: 'Shop exists'}
     return (
       knex('shops')
@@ -57,16 +56,37 @@ function removeShop(shopsId) {
 })
 }
 
-//user routes
 
-function getStaffByEmail(email) {
-  console.log(email, "made it to getStaffByEmail")
-  let staffEmail = email
-  return (knex('staff').where({email: staffEmail}).first())
+//staff routing
+
+function getAllStaff(shopId) {
+  console.log("made it to getallstaff models");
+  return (
+    knex('staff')
+  .where({shops_id: shopId})
+  .first())
+}
+
+
+function getOneStaff(staffId, shopId) {
+  console.log("made it to getonestaff models");
+  return (
+    knex('staff')
+    .where({
+    id: staffId,
+    shops_id: shopId
+  })
+  .first())
+}
+
+function getStaffByEmail(staffEmailemail) {
+  return (
+    knex('staff')
+  .where({email: staffEmail})
+  .first())
 }
 
 function createStaff(body, newShopId) {
-  console.log("made it to create staff", body, newShopId)
   let password = body.password
   let first_name = body.fname
   let last_name = body.lname
@@ -91,25 +111,11 @@ function createStaff(body, newShopId) {
       photo: photo_url
     }).returning('*'))
   })
-}
-
-function getOneStaff(staffId, shopId) {
-  console.log("made it to get one staff models")
-  return (
-    knex('staff')
-  .where({
-    id: staffId,
-    shops_id: shopId
+  .then(function([{ password, ...data }]) {
+    return data
   })
-  .first())
 }
 
-function getAllStaff(shopId) {
-  return (
-    knex('staff')
-  .where({shops_id: shopId})
-  .first())
-}
 
 function updateStaff() {
 
@@ -121,14 +127,15 @@ function removeStaff(staffId) {
   .del())
 }
 
+
 module.exports = {
   getOneShop,
   createShop,
   removeShop,
   updateShop,
-  createStaff,
-  getAllStaff,
   getOneStaff,
+  getAllStaff,
+  createStaff,
   updateStaff,
   removeStaff
 }
