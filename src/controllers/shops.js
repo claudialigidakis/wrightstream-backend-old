@@ -1,101 +1,90 @@
 const shopModel = require('../models/shops')
 
-
-function getOneShop(req, res, next){
- if(!req.params.shopId) {
-   return next({ status: 400, message:'Bad Request'})
- }
- shopModel.getOneShop(req.params.shopId)
- .then(data =>{
-   res.status(200).send({ data })
- })
- .catch(next)
+function getOneShop(req, res, next) {
+  if (!req.params.shopId) {
+    return next({status: 400, message: 'Bad Request'})
+  }
+  shopModel.getOneShop(req.params.shopId).then(data => {
+    res.status(200).send({data})
+  }).catch(next)
 }
 
-function createShop(req, res, next){
+function createShop(req, res, next) {
   console.log("made it to createshop route")
-  if(!req.body.shop_name){
-    return next({ status: 400, message: 'Missing shop creation fields'})
+  if (!req.body.shop_name) {
+    return next({status: 400, message: 'Missing shop creation fields'})
   }
-  shopModel.createShop(req.body)
-  .then(function(data){
-    return res.status(201).send({ data })
-  })
-  .catch(next)
+  shopModel.createShop(req.body).then(function(data) {
+    return res.status(201).send({data})
+  }).catch(next)
 }
 
-function updateShop(req, res, next){
+function updateShop(req, res, next) {}
 
-}
-
-
-function removeShop(req, res, next){
+function removeShop(req, res, next) {
   console.log(req.params)
-  if(!req.params.shopId){
-    return next({ status: 400, message: 'Missing shop id'})
+  if (!req.params.shopId) {
+    return next({status: 400, message: 'Missing shop id'})
   }
-  shopModel.removeShop(parseInt(req.params.shopId))
-  .then(function(data){
-    res.status(200).send({ data })
-  })
-  .catch(next)
+  shopModel.removeShop(parseInt(req.params.shopId)).then(function(data) {
+    res.status(200).send({data})
+  }).catch(next)
 }
-
 
 //staff routes
 
-function getOneStaff(req, res, next){
-    console.log("made it to get one staff controller")
-  if(!req.params.staffId || !req.params.shopId) {
-    return next({ status: 400, message:'No staff ID or Shop Id'})
+function getOneStaff(req, res, next) {
+  console.log("made it to get one staff controller")
+  if (!req.params.staffId || !req.params.shopId) {
+    return next({status: 400, message: 'No staff ID or Shop Id'})
   }
-  shopModel.getOneStaff(req.params.staffId, req.params.shopId)
-  .then(data =>{
+  shopModel.getOneStaff(req.params.staffId, req.params.shopId).then(data => {
     console.log("made it back to get one staff models");
     delete data.password
-    res.status(200).send({ data })
-  })
-  .catch(next)
+    res.status(200).send({data})
+  }).catch(next)
 }
 
-function getAllStaff(req, res, next){
-  if(!req.params.shopId){
+function getAllStaff(req, res, next) {
+  if (!req.params.shopId) {
     return next({status: 400, message: "No shop body"})
   }
-  shopModel.getAllStaff(req.params.shopId)
-  .then(data=> {
+  shopModel.getAllStaff(req.params.shopId).then(data => {
     res.status(200).send({data})
-  })
-  .catch(next)
+  }).catch(next)
 }
 
-function createStaff(req, res, next){
+function createStaff(req, res, next) {
   console.log("made it to create staff controller");
-  if(!req.body.shopId || !req.body.fname || ! req.body.lname || !req.body.password || !req.body.email || !req.body.photo || !req.body.role) {
-    return next({status:400, message:'Need proper staff inputs'})
+  if (!req.body.shopId || !req.body.fname || !req.body.lname || !req.body.password || !req.body.email || !req.body.photo || !req.body.role) {
+    return next({status: 400, message: 'Need proper staff inputs'})
   }
-  staffModel.create(req.body, parseInt(req.body.shopId))
-  .then(data=> {
+  staffModel.create(req.body, parseInt(req.body.shopId)).then(data => {
     delete data.password
-    res.status(200).send({ data })
-  })
-  .catch(next)
+    res.status(200).send({data})
+  }).catch(next)
 }
 
-function updateStaff(req, res, next){
+function updateStaff(req, res, next) {}
 
-}
-
-function removeStaff(req, res, next){
-  if(!req.params.staffId){
-    return next({ status: 400, message: 'Missing staff member'})
+function removeStaff(req, res, next) {
+  if (!req.params.staffId) {
+    return next({status: 400, message: 'Missing staff member'})
   }
-  shopModel.remove(parseInt(req.params.staffId))
-  .then(function(data){
+  shopModel.remove(parseInt(req.params.staffId)).then(function(data) {
     delete data.password
-    res.status(200).send({ data })
-  })
-  .catch(next)
+    res.status(200).send({data})
+  }).catch(next)
 }
 
-module.exports = {getOneShop, createShop, removeShop, updateShop, getAllStaff, getOneStaff, createStaff, updateStaff, removeStaff}
+module.exports = {
+  getOneShop,
+  createShop,
+  removeShop,
+  updateShop,
+  getAllStaff,
+  getOneStaff,
+  createStaff,
+  updateStaff,
+  removeStaff
+}

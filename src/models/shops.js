@@ -79,9 +79,11 @@ function getOneStaff(staffId, shopId) {
   .first())
 }
 
-function getStaffByEmail(email) {
-  let staffEmail = email
-  return (knex('staff').where({email: staffEmail}).first())
+function getStaffByEmail(staffEmailemail) {
+  return (
+    knex('staff')
+  .where({email: staffEmail})
+  .first())
 }
 
 function createStaff(body, newShopId) {

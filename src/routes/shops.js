@@ -9,6 +9,7 @@ router.put('/:shopId', controller.updateShop)
 router.delete('/:shopId', controller.removeShop)
 
 //staff routes
+
 router.get('/staff', controller.getAllStaff)
 router.get('/:shopId/staff/:staffId', controller.getOneStaff)
 router.post('/staff', controller.createStaff)
