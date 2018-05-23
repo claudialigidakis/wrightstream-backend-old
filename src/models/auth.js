@@ -1,10 +1,10 @@
 const db = require('../../db')
 const bcrypt = require('bcrypt-as-promised')
-const staffModel = require('./staff')
+const shopModel = require('./shops')
 
 function login(email, password){
   let staff
-  return staffModel.getStaffByEmail(email)
+  return shopModel.getStaffByEmail(email)
   .then(function(data){
     if(!data) throw { status: 400, message: "Bad Request"}
     staff = data
