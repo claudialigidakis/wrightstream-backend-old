@@ -1,19 +1,17 @@
 const express = require('express')
 const router = express.Router()
-const controller = require('../controllers/shops')
+const shopController = require('../controllers/shops')
 
-
-router.get('/:shopId', controller.getOneShop)
-router.post('/', controller.createShop)
-router.put('/:shopId', controller.updateShop)
-router.delete('/:shopId', controller.removeShop)
-
+//shop routes
+router.get('/:shopId', shopController.getOneShop)
+router.post('/', shopController.createShop)
+router.put('/:shopId', shopController.updateShop)
+router.delete('/:shopId', shopController.removeShop)
 //staff routes
-
-router.get('/staff', controller.getAllStaff)
-router.get('/:shopId/staff/:staffId', controller.getOneStaff)
-router.post('/staff', controller.createStaff)
-router.put('/:shopId/staff/:staffId', controller.updateStaff)
-router.delete('/:shopId/staff/:staffId', controller.removeStaff)
+router.get('/:shopId/staff/:staffId', shopController.getOneStaff)
+router.get('/:shopId/staff', shopController.getAllStaff)
+router.post('/:shopId/staff', shopController.createStaff)
+router.put('/:shopId/staff/:staffId', shopController.updateStaff)
+router.delete('/:shopId/staff/:staffId', shopController.removeStaff)
 
 module.exports = router
