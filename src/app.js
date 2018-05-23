@@ -21,8 +21,7 @@ app.use(cookieParser());
 
 //user routes
 app.use('/shops', require('./routes/shops'))
-app.use('/staff', require('./routes/staff'))
-app.use('/auth', require('./routes/auth'))
+// app.use('/auth', require('./routes/auth'))
 
 
 
@@ -36,22 +35,22 @@ app.use(cookieSession({
 app.use(passport.initialize())
 app.use(passport.session())
 
-// passport.serializeUser(function (object, done) {
-//   console.log("serializeUser", {token: object})
-//   done(null, {token: object.token});
-// });
-// passport.deserializeUser(function (object, done) {
-//   console.log("deserializeUser", object)
-//   // done(null, object);
-// });
+passport.serializeUser(function (object, done) {
+  console.log("serializeUser", {token: object})
+  done(null, {token: object.token});
+});
+passport.deserializeUser(function (object, done) {
+  console.log("deserializeUser", object)
+  done(null, object);
+});
 
 passport.use(new EtsyStrategy({
     consumerKey: 'xdr1slzhyyszqryd0rulflf9',
     consumerSecret: 'ya26ek0vi1',
-    callbackURL: 'http://127.0.0.1:3000/auth/etsy/callback'
+    callbackURL: 'http://localhost:3000/auth/etsy/callback'
   },
   function (token, tokenSecret, profile, done){
-    console.log(token)
+    // console.log(token)
     User.findOrCreate({etsyID: profile.id})
   }
 ));
