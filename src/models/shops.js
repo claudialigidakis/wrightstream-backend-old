@@ -3,7 +3,9 @@ const bcrypt = require('bcrypt-as-promised')
 
 
 function getShopByName(shopName) {
-  return (knex('shops')
+  console.log(shopName, "getShopByName models");
+  return (
+    knex('shops')
   .where({shop_name: shopName})
   .first())
 }
@@ -15,25 +17,18 @@ function getOneShop(shopsId) {
 }
 
 function createShop(body) {
-  console.log(body, "made it to createShop models")
+  console.log(body)
   let shopName = body.shop_name
-  let logo_url = body.logoURL
-  let email = body.email
-  var newShopId = ''
-  return getShopByName(shopName).then(data => {
+  return getShopByName(shopName)
+  .then(data => {
     if (data) throw {status : 400, message: 'Shop exists'}
     return (
       knex('shops')
       .insert({
-        shop_name: shopName,
-        logo_url: logo_url
+        shop_name: shopName
       })
-      .returning('*'))
-  }).then(data => {
-    let newShopId = data[0].id
-    return createStaff(body, newShopId)
-  }).then(function([{ password, ...data }]) {
-    return data
+      .returning('*')
+    )
   })
 }
 
@@ -59,14 +54,6 @@ function removeShop(shopsId) {
 
 //staff routing
 
-function getAllStaff(shopId) {
-  console.log("made it to getallstaff models");
-  return (
-    knex('staff')
-  .where({shops_id: shopId})
-  .first())
-}
-
 
 function getOneStaff(staffId, shopId) {
   console.log("made it to getonestaff models");
@@ -79,14 +66,25 @@ function getOneStaff(staffId, shopId) {
   .first())
 }
 
-function getStaffByEmail(staffEmailemail) {
+function getStaffByEmail(email) {
+  console.log(email, "in getstaffbyemail models");
+  let staffEmail = email
   return (
     knex('staff')
   .where({email: staffEmail})
   .first())
 }
 
+function getAllStaff(shopId) {
+  console.log("made it to getallstaff models");
+  return (
+    knex('staff')
+  .where({shops_id: shopId})
+  .first())
+}
+
 function createStaff(body, newShopId) {
+  console.log(body, newShopId);
   let password = body.password
   let first_name = body.fname
   let last_name = body.lname

@@ -10,11 +10,11 @@ function getOneShop(req, res, next) {
 }
 
 function createShop(req, res, next) {
-  console.log("made it to createshop route")
   if (!req.body.shop_name) {
     return next({status: 400, message: 'Missing shop creation fields'})
   }
-  shopModel.createShop(req.body).then(function(data) {
+  shopModel.createShop(req.body)
+  .then(function(data) {
     return res.status(201).send({data})
   }).catch(next)
 }
@@ -56,22 +56,27 @@ function getAllStaff(req, res, next) {
 
 function createStaff(req, res, next) {
   console.log("made it to create staff controller");
-  if (!req.body.shopId || !req.body.fname || !req.body.lname || !req.body.password || !req.body.email || !req.body.photo || !req.body.role) {
+  if (!req.params.shopId || !req.body.fname || !req.body.lname || !req.body.password || !req.body.email || !req.body.photo) {
     return next({status: 400, message: 'Need proper staff inputs'})
   }
-  staffModel.create(req.body, parseInt(req.body.shopId)).then(data => {
+  shopModel.createStaff(req.body, parseInt(req.params.shopId))
+  .then(data => {
     delete data.password
     res.status(200).send({data})
-  }).catch(next)
+  })
+  .catch(next)
 }
 
-function updateStaff(req, res, next) {}
+function updateStaff(req, res, next) {
+
+}
 
 function removeStaff(req, res, next) {
   if (!req.params.staffId) {
     return next({status: 400, message: 'Missing staff member'})
   }
-  shopModel.remove(parseInt(req.params.staffId)).then(function(data) {
+  shopModel.removeStaff(parseInt(req.params.staffId))
+  .then(function(data) {
     delete data.password
     res.status(200).send({data})
   }).catch(next)

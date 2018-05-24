@@ -5,7 +5,7 @@ exports.seed = function(knex, Promise) {
         [
           {id:1, name: 'Custom', store_logo:'this'},
           {id:2, name: 'Etsy', store_logo:'this'},
-          {id:2, name: 'Shopify', store_logo:'this'},
+          {id:3, name: 'Shopify', store_logo:'this'},
         ]
       );
     })
