@@ -41,7 +41,7 @@ function getAllStaff(shopId) {
   return (knex('staff').where({shops_id: shopId}).first())
 }
 
-function createStaff(body, newShopId) {
+function createStaff(body, ShopId) {
   let password = body.password
   let first_name = body.fname
   let last_name = body.lname

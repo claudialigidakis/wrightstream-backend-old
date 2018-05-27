@@ -46,8 +46,8 @@ app.use('/auth', require('./routes/auth'))
 // });
 //
 // passport.use(new EtsyStrategy({
-//     consumerKey: 'xdr1slzhyyszqryd0rulflf9',
-//     consumerSecret: 'ya26ek0vi1',
+//     consumerKey: CONSUMER_KEY,
+//     consumerSecret: CONSUMER_SECRET,
 //     callbackURL: 'http://localhost:3000/auth/etsy/callback'
 //   },
 //   function (token, tokenSecret, profile, done){
