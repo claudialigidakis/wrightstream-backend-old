@@ -16,9 +16,7 @@ function getOneStore(storeId) {
 
 function createStore(body, shopId){
   //creating the initial relationship
-  // body.name === 'Etsy' ? linkEtsy() :
-  // body.name === 'Shopify' ? linkShopify() :
-  // throw {status : 400, message: 'Dont know store type'}
+s
 
 }
 
