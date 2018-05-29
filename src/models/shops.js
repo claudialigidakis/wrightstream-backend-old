@@ -38,7 +38,7 @@ function getStaffByEmail(staffEmail) {
 }
 
 function getAllStaff(shopId) {
-  return (knex('staff').where({shops_id: shopId}).first())
+  return (knex('staff').where({shops_id: shopId}))
 }
 
 function createStaff(body, ShopId) {

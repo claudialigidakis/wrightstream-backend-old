@@ -4,7 +4,7 @@ const storeController = require('../controllers/stores')
 
 
 //shop params
-router.get('/:shopId', storeController.getAllStore)
+router.get('/:shopId/allStores', storeController.getAllStore)
 router.post('/:shopId', storeController.createStore)
 
 //store params

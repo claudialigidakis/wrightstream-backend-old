@@ -4,7 +4,7 @@ function getAllStore(shopId) {
   return (
     knex('stores')
     .where({shops_id: shopId})
-    .first())
+  )
 }
 
 function getOneStore(storeId) {
@@ -14,7 +14,11 @@ function getOneStore(storeId) {
     .first())
 }
 
-function createStore(){
+function createStore(body, shopId){
+  //creating the initial relationship
+  // body.name === 'Etsy' ? linkEtsy() :
+  // body.name === 'Shopify' ? linkShopify() :
+  // throw {status : 400, message: 'Dont know store type'}
 
 }
 
@@ -26,7 +30,7 @@ function removeStore(storeId){
 }
 
 function updateStore(){
-
+//refreshing the token
 }
 
 module.exports = {
