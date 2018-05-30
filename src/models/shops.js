@@ -48,7 +48,7 @@ function createStaff(body, ShopId) {
   let staffEmail = body.email
   let photo_url = body.photo
   let shopId = newShopId
-  let role = body.role
+  let role = body.role || 1
   return getStaffByEmail(staffEmail).then(data => {
     if (data) throw {status : 400, message: 'Staff member already exists'}
     return bcrypt.hash(password, 10)
