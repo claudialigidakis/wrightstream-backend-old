@@ -19,7 +19,16 @@ function createShop(req, res, next) {
   }).catch(next)
 }
 
-function updateShop(req, res, next) {}
+function updateShop(req, res, next) {
+  if (!req.body.shop_name || !req.body.logo || !req.body.settings) {
+    return next({ status: 400, message: 'Bad request'});
+  }
+  shopModel.updateShop(parseInt(req.params.shopsId), req.body.shop_name, req.body.logo, req.body.settings)
+  .then(data => {
+    res.status(200).send({ data });
+  })
+  .catch(next);
+}
 
 function removeShop(req, res, next) {
   if (!req.params.shopId) {
@@ -52,6 +61,7 @@ function getAllStaff(req, res, next) {
   }
   shopModel.getAllStaff(req.params.shopId)
   .then(data => {
+    delete data.password
     res.status(200).send({data})
   })
   .catch(next)
@@ -70,7 +80,14 @@ function createStaff(req, res, next) {
 }
 
 function updateStaff(req, res, next) {
-
+  if (!req.body.first_name || !req.body.last_name || !req.body.password || !req.body.email || !req.body.photo || !req.body.role) {
+    return next({ status: 400, message: 'Bad request'});
+  }
+  shopModel.updateShop(parseInt(req.params.staffId), req.body.first_name, req.body.last_name, req.body.password, req.body.email, req.body.photo, req.body.role)
+  .then(data => {
+    res.status(200).send({ data });
+  })
+  .catch(next);
 }
 
 function removeStaff(req, res, next) {
