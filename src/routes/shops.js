@@ -7,6 +7,7 @@ router.get('/:shopId', shopController.getOneShop)
 router.post('/', shopController.createShop)
 router.put('/:shopId', shopController.updateShop)
 router.delete('/:shopId', shopController.removeShop)
+
 //staff routes
 router.get('/:shopId/staff/:staffId', shopController.getOneStaff)
 router.get('/:shopId/staff', shopController.getAllStaff)

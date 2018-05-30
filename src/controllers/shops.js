@@ -22,41 +22,43 @@ function createShop(req, res, next) {
 function updateShop(req, res, next) {}
 
 function removeShop(req, res, next) {
-  console.log(req.params)
   if (!req.params.shopId) {
     return next({status: 400, message: 'Missing shop id'})
   }
-  shopModel.removeShop(parseInt(req.params.shopId)).then(function(data) {
+  shopModel.removeShop(parseInt(req.params.shopId))
+  .then(function(data) {
     res.status(200).send({data})
-  }).catch(next)
+  })
+  .catch(next)
 }
 
 //staff routes
 
 function getOneStaff(req, res, next) {
-  console.log("made it to get one staff controller")
   if (!req.params.staffId || !req.params.shopId) {
     return next({status: 400, message: 'No staff ID or Shop Id'})
   }
-  shopModel.getOneStaff(req.params.staffId, req.params.shopId).then(data => {
-    console.log("made it back to get one staff models");
+  shopModel.getOneStaff(req.params.staffId, req.params.shopId)
+  .then(data => {
     delete data.password
     res.status(200).send({data})
-  }).catch(next)
+  })
+  .catch(next)
 }
 
 function getAllStaff(req, res, next) {
   if (!req.params.shopId) {
     return next({status: 400, message: "No shop body"})
   }
-  shopModel.getAllStaff(req.params.shopId).then(data => {
+  shopModel.getAllStaff(req.params.shopId)
+  .then(data => {
     res.status(200).send({data})
-  }).catch(next)
+  })
+  .catch(next)
 }
 
 function createStaff(req, res, next) {
-  console.log("made it to create staff controller");
-  if (!req.params.shopId || !req.body.fname || !req.body.lname || !req.body.password || !req.body.email || !req.body.photo) {
+  if (!req.params.shopId || !req.body.fname || !req.body.lname || !req.body.password || !req.body.email || !req.body.photo || req.body.role) {
     return next({status: 400, message: 'Need proper staff inputs'})
   }
   shopModel.createStaff(req.body, parseInt(req.params.shopId))
