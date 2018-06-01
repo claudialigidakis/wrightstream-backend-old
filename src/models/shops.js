@@ -2,38 +2,27 @@ const knex = require('../../db');
 const bcrypt = require('bcrypt-as-promised')
 
 function getShopByName(shopName) {
-  return (knex('shops')
-  .where({shop_name: shopName})
-  .first())
+  return (knex('shops').where({shop_name: shopName}).first())
 }
 
 function getOneShop(shopsId) {
-  return (knex('shops')
-  .where({id: shopsId})
-  .first())
+  return (knex('shops').where({id: shopsId}).first())
 }
 
 function createShop(body) {
   let shopName = body.shop_name
-  return getShopByName(shopName)
-  .then(data => {
+  return getShopByName(shopName).then(data => {
     if (data)
       throw {
         status : 400,
         message: 'Shop exists'
       }
-    return (knex('shops')
-    .insert({shop_name: shopName})
-    .returning('*'))
+    return (knex('shops').insert({shop_name: shopName}).returning('*'))
   })
 }
 
 function updateShop(shopsId, shop_name, logo, settings) {
-  return knex('shops')
-  .update({shop_name, settings, logo})
-  .where({id: shopsId})
-  .returning('*')
-  .then(([data]) => {
+  return knex('shops').update({shop_name, settings, logo}).where({id: shopsId}).returning('*').then(([data]) => {
     return data
   })
 }
@@ -68,7 +57,10 @@ function createStaff(body, ShopId) {
   return getStaffByEmail(staffEmail)
   .then(data => {
     if (data)
-      throw {status : 400, message: 'Staff member already exists'}
+      throw {
+        status : 400,
+        message: 'Staff member already exists'
+      }
     return bcrypt.hash(password, 10)
   })
   .then(newPassword => {
@@ -81,31 +73,39 @@ function createStaff(body, ShopId) {
       email: staffEmail,
       password: newPassword,
       photo: photo_url
-    }).returning('*'))
+    })
+    .returning('*'))
   }).then(function([{password,...data}]) {
     return data
   })
 }
 
 function updateStaff(staffId, first_name, last_name, unhashed_password, email, photo, role) {
-  return bcrypt.hash(unhashed_password, 10)
-  .then(password => return knex('staff')
-  .update({
-    role,
-    first_name,
-    last_name,
-    password,
-    email,
-    photo
-  }).where({id: staffId})
-  .returning('*')
+return bcrypt.hash(unhashed_password, 10)
+  .then(password => {
+    return(knex('staff')
+    .update({
+      role,
+      first_name,
+      last_name,
+      password,
+      email,
+      photo
+    })
+    .where({id: staffId})
+    .returning('*')
+  )}
+)
   .then(function([{password,...data}]) {
-    return data
-  })
+      return data
+    })
 }
 
 function removeStaff(staffId) {
-  return (knex('staff').where({id: staffId}).del())
+  return (
+    knex('staff')
+    .where({id: staffId})
+    .del())
 }
 
 module.exports = {

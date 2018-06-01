@@ -28,10 +28,8 @@ function createBundles(req, res, next) {
   // if (!req.params.shopId || !req.body.fname || !req.body.lname || !req.body.password || !req.body.email || !req.body.photo) {
   //   return next({status: 400, message: 'Need proper staff inputs'})
   // }
-  bundlesModel.createItem(req.body, parseInt(req.params.bundleId))
+  bundlesModel.createItem(req.body, parseInt(req.params.shopId))
   .then(data => {
-    //need to know what i need to delete
-    // delete data.password
     res.status(200).send({data})
   })
   .catch(next)
@@ -47,8 +45,6 @@ function removeBundles(req, res, next) {
   }
   bundlesModel.removeItems(parseInt(req.params.bundleId))
   .then(function(data) {
-    //need to know what to filter from returned data
-    // delete data.password
     res.status(200).send({data})
   })
   .catch(next)

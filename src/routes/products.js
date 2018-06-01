@@ -4,7 +4,6 @@ const productsController = require('../controllers/products')
 
 router.get('/:productId', productsController.getOneProduct)
 router.get('/:shopId/allProducts', productsController.getAllProducts)
-//rerendering products
 router.put('/:productId', productsController.updateProducts)
 
 
