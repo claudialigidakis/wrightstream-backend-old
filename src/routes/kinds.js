@@ -6,9 +6,9 @@ const kindsController = require('../controllers/kinds')
 
 router.get('/:shopId/allKinds', kindsController.getAllKinds)
 router.post('/:shopId', kindsController.createKinds)
-router.get('/:kindId', kindsController.getOneKind)
-router.put('/:kindId', kindsController.updateKinds)
-router.delete('/:kindId', kindsController.removeKinds)
+router.get('/:kindsId', kindsController.getOneKind)
+router.put('/:kindsId', kindsController.updateKinds)
+router.delete('/:kindsId', kindsController.removeKinds)
 
 
 module.exports = router

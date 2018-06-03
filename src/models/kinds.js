@@ -1,4 +1,4 @@
-const kindsModel = require('../models/kinds')
+const knex = require('../../db');
 
 function getOneKind(kindId) {
   return (knex('kinds')
@@ -22,7 +22,8 @@ function createKinds(body, shopId) {
 }
 
 function removeKinds(kindId) {
-  return (knex('kinds')
+  return (
+    knex('kinds')
   .where({id: kindId})
   .del())
 }
