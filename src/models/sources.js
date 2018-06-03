@@ -1,30 +1,41 @@
 const sourcesModel = require('../models/sources')
 
 
-getOneSource(){
-
+function getOneSource(sourceId){
+  return (knex('sources')
+  .where({id: sourceId})
+  .first())
 }
 
-getAllSources(){
-
+function getAllSources(shopId){
+  return (
+    knex('sources')
+  .where({shop_id: shopId})
+  )
 }
 
-createSources(){
-
+function createSource(body, shopId){
+  return (
+    knex('sources')
+  .insert({name: body.name, shop_id: shopId, link: body.link, type_id: body.type_id})
+  .returning('*')
+)
 }
 
-removeSources(){
-
+function removeSource(sourceId){
+  return (knex('sources')
+  .where({id: sourceId})
+  .del())
 }
 
-updateSources(){
+function updateSource(){
 
 }
 
 module.exports = {
   getOneSource,
   getAllSources,
-  createSources,
-  removeSources,
-  updateSources
+  createSource,
+  removeSource,
+  updateSource
 }

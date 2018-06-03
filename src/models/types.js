@@ -1,23 +1,34 @@
 const typesModel = require('../models/types')
 
 
-getOneType(){
-
+function getOneType(typeId){
+  return (knex('type')
+  .where({id: typeId})
+  .first())
 }
 
-getAllTypes(){
-
+function getAllTypes(shopId){
+  return (
+    knex('type')
+  .where({shop_id: shopId})
+  )
 }
 
-createTypes(){
-
+function createTypes(body, shopId){
+  return (
+    knex('type')
+  .insert({name: body.name, shop_id: shopId})
+  .returning('*')
+)
 }
 
-removeTypes(){
-
+function removeTypes(typesId){
+  return (knex('type')
+  .where({id: typesId})
+  .del())
 }
 
-updateTypes(){
+function updateTypes(){
 
 }
 

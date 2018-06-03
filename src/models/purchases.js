@@ -1,7 +1,7 @@
 const knex = require('../../db');
 
 
-function getOnePurchase(purchaseId) {
+function getOnepurchase(purchaseId) {
     return (
       knex('purchases')
     .where({id: purchaseId})
@@ -38,7 +38,7 @@ function updatePurchases(purchaseId) {
 
 
 module.exports = {
-  getOnePurchase,
+  getOnepurchase,
   getAllPurchases,
   createPurchases,
   removePurchases,
