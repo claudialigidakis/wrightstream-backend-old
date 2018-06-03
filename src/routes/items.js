@@ -3,11 +3,11 @@ const router = express.Router()
 const itemsController = require('../controllers/items')
 
 
-router.get('/:itemId', ordersController.getOneItem)
-router.get('/:shopId/allItems', ordersController.getAllItems)
-router.post('/:shopId', ordersController.createItems)
-router.put('/:itemId', ordersController.updateItems)
-router.delete('/:itemId', ordersController.removeItems)
+router.get('/:itemId', itemsController.getOneItem)
+router.get('/:shopId/allItems', itemsController.getAllItems)
+router.post('/:shopId', itemsController.createItems)
+router.put('/:itemId', itemsController.updateItems)
+router.delete('/:itemId', itemsController.removeItems)
 
 
 module.exports = router

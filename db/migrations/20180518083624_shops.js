@@ -4,6 +4,8 @@ exports.up = function(knex, Promise) {
     table.increments();
     table.string('shop_name').notNullable();
     table.string('settings').defaultsTo('');
+    table.string('logo').defaultsTo(null)
+    table.timestamps('true', 'true');
   });
 };
 

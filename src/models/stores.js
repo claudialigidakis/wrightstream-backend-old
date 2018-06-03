@@ -16,7 +16,6 @@ function getOneStore(storeId) {
 
 function createStore(body, shopId){
   //creating the initial relationship
-s
 
 }
 
