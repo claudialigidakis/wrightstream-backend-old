@@ -15,6 +15,13 @@ function getOneShop(shopsId) {
     .first())
 }
 
+function getAllShops(){
+  return (
+    knex('shops')
+    .first()
+  )
+}
+
 function createShop(body) {
   let shopName = body.shop_name
   return getShopByName(shopName)
@@ -71,7 +78,9 @@ function getStaffByEmail(staffEmail) {
 }
 
 function getAllStaff(shopId) {
-  return (knex('staff').where({shops_id: shopId}))
+  return (knex('staff')
+  .where({shops_id: shopId})
+)
 }
 
 function createStaff(body, ShopId) {
@@ -137,6 +146,7 @@ function removeStaff(staffId) {
 }
 
 module.exports = {
+  getAllShops,
   getOneShop,
   createShop,
   removeShop,

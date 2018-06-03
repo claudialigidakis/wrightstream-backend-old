@@ -9,6 +9,14 @@ function getOneShop(req, res, next) {
   }).catch(next)
 }
 
+function getAllShops(req, res, next){
+  shopModel.getAllShops()
+  .then(data => {
+    res.status(200).send({data})
+  })
+  .catch(next)
+}
+
 function createShop(req, res, next) {
   if (!req.body.shop_name) {
     return next({status: 400, message: 'Missing shop creation fields'})
@@ -102,6 +110,7 @@ function removeStaff(req, res, next) {
 }
 
 module.exports = {
+  getAllShops,
   getOneShop,
   createShop,
   removeShop,

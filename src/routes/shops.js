@@ -3,6 +3,7 @@ const router = express.Router()
 const shopController = require('../controllers/shops')
 
 //shop routes
+router.get('/', shopController.getAllShops)
 router.get('/:shopId', shopController.getOneShop)
 router.post('/', shopController.createShop)
 router.put('/:shopId', shopController.updateShop)
