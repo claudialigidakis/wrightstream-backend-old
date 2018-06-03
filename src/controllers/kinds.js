@@ -45,7 +45,14 @@ function removeKinds(req, res, next) {
 }
 
 function updateKinds(req, res, next) {
-
+  if (!req.params.kindsId|| !req.body) {
+    return next({ status: 400, message: 'Bad request'})
+  }
+  kindsModel.updateKinds(req.params.kindsId, req.body)
+  .then(data => {
+    res.status(200).send({ data })
+  })
+  .catch(next)
 }
 
 module.exports = {

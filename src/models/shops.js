@@ -43,9 +43,6 @@ function updateShop(shopsId, shop_name, logo, settings) {
     .update({shop_name, settings, logo})
     .where({id: shopsId})
     .returning('*'))
-  .then(([data]) => {
-    return data
-  })
 }
 
 function removeShop(shopsId) {

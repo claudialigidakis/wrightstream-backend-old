@@ -27,8 +27,12 @@ function removeTypes(typesId){
   .del())
 }
 
-function updateTypes(){
-
+function updateTypes(typesId, body){
+  return (
+    knex('type')
+    .update({name: body.name})
+    .where({id: typesId})
+    .returning('*'))
 }
 
 module.exports = {

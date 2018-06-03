@@ -2,22 +2,22 @@ const knex = require('../../db');
 
 function getAllCategories(shopId) {
     return (
-      knex('bundles')
+      knex('categories')
     .where({shop_id: shopId})
   )
 }
 
-function getOneCategory(bundleId) {
+function getOneCategory(categoryId) {
     return (
-      knex('bundles')
-    .where({id: bundleId})
+      knex('categories')
+    .where({id: categoryId})
     .first())
 }
 
 function createCategories(name, shopId) {
     return (
       knex('categories')
-    .insert({shopId, name})
+    .insert({shop_id: shopId, name})
     .returning('*')
   )
   }
@@ -31,8 +31,12 @@ function removeCategories(categoryId) {
 }
 
 
-function updateCategories(bundleId) {
-//updating Item
+function updateCategories(categoryId, body) {
+  return (
+    knex('categories')
+    .update({name: body.name})
+    .where({id: categoryId})
+    .returning('*'))
 }
 
 module.exports = {
