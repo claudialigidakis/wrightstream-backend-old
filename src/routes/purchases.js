@@ -6,7 +6,7 @@ const purchasesController = require('../controllers/purchases')
 
 router.get('/:shopId/allPurchases', purchasesController.getAllPurchases)
 router.post('/:shopId', purchasesController.createPurchases)
-router.get('/:purchases', purchasesController.getOnepurchase)
+router.get('/:purchaseId', purchasesController.getOnepurchase)
 router.put('/:purchaseId', purchasesController.updatePurchases)
 router.delete('/:purchaseId', purchasesController.removePurchases)
 

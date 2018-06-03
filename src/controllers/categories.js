@@ -34,7 +34,7 @@ function createCategories(req, res, next) {
   .catch(next)
 }
 
-function updateBundles(req, res, next) {
+function updateCategories(req, res, next) {
 
 }
 

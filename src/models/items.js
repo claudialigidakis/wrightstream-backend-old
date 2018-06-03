@@ -21,6 +21,15 @@ function createItems(body, shopId) {
     .insert({name: body.name, stock_qty: stock, steps: body.steps, shop_id: shopId,  category_id: category, product_id: product})
     .returning('*')
   )
+  .then(newItem => {
+    body.supplies.map(supply => {
+      return (
+        knex('items_supplies')
+        .insert({stock_qty: body.stock_qty, stock_qty_measure: body.stock_qty_measure, item_id: newItem.id, supplies_id: supply.id})
+        .returning('*')
+      )
+    })
+  })
 }
 
 function removeItems(itemId) {

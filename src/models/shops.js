@@ -2,40 +2,68 @@ const knex = require('../../db');
 const bcrypt = require('bcrypt-as-promised')
 
 function getShopByName(shopName) {
-  return (knex('shops').where({shop_name: shopName}).first())
+  return (
+    knex('shops')
+  .where({shop_name: shopName})
+  .first())
 }
 
 function getOneShop(shopsId) {
-  return (knex('shops').where({id: shopsId}).first())
+  return (
+    knex('shops')
+    .where({id: shopsId})
+    .first())
 }
 
 function createShop(body) {
   let shopName = body.shop_name
-  return getShopByName(shopName).then(data => {
+  return getShopByName(shopName)
+  .then(data => {
     if (data)
       throw {
         status : 400,
         message: 'Shop exists'
       }
-    return (knex('shops').insert({shop_name: shopName}).returning('*'))
+    return (
+      knex('shops')
+      .insert({shop_name: shopName})
+      .returning('*'))
   })
 }
 
 function updateShop(shopsId, shop_name, logo, settings) {
-  return knex('shops').update({shop_name, settings, logo}).where({id: shopsId}).returning('*').then(([data]) => {
+  return (
+    knex('shops')
+    .update({shop_name, settings, logo})
+    .where({id: shopsId})
+    .returning('*'))
+  .then(([data]) => {
     return data
   })
 }
 
 function removeShop(shopsId) {
-  return (knex('staff').where({shops_id: shopsId}).del()).then(data => {
+  return (
+    knex('items_supplies')
+  .innerJoin('items', 'items.id', 'items_supplies.item_id')
+  .where({shop_id: shopsId})
+  .del())
+  .then(data => {
+    return (knex('items').where({shop_id: shopsId}).del())
+  }).then(data => {
+    return (knex('items').innerJoin('categories', 'items.category_id', 'categories.id').where({shop_id: shopsId}).del())
+  }).then(data => {
+    return (knex('categories').where({shop_id: shopsId}).del())
+  }).then(data => {
+    return (knex('staff').where({shops_id: shopsId}).del())
+  }).then(data => {
     return (knex('shops').where({id: shopsId}).del())
   })
 }
 
 //Staff Routing//
 function getOneStaff(staffId, shopId) {
-  return (knex('staff').where({id: staffId, shops_id: shopId}).innerJoin('shops_id', 'staff.shops_id', 'shops.id').first())
+  return (knex('staff').where({id: staffId, shops_id: shopId}).first())
 }
 
 function getStaffByEmail(staffEmail) {
@@ -52,20 +80,17 @@ function createStaff(body, ShopId) {
   let last_name = body.lname
   let staffEmail = body.email
   let photo_url = body.photo
-  let shopId = newShopId
+  let shopId = ShopId
   let role = body.role || 1
-  return getStaffByEmail(staffEmail)
-  .then(data => {
+  return getStaffByEmail(staffEmail).then(data => {
     if (data)
       throw {
         status : 400,
         message: 'Staff member already exists'
       }
     return bcrypt.hash(password, 10)
-  })
-  .then(newPassword => {
-    return (knex('staff')
-    .insert({
+  }).then(newPassword => {
+    return (knex('staff').insert({
       shops_id: shopId,
       role_id: role,
       first_name: first_name,
@@ -73,32 +98,35 @@ function createStaff(body, ShopId) {
       email: staffEmail,
       password: newPassword,
       photo: photo_url
-    })
-    .returning('*'))
-  }).then(function([{password,...data}]) {
+    }).returning('*'))
+  }).then(function([
+    {
+      password,
+      ...data
+    }
+  ]) {
     return data
   })
 }
 
 function updateStaff(staffId, first_name, last_name, unhashed_password, email, photo, role) {
-return bcrypt.hash(unhashed_password, 10)
-  .then(password => {
-    return(knex('staff')
-    .update({
+  return bcrypt.hash(unhashed_password, 10).then(password => {
+    return (knex('staff').update({
       role,
       first_name,
       last_name,
       password,
       email,
       photo
-    })
-    .where({id: staffId})
-    .returning('*')
-  )}
-)
-  .then(function([{password,...data}]) {
-      return data
-    })
+    }).where({id: staffId}).returning('*'))
+  }).then(function([
+    {
+      password,
+      ...data
+    }
+  ]) {
+    return data
+  })
 }
 
 function removeStaff(staffId) {
