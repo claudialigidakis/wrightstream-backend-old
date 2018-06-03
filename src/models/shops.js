@@ -18,7 +18,6 @@ function getOneShop(shopsId) {
 function getAllShops(){
   return (
     knex('shops')
-    .first()
   )
 }
 
