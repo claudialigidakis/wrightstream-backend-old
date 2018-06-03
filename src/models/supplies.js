@@ -1,5 +1,4 @@
-const supplies = require('../models/supplies')
-
+const knex = require('../../db');
 
 function getOneSupply(suppliesId){
   return (knex('supplies')
@@ -9,7 +8,7 @@ function getOneSupply(suppliesId){
 
 function getAllSupplies(shopId){
   return (
-    knex('suppliess')
+    knex('supplies')
   .where({shop_id: shopId})
   )
 }

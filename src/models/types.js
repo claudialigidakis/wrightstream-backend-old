@@ -1,5 +1,4 @@
-const typesModel = require('../models/types')
-
+const knex = require('../../db');
 
 function getOneType(typeId){
   return (knex('type')

@@ -1,5 +1,4 @@
-const sourcesModel = require('../models/sources')
-
+const knex = require('../../db');
 
 function getOneSource(sourceId){
   return (knex('sources')
