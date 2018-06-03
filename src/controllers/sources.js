@@ -1,30 +1,58 @@
 const sourcesModel = require('../models/sources')
 
 
-getOneSource(req, res, next){
-
+function getOneSource(req, res, next){
+  if (!req.params.sourceId) {
+    return next({status: 400, message: 'No source indicated'})
+  }
+  sourcesModel.getOneSource(req.params.sourceId)
+  .then(data => {
+    res.status(200).send({data})
+  })
+  .catch(next)
 }
 
-getAllSources(req, res, next){
-
+function getAllSources(req, res, next){
+  if (!req.params.shopId) {
+    return next({status: 400, message: "Need specified shop to get the sources"})
+  }
+  sourcesModel.getAllSources(req.params.shopId)
+  .then(data => {
+    res.status(200).send({data})
+  })
+  .catch(next)
 }
 
-createSources(req, res, next){
-
+function createSource(req, res, next){
+  if (!req.params.shopId || !req.body) {
+    return next({status: 400, message: 'Need proper source inputs'})
+  }
+  sourcesModel.createSource(req.body, parseInt(req.params.shopId))
+  .then(data => {
+    res.status(200).send({data})
+  })
+  .catch(next)
 }
 
-removeSources(req, res, next){
-
+function removeSource(req, res, next){
+  if (!req.params.sourceId) {
+    return next({status: 400, message: 'Need to know indicated source'})
+  }
+  sourcesModel.removeSource(parseInt(req.params.sourceId))
+  .then(function(data) {
+    res.status(200).send({data})
+  })
+  .catch(next)
 }
 
-updateSources(req, res, next){
+function updateSource(req, res, next){
 
 }
 
 module.exports = {
   getOneSource,
   getAllSources,
-  createSources,
-  removeSources,
-  updateSources
+  createSource,
+  removeSource,
+  updateSource
 }

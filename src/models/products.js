@@ -7,13 +7,14 @@ function getAllProducts(storeId) {
   )
 }
 
-function getOneProduts(productId) {
+function getOneProduct(productId) {
     return (
       knex('products')
     .where({id: productId})
-    .first())
+    .first()
+  )
 
-
+}
 
 function updateProducts(storeId) {
 //updating Item
@@ -21,7 +22,7 @@ function updateProducts(storeId) {
 
 
 module.exports = {
-  getOneProduts,
+  getOneProduct,
   getAllProducts,
   updateProducts
 }

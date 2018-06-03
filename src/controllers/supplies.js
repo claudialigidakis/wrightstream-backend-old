@@ -1,23 +1,51 @@
-const supplies = require('../models/supplies')
+const suppliesModel = require('../models/supplies')
 
 
-getOneSupply(req, res, next){
-
+function getOneSupply(req, res, next){
+  if (!req.params.suppliesId) {
+    return next({status: 400, message: 'No supply indicated'})
+  }
+  suppliesModel.getOneSupply(req.params.suppliesId)
+  .then(data => {
+    res.status(200).send({data})
+  })
+  .catch(next)
 }
 
-getAllSupplies(req, res, next){
-
+function getAllSupplies(req, res, next){
+  if (!req.params.shopId) {
+    return next({status: 400, message: "Need specified shop to get the supplies"})
+  }
+  suppliesModel.getAllSupplies(req.params.shopId)
+  .then(data => {
+    res.status(200).send({data})
+  })
+  .catch(next)
 }
 
-createSupplies(req, res, next){
-
+function createSupplies(req, res, next){
+  if (!req.params.shopId || !req.body) {
+    return next({status: 400, message: 'Need proper supply inputs'})
+  }
+  suppliesModel.createSupplies(req.body, parseInt(req.params.shopId))
+  .then(data => {
+    res.status(200).send({data})
+  })
+  .catch(next)
 }
 
-removeSupplies(req, res, next){
-
+function removeSupplies(req, res, next){
+  if (!req.params.suppliesId) {
+    return next({status: 400, message: 'Need to know indicated supply'})
+  }
+  suppliesModel.removeSupplies(parseInt(req.params.suppliesId))
+  .then(function(data) {
+    res.status(200).send({data})
+  })
+  .catch(next)
 }
 
-updateSupplies(req, res, next){
+function updateSupplies(req, res, next){
 
 }
 

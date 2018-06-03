@@ -24,14 +24,11 @@ function getAllItems(req, res, next) {
 }
 
 function createItems(req, res, next) {
-  //need to know what I  need to make sure I have
-  // if (!req.params.shopId || !req.body.fname || !req.body.lname || !req.body.password || !req.body.email || !req.body.photo) {
-  //   return next({status: 400, message: 'Need proper staff inputs'})
-  // }
+  if (!req.params.shopId || !req.body) {
+    return next({status: 400, message: 'Need proper item inputs'})
+  }
   itemsModel.createItem(req.body, parseInt(req.params.shopId))
   .then(data => {
-    //need to know what i need to delete
-    // delete data.password
     res.status(200).send({data})
   })
   .catch(next)
