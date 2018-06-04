@@ -1,7 +1,9 @@
 const knex = require('../../db');
 
 function getAllItems(shopId) {
-  return (knex('items').where({shops_id: shopId}))
+  return (knex('items')
+  .where({shop_id: shopId})
+)
 }
 
 function getOneItem(itemId) {

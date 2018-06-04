@@ -36,5 +36,6 @@
     "passport-etsy": "^0.1.0",
     "pg": "^7.4.3",
     "shortid": "^2.2.8"
-  }
+  },
+  "devDependencies": {}
 }

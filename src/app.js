@@ -21,14 +21,16 @@ app.use(cookieParser());
 
 //user routes
 app.use('/shops', require('./routes/shops'))
+
 app.use('/stores', require('./routes/stores'))
+app.use('/products', require('./routes/products'))
+app.use('/purchases', require('./routes/purchases'))
+
 app.use('/auth', require('./routes/auth'))
 app.use('/bundles', require('./routes/bundles'))
 app.use('/categories', require('./routes/categories'))
 app.use('/items', require('./routes/items'))
 app.use('/kinds', require('./routes/kinds'))
-app.use('/products', require('./routes/products'))
-app.use('/purchases', require('./routes/purchases'))
 app.use('/sources', require('./routes/sources'))
 app.use('/supplies', require('./routes/supplies'))
 app.use('/types', require('./routes/types'))

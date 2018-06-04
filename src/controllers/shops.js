@@ -28,10 +28,11 @@ function createShop(req, res, next) {
 }
 
 function updateShop(req, res, next) {
+  console.log(req.body, req.params);
   if (!req.body.shop_name || !req.body.logo || !req.body.settings) {
     return next({ status: 400, message: 'Bad request'});
   }
-  shopModel.updateShop(parseInt(req.params.shopsId), req.body.shop_name, req.body.logo, req.body.settings)
+  shopModel.updateShop(parseInt(req.params.shopId), req.body.shop_name, req.body.logo, req.body.settings)
   .then(data => {
     res.status(200).send({ data });
   })
@@ -88,7 +89,7 @@ function createStaff(req, res, next) {
 }
 
 function updateStaff(req, res, next) {
-  if (!req.body.first_name || !req.body.last_name || !req.body.password || !req.body.email || !req.body.photo || !req.body.role) {
+  if (!req.body.password) {
     return next({ status: 400, message: 'Bad request'});
   }
   shopModel.updateShop(parseInt(req.params.staffId), req.body.first_name, req.body.last_name, req.body.password, req.body.email, req.body.photo, req.body.role)

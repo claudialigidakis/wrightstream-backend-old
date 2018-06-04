@@ -5,7 +5,11 @@ function getAllBundles(shopId) {
 }
 
 function getOneBundle(bundleId) {
-  return (knex('bundles').where({id: bundleId}).innerJoin('bundles_items', 'bundles_id', 'bundles.id').innerJoin('items', 'items_id', 'items.id').first())
+  return (knex('bundles')
+  .where({id: bundleId})
+  // .join('bundles_items', 'bundles_items.bundles_id', 'bundles.id')
+  // .innerJoin('items', 'items_id', 'items.id')
+  .first())
 }
 
 function createBundles(body, shopId) {
