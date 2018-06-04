@@ -15,6 +15,8 @@ function getAllShops() {
 
 function createShop(body) {
   let shopName = body.shop_name
+  let settings = []
+  let logo = "this.url"
   return getShopByName(shopName).then(data => {
     if (data)
       throw {
@@ -22,13 +24,12 @@ function createShop(body) {
         message: 'Shop exists'
       }
     return (knex('shops')
-    .insert({shop_name: shopName})
+    .insert({shop_name: shopName, settings, logo})
     .returning('*'))
   })
 }
 
 function updateShop(shopId, shop_name, logo, settings) {
-
   return (knex('shops')
   .update({shop_name, settings, logo})
   .where({id: shopId}).returning('*'))
@@ -52,7 +53,6 @@ function getOneStaff(staffId, shopId) {
 function getStaffByEmail(staffEmail) {
   return (knex('staff')
   .where({email: staffEmail})
-  .innerJoin('shops', 'staff.shops_id', 'shops.id')
   .first())
 }
 
@@ -61,12 +61,11 @@ function getAllStaff(shopId) {
 }
 
 function createStaff(body, ShopId) {
-  let password = body.password
   let role = body.role || 1
   return getStaffByEmail(body.email).then(data => {
     if (data)
       throw {status : 400,  message: 'Staff member already exists'}
-    return bcrypt.hash(password, 10)
+    return bcrypt.hash(body.password, 10)
   }).then(newPassword => {
     return (knex('staff').insert({
       shops_id: ShopId,

@@ -12,13 +12,15 @@ function createItems(body, shopId) {
   let stock = body.stock || 0
   let category = body.categoryId || null
   let product = body.productId || null
+  let photo = body.photo || null
   return (knex('items').insert({
     name: body.name,
     stock_qty: stock,
     steps: body.steps,
     shop_id: shopId,
     category_id: category,
-    product_id: product
+    product_id: product,
+    photo: body.photo
   }).returning('*'))
   .then(newItem => {
     if(body.supplies){
@@ -44,7 +46,7 @@ function removeItems(itemId) {
 }
 
 
-function updateItems(itemId, name, stock, steps, category, product, supplies) {
+function updateItems(itemId, name, stock, steps, category, product, supplies, photo) {
   const toUpdate = {}
   if (name) {
     toUpdate.name = name
@@ -60,6 +62,9 @@ function updateItems(itemId, name, stock, steps, category, product, supplies) {
   }
   if (steps) {
     toUpdate.steps = steps
+  }
+  if (photo) {
+    toUpdate.photo = photo
   }
   return (knex('items')
   .update(toUpdate)
