@@ -9,6 +9,11 @@ exports.seed = function(knex, Promise) {
         {id: 2, shop_id: 1, name: 'Frosting'},
         {id: 3, shop_id: 1, name: 'Supplies'},
         {id: 4, shop_id: 1, name: 'Baking Goods'}
-      ]);
+      ])
+    })
+    .then(() => {
+      return knex.raw(
+        "SELECT setval('kinds_id_seq', (SELECT MAX(id) FROM kinds));"
+      );
     });
 };

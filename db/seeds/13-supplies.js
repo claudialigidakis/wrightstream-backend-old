@@ -11,6 +11,11 @@ exports.seed = function(knex, Promise) {
         {id: 4, name: 'Candle Stick', stock_qty: 40, stock_qty_measure_type: 'unit', shop_id: 1, source_id: 3, kind_id: 3},
         {id: 5, name: 'Cutting Knife', stock_qty: 14, stock_qty_measure_type: 'unit', shop_id: 1, source_id: 3, kind_id: 3},
         {id: 6, name: 'Cupcake Wrapper', stock_qty: 6, stock_qty_measure_type: 'unit', shop_id: 1, source_id: 3, kind_id: 3}
-      ]);
+      ])
+    })
+    .then(() => {
+      return knex.raw(
+        "SELECT setval('supplies_id_seq', (SELECT MAX(id) FROM supplies));"
+      );
     });
 };

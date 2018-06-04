@@ -1,9 +1,7 @@
 
 exports.seed = function(knex, Promise) {
-  // Deletes ALL existing entries
   return knex('bundles_items').del()
     .then(function () {
-      // Inserts seed entries
       return knex('bundles_items').insert([
         {id: 1, item_qty: 1, bundles_id: 1, item_id: 16},
         {id: 2, item_qty: 1, bundles_id: 2, item_id: 16},
@@ -18,6 +16,11 @@ exports.seed = function(knex, Promise) {
         {id: 11, item_qty: 1, bundles_id: 3, item_id: 9},
         {id: 12, item_qty: 1, bundles_id: 3, item_id: 3},
         {id: 13, item_qty: 2, bundles_id: 1, item_id: 20},
-      ]);
-    });
+      ])
+    })
+    .then(() => {
+      return knex.raw(
+        "SELECT setval('bundles_items_id_seq', (SELECT MAX(id) FROM bundles_items));"
+      )
+    })
 };

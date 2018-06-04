@@ -25,6 +25,11 @@ exports.seed = function(knex, Promise) {
         {id: 18, name: 'Cinnamon Cookies', shop_id: 1, stock_qty: 9, steps: '[]', category_id: 3},
         {id: 19, name: 'Raspberry Donuts', shop_id: 1, stock_qty: 4, steps: '[]', category_id: 6},
         {id: 20, name: 'Red Velvet Cupcakes', shop_id: 1, stock_qty: 6, steps: '[]', category_id: 1}
-      ]);
+      ])
+    })
+    .then(() => {
+      return knex.raw(
+        "SELECT setval('items_id_seq', (SELECT MAX(id) FROM items));"
+      );
     });
 };
