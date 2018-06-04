@@ -27,11 +27,20 @@ function removeSource(sourceId){
   .del())
 }
 
-function updateSource(sourceId, body){
-  console.log(body)
+function updateSource(sourceId, name, link, type){
+  const toUpdate = {}
+  if (name) {
+    toUpdate.name = name
+  }
+  if (link) {
+    toUpdate.link = link
+  }
+  if (type) {
+    toUpdate.type_id = type
+  }
   return (
     knex('sources')
-    .update({name: body.name, link: body.link, type_id: body.type})
+    .update(toUpdate)
     .where({id: sourceId})
     .returning('*'))
 }

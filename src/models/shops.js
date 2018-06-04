@@ -21,13 +21,17 @@ function createShop(body) {
         status : 400,
         message: 'Shop exists'
       }
-    return (knex('shops').insert({shop_name: shopName}).returning('*'))
+    return (knex('shops')
+    .insert({shop_name: shopName})
+    .returning('*'))
   })
 }
 
 function updateShop(shopId, shop_name, logo, settings) {
-  console.log(shopId, shop_name, logo, settings)
-  return (knex('shops').update({shop_name, settings, logo}).where({id: shopId}).returning('*'))
+
+  return (knex('shops')
+  .update({shop_name, settings, logo})
+  .where({id: shopId}).returning('*'))
 }
 
 function removeShop(shopId) {

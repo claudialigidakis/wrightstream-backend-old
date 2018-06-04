@@ -13,7 +13,6 @@ function getOneProduct(productId) {
     .where({id: productId})
     .first()
   )
-
 }
 
 function updateProducts(storeId) {

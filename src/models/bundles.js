@@ -49,31 +49,43 @@ function removeBundles(bundleId) {
   })
 }
 
-function updateBundles(bundleId, body) {
-  let stock = body.stock || 0
-  let category = body.categoryId || 0
-  let product = body.product_id || null
+function updateBundles(bundleId, name, stock, categoryId, product_id, steps, items) {
+  const toUpdate = {}
+  if (name) {
+    toUpdate.name = name
+  }
+  if (stock) {
+    toUpdate.stock_qty = stock
+  }
+  if (categoryId) {
+    toUpdate.category_id = categoryId
+  }
+  if (product_id) {
+    toUpdate.product_id = product_id
+  }
+  if (steps) {
+    toUpdate.steps = steps
+  }
   return (
     knex('bundles')
-    .update({name: body.name, stock_qty: stock, steps: body.steps, category_id: category, product_id: product})
+    .update(toUpdate)
     .where({id: bundleId})
     .returning('*'))
     .then(data => {
-    if (body.items) {
+      if (items) {
       return (knex('bundles_items')
       .where({bundles_id: bundleId})
       .del())
       .then(newdata => {
-        if(body.items){
           const itemArray = JSON.parse(body.items)
           itemArray.map(ele => {
             return (knex('bundles_items')
             .insert({item_qty: ele.item_qty, bundles_id: bundles.id, item_id: ele.id})
             .returning('*'))
           })
-        }
       })
     }
+    return data
   })
 }
 

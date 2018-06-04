@@ -30,13 +30,26 @@ function removeSupplies(suppliesId){
   .del())
 }
 
-function updateSupplies(suppliesId, body){
-  let stock = parseInt(body.stock) || 0
-  let source = parseInt(body.source_id) || null
-  let kind = parseInt(body.kind_id) || null
+function updateSupplies(suppliesId, name, stock, measure_type, source_id, kind_id){
+  const toUpdate = {}
+  if (name) {
+    toUpdate.name = name
+  }
+  if (stock) {
+    toUpdate.stock = stock
+  }
+  if (measure_type) {
+    toUpdate.measure_type = measure_type
+  }
+  if (source_id) {
+    toUpdate.source_id = source_id
+  }
+  if (kind_id) {
+    toUpdate.kind_id = kind_id
+  }
   return (
     knex('supplies')
-    .update({name: body.name, stock_qty: stock, stock_qty_measure_type: body.measure_type, source_id: source, kind_id: kind})
+    .update(toUpdate)
     .where({id: suppliesId})
     .returning('*'))
 }
