@@ -15,6 +15,7 @@ function createBundles(body, shopId) {
   let stock = body.stock || 0
   let category = parseInt(body.categoryId) || null
   let product = body.productId || null
+  let photo = body.photo || null
   return (
     knex('bundles').insert({
     name: body.name,
@@ -22,7 +23,8 @@ function createBundles(body, shopId) {
     stock_qty: stock,
     steps: body.steps,
     category_id: category,
-    product_id: product
+    product_id: product,
+    photo: photo
   }).returning('*'))
   .then(bundles => {
     if(body.items){
@@ -49,7 +51,7 @@ function removeBundles(bundleId) {
   })
 }
 
-function updateBundles(bundleId, name, stock, categoryId, product_id, steps, items) {
+function updateBundles(bundleId, name, stock, categoryId, product_id, steps, items, photo) {
   const toUpdate = {}
   if (name) {
     toUpdate.name = name
@@ -65,6 +67,9 @@ function updateBundles(bundleId, name, stock, categoryId, product_id, steps, ite
   }
   if (steps) {
     toUpdate.steps = steps
+  }
+  if (photo) {
+    toUpdate.photo = photo
   }
   return (
     knex('bundles')

@@ -7,6 +7,7 @@ exports.up = function(knex, Promise) {
     table.string('steps').defaultsTo('[]');
     table.integer('category_id').references('categories.id');
     table.integer('product_id').references('products.id');
+    table.text('photo').defaultTo(null);
   });
 };
 
