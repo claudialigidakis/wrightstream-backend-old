@@ -76,7 +76,7 @@ function getAllStaff(req, res, next) {
 }
 
 function createStaff(req, res, next) {
-  if (!req.params.shopId || !req.body.fname || !req.body.lname || !req.body.password || !req.body.email || !req.body.photo || req.body.role) {
+  if (!req.params.shopId || !req.body.fname || !req.body.lname || !req.body.password) {
     return next({status: 400, message: 'Need proper staff inputs'})
   }
   shopModel.createStaff(req.body, parseInt(req.params.shopId))
