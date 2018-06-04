@@ -34,7 +34,7 @@ function createKinds(req, res, next) {
 }
 
 function removeKinds(req, res, next) {
-  if (!req.params.kindsId) {
+  if (!req.params.kindId) {
     return next({status: 400, message: 'Need to know indicated kind'})
   }
   kindsModel.removeKinds(parseInt(req.params.kindId))

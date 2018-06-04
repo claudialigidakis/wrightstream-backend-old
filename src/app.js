@@ -110,7 +110,7 @@ errorMessage.stack = err.stack
 
 errorMessage.status = err.status || 500
 errorMessage.message = err.message || 'Internal Server Error'
-
+console.log(errorMessage)
 res.status(errorMessage.status).send(errorMessage)
 })
 

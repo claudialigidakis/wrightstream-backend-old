@@ -27,7 +27,7 @@ function createItems(req, res, next) {
   if (!req.params.shopId || !req.body) {
     return next({status: 400, message: 'Need proper item inputs'})
   }
-  itemsModel.createItem(req.body, parseInt(req.params.shopId))
+  itemsModel.createItems(req.body, parseInt(req.params.shopId))
   .then(data => {
     res.status(200).send({data})
   })
