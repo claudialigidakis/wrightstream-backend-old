@@ -151,6 +151,7 @@ module.exports = {
   removeShop,
   updateShop,
   getOneStaff,
+  getStaffByEmail,
   getAllStaff,
   createStaff,
   updateStaff,
