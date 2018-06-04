@@ -8,6 +8,6 @@ exports.seed = function(knex, Promise) {
         {stock_qty: 4, stock_qty_measure: 'oz', item_id: '1', supplies_id: 1},
         {stock_qty: 6, stock_qty_measure: 'oz', item_id: '1', supplies_id: 2},
         {stock_qty: 3, stock_qty_measure: 'oz', item_id: '1', supplies_id: 3},
-      ]);
-    });
+      ])
+    })
 };
