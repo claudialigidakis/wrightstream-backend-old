@@ -28,7 +28,13 @@ function removeKinds(kindId) {
   .del())
 }
 
-function updateKinds() {}
+function updateKinds(kindId, body) {
+  return (
+    knex('kinds')
+    .update({name: body.name})
+    .where({id: kindId})
+    .returning('*'))
+}
 
 module.exports = {
   getOneKind,

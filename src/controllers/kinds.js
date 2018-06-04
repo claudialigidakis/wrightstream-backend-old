@@ -1,10 +1,10 @@
 const kindsModel = require('../models/kinds')
 
 function getOneKind(req, res, next) {
-  if (!req.params.kindsId) {
+  if (!req.params.kindId) {
     return next({status: 400, message: 'No kind indicated'})
   }
-  kindsModel.getOneKind(req.params.kindsId)
+  kindsModel.getOneKind(req.params.kindId)
   .then(data => {
     res.status(200).send({data})
   })
@@ -37,7 +37,7 @@ function removeKinds(req, res, next) {
   if (!req.params.kindsId) {
     return next({status: 400, message: 'Need to know indicated kind'})
   }
-  kindsModel.removeKinds(parseInt(req.params.kindsId))
+  kindsModel.removeKinds(parseInt(req.params.kindId))
   .then(function(data) {
     res.status(200).send({data})
   })
@@ -45,7 +45,14 @@ function removeKinds(req, res, next) {
 }
 
 function updateKinds(req, res, next) {
-
+  if (!req.params.kindId|| !req.body) {
+    return next({ status: 400, message: 'Bad request'})
+  }
+  kindsModel.updateKinds(req.params.kindId, req.body)
+  .then(data => {
+    res.status(200).send({ data })
+  })
+  .catch(next)
 }
 
 module.exports = {

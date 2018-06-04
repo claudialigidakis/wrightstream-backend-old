@@ -35,7 +35,14 @@ function createItems(req, res, next) {
 }
 
 function updateItems(req, res, next) {
-
+  if (!req.params.itemId|| !req.body) {
+    return next({ status: 400, message: 'Bad request'})
+  }
+  itemsModel.updateItems(req.params.itemId, req.body)
+  .then(data => {
+    res.status(200).send({ data })
+  })
+  .catch(next)
 }
 
 function removeItems(req, res, next) {
@@ -44,8 +51,6 @@ function removeItems(req, res, next) {
   }
   itemsModel.removeItems(parseInt(req.params.itemId))
   .then(function(data) {
-    //need to know what to filter from returned data
-    // delete data.password
     res.status(200).send({data})
   })
   .catch(next)

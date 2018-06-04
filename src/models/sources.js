@@ -27,8 +27,13 @@ function removeSource(sourceId){
   .del())
 }
 
-function updateSource(){
-
+function updateSource(sourceId, body){
+  console.log(body)
+  return (
+    knex('sources')
+    .update({name: body.name, link: body.link, type_id: body.type})
+    .where({id: sourceId})
+    .returning('*'))
 }
 
 module.exports = {

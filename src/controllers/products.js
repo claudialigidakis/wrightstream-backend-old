@@ -1,12 +1,12 @@
 const productsModel = require('../models/products')
 
-function getOneProduct(){
+function getOneProduct(req, res, next){
 
 }
-function getAllProducts(){
+function getAllProducts(req, res, next){
 
 }
-function updateProducts(){
+function updateProducts(req, res, next){
 
 }
 

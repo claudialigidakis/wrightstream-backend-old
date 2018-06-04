@@ -4,7 +4,7 @@ exports.up = function(knex, Promise) {
     table.string('name').notNullable();
     table.integer('shop_id').notNullable().references('shops.id');
     table.text('link').notNullable();
-    table.integer('type_id').notNullable().references('type.id');
+    table.integer('type_id').references('type.id');
   });
 };
 

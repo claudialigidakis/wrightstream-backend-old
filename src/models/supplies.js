@@ -30,8 +30,15 @@ function removeSupplies(suppliesId){
   .del())
 }
 
-function updateSupplies(){
-
+function updateSupplies(suppliesId, body){
+  let stock = parseInt(body.stock) || 0
+  let source = parseInt(body.source_id) || null
+  let kind = parseInt(body.kind_id) || null
+  return (
+    knex('supplies')
+    .update({name: body.name, stock_qty: stock, stock_qty_measure_type: body.measure_type, source_id: source, kind_id: kind})
+    .where({id: suppliesId})
+    .returning('*'))
 }
 
 module.exports = {

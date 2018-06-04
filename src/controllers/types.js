@@ -46,7 +46,14 @@ function removeTypes(req, res, next){
 }
 
 function updateTypes(req, res, next){
-
+  if (!req.params.typeId|| !req.body) {
+    return next({ status: 400, message: 'Bad request'})
+  }
+  typesModel.updateTypes(req.params.typeId, req.body)
+  .then(data => {
+    res.status(200).send({ data })
+  })
+  .catch(next)
 }
 
 module.exports = {

@@ -46,7 +46,14 @@ function removeSupplies(req, res, next){
 }
 
 function updateSupplies(req, res, next){
-
+  if (!req.params.suppliesId|| !req.body) {
+    return next({ status: 400, message: 'Bad request'})
+  }
+  suppliesModel.updateSupplies(req.params.suppliesId, req.body)
+  .then(data => {
+    res.status(200).send({ data })
+  })
+  .catch(next)
 }
 
 module.exports = {

@@ -46,7 +46,14 @@ function removeSource(req, res, next){
 }
 
 function updateSource(req, res, next){
-
+  if (!req.params.sourceId|| !req.body) {
+    return next({ status: 400, message: 'Bad request'})
+  }
+  sourcesModel.updateSource(req.params.sourceId, req.body)
+  .then(data => {
+    res.status(200).send({ data })
+  })
+  .catch(next)
 }
 
 module.exports = {
