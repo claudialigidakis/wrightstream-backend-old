@@ -10,8 +10,8 @@ function login(req, res, next){
     return next({ status: 400, message: 'Bad request'})
   }
   authModel.login(req.body.email, req.body.password)
-  .then(function({id, email, first_name, last_name, photo}){
-    const token = jwt.sign({id, email, first_name, last_name, photo}, process.env.SECRET)
+  .then(function({id, email, first_name, last_name, photo, shops_id}){
+    const token = jwt.sign({id, email, first_name, last_name, photo, shops_id}, process.env.SECRET)
     return res.status(200).send({ token })
   })
   .catch(next)
