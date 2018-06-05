@@ -15,10 +15,10 @@ function getAllPurchases(shopId) {
     .first())
 }
 
-function createPurchases(body, shopId) {
+function createPurchases(store_id, shopId, delivery_date, store_id, shop_id, staff_id, purchase_date, service, tracking) {
     return (
       knex('purchases')
-    .insert({shopId, name})
+    .insert({store_id, shop_id, staff_id, purchase_date, service, tracking, delivery_date})
     .returning('*')
   )
   }
@@ -32,8 +32,19 @@ function removePurchases(purchaseId) {
 }
 
 
-function updatePurchases(purchaseId) {
-//updating Item
+function updatePurchases(purchaseId, delivery_date, store_id, shop_id, staff_id, purchase_date, service, tracking) {
+  const toUpdate = {}
+  delivery_date ? toUpdate.delivery_date = delivery_date : null
+  store_id ? toUpdate.store_id = store_id : null
+  shop_id ? toUpdate.shop_id = shop_id : null
+  staff_id ? toUpdate.staff_id = staff_d : null
+  purchase_date ? toUpdate.purchase_date = purchase_date : null
+  service ? toUpdate.service = service : null
+  tracking ? toUpdate.tracking = tracking : null
+  return (knex('purchases')
+  .update(toUpdate)
+  .where({id: purchaseId})
+  .returning('*'))
 }
 
 

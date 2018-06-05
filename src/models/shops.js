@@ -85,31 +85,17 @@ function createStaff(body, ShopId) {
 
 function updateStaff(staffId, first_name, last_name, unhashed_password, email, photo, role) {
   const toUpdate = {}
-  if (first_name) {
-    toUpdate.first_name = first_name
-  }
-  if (last_name) {
-    toUpdate.last_name = last_name
-  }
-  if (email) {
-    toUpdate.email = email
-  }
-  if (photo) {
-    toUpdate.photo = photo
-  }
-  if (role) {
-    toUpdate.role = role
-  }
+  first_name ? toUpdate.first_name = first_name : null
+  last_name ? toUpdate.last_name = last_name : null
+  email ? toUpdate.email = email : null
+  photo ? toUpdate.photo = photo : null
+  role ? toUpdate.role = role : null
   return bcrypt.hash(unhashed_password, 10).then(password => {
     return (knex('staff').update(toUpdate).where({id: staffId}).returning('*'))
   }).then(function([
-    {
-      password,
-      ...data
+    {password,...data
     }
-  ]) {
-    return data
-  })
+  ]) {return data})
 }
 
 function removeStaff(staffId) {

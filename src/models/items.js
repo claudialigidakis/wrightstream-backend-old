@@ -48,24 +48,13 @@ function removeItems(itemId) {
 
 function updateItems(itemId, name, stock, steps, category, product, supplies, photo) {
   const toUpdate = {}
-  if (name) {
-    toUpdate.name = name
-  }
-  if (stock) {
-    toUpdate.stock_qty = stock
-  }
-  if (category) {
-    toUpdate.category_id = category
-  }
-  if (product) {
-    toUpdate.product_id = product
-  }
-  if (steps) {
-    toUpdate.steps = steps
-  }
-  if (photo) {
-    toUpdate.photo = photo
-  }
+  name ? toUpdate.name = name : null
+  stock ? toUpdate.stock_qty = stock : null
+  category ? toUpdate.category_id = category : null
+  product ? toUpdate.product_id = product : null
+  steps ? toUpdate.steps = steps : null
+  photo ? toUpdate.photo = photo : null
+  
   return (knex('items')
   .update(toUpdate)
   .where({id: itemId})
