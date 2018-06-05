@@ -1,7 +1,8 @@
 const purchasesModel = require('../models/purchases_items')
 
+
 function getOnePurchaseItem(req, res, next){
-  if (!req.params.purchase_id || req.params.item_id) {
+  if (!req.params.purchase_id || !req.params.item_id) {
     return next({status: 400, message: 'Missing purchase item fields'})
   }
   purchasesModel.getOnePurchaseItem(req.params.purchase_id, req.params.item_id)
@@ -36,7 +37,7 @@ function updatePurchaseItem(req, res, next){
   if (!req.params.purchase_id || !req.body) {
     return next({ status: 400, message: 'Missing purchase item fields'})
   }
-  purchasesModel.updatePurchaseItem(req.params.purchaseId, req.body.item_id, req.body.item_qty, req.body.completed, req.body.staff_id)
+  purchasesModel.updatePurchaseItem(req.params.purchase_id, req.params.item_id, req.body.item_qty, req.body.completed, req.body.staff_id)
   .then(data => {
     res.status(200).send({ data })
   })
@@ -44,7 +45,8 @@ function updatePurchaseItem(req, res, next){
 }
 
 function removePurchaseItem(req, res, next){
-  if (!req.params.item_id || req.params.purchase_id) {
+  console.log(req.params);
+  if (!req.params.item_id || !req.params.purchase_id) {
     return next({status: 400, message: 'Missing purchase item fields'})
   }
   purchasesModel.removePurchaseItem(req.params.purchase_id, req.params.item_id)
