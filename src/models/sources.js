@@ -29,15 +29,10 @@ function removeSource(sourceId){
 
 function updateSource(sourceId, name, link, type){
   const toUpdate = {}
-  if (name) {
-    toUpdate.name = name
-  }
-  if (link) {
-    toUpdate.link = link
-  }
-  if (type) {
-    toUpdate.type_id = type
-  }
+  name ? toUpdate.name = name : null
+  link ? toUpdate.link = link : null
+  type ? toUpdate.type_id = type : null
+  
   return (
     knex('sources')
     .update(toUpdate)

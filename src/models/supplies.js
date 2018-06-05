@@ -32,21 +32,12 @@ function removeSupplies(suppliesId){
 
 function updateSupplies(suppliesId, name, stock, measure_type, source_id, kind_id){
   const toUpdate = {}
-  if (name) {
-    toUpdate.name = name
-  }
-  if (stock) {
-    toUpdate.stock = stock
-  }
-  if (measure_type) {
-    toUpdate.measure_type = measure_type
-  }
-  if (source_id) {
-    toUpdate.source_id = source_id
-  }
-  if (kind_id) {
-    toUpdate.kind_id = kind_id
-  }
+  name ? toUpdate.name = name : null
+  stock ? toUpdate.stock = stock : null
+  measure_type ? toUpdate.measure_type = measure_type : null
+  source_id ? toUpdate.source_id = source_id : null
+  kind_id ? toUpdate.kind_id = kind_id : null
+  
   return (
     knex('supplies')
     .update(toUpdate)
