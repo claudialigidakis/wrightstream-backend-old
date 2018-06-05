@@ -15,10 +15,10 @@ function getAllPurchases(shopId) {
     .first())
 }
 
-function createPurchases(store_id, shopId, delivery_date, store_id, shop_id, staff_id, purchase_date, service, tracking) {
+function createPurchases(store_id, shopId, delivery_date, store_id, shop_id, staff_id, purchase_date, order_id, service, tracking) {
     return (
       knex('purchases')
-    .insert({store_id, shop_id, staff_id, purchase_date, service, tracking, delivery_date})
+    .insert({store_id, shop_id, staff_id, purchase_date, order_id, service, tracking, delivery_date})
     .returning('*')
   )
   }
