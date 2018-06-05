@@ -29,16 +29,15 @@ function createPurchaseItem(purchaseId, item_id, item_qty, completed, staff_id) 
 }
 
 function updatePurchaseItem(purchaseId, item_id, item_qty, completed, staff_id) {
+  console.log(purchaseId, item_id, item_qty, completed, staff_id);
   const toUpdate = {}
-  toUpdate.purchase_id = purchaseId
-  toUpdate.item_id = item_id
   completed ? toUpdate.completed = completed : null
   item_qty ? toUpdate.item_qty = item_qty : null
   staff_id ? toUpdate.staff_id = staff_id : null
   return(
     knex('purchases_items')
   .update(toUpdate)
-  .where({purchase_id: purchase_id, status_id: status_id})
+  .where({purchase_id: purchaseId, item_id: item_id})
   .returning('*'))
 }
 
