@@ -2,10 +2,10 @@ exports.up = function(knex, Promise) {
   return knex.schema.createTable('purchases_statuses', (table) => {
     table.integer('purchase_id').nullable().references('purchases.id');
     table.integer('status_id').notNullable().references('statuses.id');
-    table.integer('priority')
-    table.string('completed').nullable();
+    table.integer('priority').nullable();
+    table.boolean('completed').nullable().defaultsTo(false);
     table.integer('staff_id').references('staff.id');
-    table.timestamps('true', 'true');
+    table.timestamps(true, true);
   });
 };
 

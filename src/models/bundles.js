@@ -31,7 +31,7 @@ function getAllItems(shopId) {
         })
       })
       return Promise.all(promises)
-})
+    })
 }
 
 function getOneBundle(bundleId) {
