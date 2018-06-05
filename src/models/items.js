@@ -1,11 +1,26 @@
 const knex = require('../../db');
 
 function getAllItems(shopId) {
-  return knex('items').where({shop_id: shopId})
+  return knex('items')
+  .where({shop_id: shopId})
+  .then(items => {
+    const promises = items.map(item => {
+      return knex('items_supplies')
+        .join('supplies', 'supplies.id', 'items_supplies.supplies_id')
+        .where('items_supplies.item_id', item.id)
+        .then(supply => {
+          item.supplies = supply
+          return item
+        })
+      })
+      return Promise.all(promises)
+})
 }
 
 function getOneItem(itemId) {
-  return knex('items').where({id: itemId}).first()
+  return knex('items')
+  .where({id: itemId})
+  .first()
 }
 
 function createItems(body, shopId) {
@@ -54,7 +69,7 @@ function updateItems(itemId, name, stock, steps, category, product, supplies, ph
   product ? toUpdate.product_id = product : null
   steps ? toUpdate.steps = steps : null
   photo ? toUpdate.photo = photo : null
-  
+
   return (knex('items')
   .update(toUpdate)
   .where({id: itemId})

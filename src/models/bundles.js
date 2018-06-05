@@ -3,6 +3,35 @@ const knex = require('../../db');
 function getAllBundles(shopId) {
   return knex('bundles')
   .where({shop_id: shopId})
+  .then(bundles => {
+    const promises = bundles.map(bundle => {
+      return knex('bundles_items')
+        .join('items', 'items.id', 'bundles_items.item_id')
+        .where('bundles_items.bundles_id', bundle.id)
+        .then(item => {
+          bundle.items = item
+          return bundle
+        })
+      })
+      return Promise.all(promises)
+})
+}
+
+function getAllItems(shopId) {
+  return knex('items')
+  .where({shop_id: shopId})
+  .then(items => {
+    const promises = items.map(item => {
+      return knex('items_supplies')
+        .join('supplies', 'supplies.id', 'items_supplies.supplies_id')
+        .where('items_supplies.item_id', item.id)
+        .then(supply => {
+          item.supplies = supply
+          return item
+        })
+      })
+      return Promise.all(promises)
+})
 }
 
 function getOneBundle(bundleId) {
