@@ -20,7 +20,6 @@ async function getOAuthAccessToken(shops_id, requestToken, requestVerifier){
     return new Promise((resolve, reject) => {
       etsyOAuth.getOAuthAccessToken(requestToken, shop.tokenSecret, requestVerifier,
         function(err, oauth_access_token, oauth_access_token_secret, results) {
-          console.log('++', err)
           if(err) return reject(err)
           resolve({ accessToken: oauth_access_token, accessTokenSecret: oauth_access_token_secret})
         })
