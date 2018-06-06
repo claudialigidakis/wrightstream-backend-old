@@ -1,4 +1,5 @@
 const shopModel = require('../models/shops')
+const {etsyOAuth} = require('../../config/oauth.js')
 
 function getOneShop(req, res, next) {
   if (!req.params.shopId) {

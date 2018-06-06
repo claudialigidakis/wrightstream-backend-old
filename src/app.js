@@ -8,11 +8,15 @@ const cookieSession = require('cookie-session')
 const cookieParser = require('cookie-parser')
 
 
+
 if(process.env.NODE_ENV !== 'production'){
   require('dotenv').load()
 }
 
+
 const app = express()
+
+
 
 app.use(cors())
 app.use(morgan('dev'))
@@ -21,6 +25,7 @@ app.use(cookieParser());
 
 //user routes
 app.use('/shops', require('./routes/shops'))
+app.use('/etsy', require('./routes/etsy'))
 
 app.use('/stores', require('./routes/stores'))
 app.use('/products', require('./routes/products'))
@@ -29,6 +34,8 @@ app.use('/purchases_statuses', require('./routes/purchases_statuses'))
 app.use('/purchases_items', require('./routes/purchases_items'))
 app.use('/purchases_bundles', require('./routes/purchases_bundles'))
 app.use('/auth', require('./routes/auth'))
+app.use('/auth/etsy', require('./routes/authEtsy'))
+
 app.use('/bundles', require('./routes/bundles'))
 app.use('/categories', require('./routes/categories'))
 app.use('/items', require('./routes/items'))
@@ -119,7 +126,7 @@ res.status(errorMessage.status).send(errorMessage)
 //////////////////////////////////////////////////////////////////////////////
 // Starting Server
 //////////////////////////////////////////////////////////////////////////////
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 5000
 
 app.listen(port, function(){
   console.log(`Listening on port ${port}`)

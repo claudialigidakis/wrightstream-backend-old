@@ -3,7 +3,10 @@ exports.up = function(knex, Promise) {
     table.increments();
     table.string('shop_name').notNullable();
     table.string('settings').defaultsTo('');
-    table.string('logo').defaultsTo(null)
+    table.string('logo').defaultsTo(null);
+    table.string('tokenSecret')
+    table.string('accessToken')
+    table.string('accessTokenSecret')
     table.timestamp('true', 'true');
   });
 };

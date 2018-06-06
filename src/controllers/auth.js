@@ -1,5 +1,8 @@
 const authModel = require('../models/auth')
+const authEtsyModel = require('../models/authEtsy')
 const jwt = require('jsonwebtoken')
+const db = require('../../db')
+
 
 
 function login(req, res, next){
@@ -10,8 +13,8 @@ function login(req, res, next){
     return next({ status: 400, message: 'Bad request'})
   }
   authModel.login(req.body.email, req.body.password)
-  .then(function({id, email, first_name, last_name, photo, shops_id}){
-    const token = jwt.sign({id, email, first_name, last_name, photo, shops_id}, process.env.SECRET)
+  .then(function({id, email, first_name, last_name, photo, shops_id, role_id }){
+    const token = jwt.sign({ id, email, first_name, last_name, photo, shops_id, role_id }, process.env.SECRET)
     return res.status(200).send({ token })
   })
   .catch(next)
@@ -45,9 +48,10 @@ function isSelf(req, res, next){
   next()
 }
 
+
 module.exports = {
   login,
   getAuthStatus,
   isAuthenticated,
-  isSelf
+  isSelf,
 }
