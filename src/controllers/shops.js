@@ -1,4 +1,5 @@
 const shopModel = require('../models/shops')
+const {etsyOAuth} = require('../../config/oauth.js')
 
 function getOneShop(req, res, next) {
   if (!req.params.shopId) {
@@ -28,7 +29,6 @@ function createShop(req, res, next) {
 }
 
 function updateShop(req, res, next) {
-  console.log(req.body, req.params);
   if (!req.body.shop_name || !req.body.logo || !req.body.settings) {
     return next({ status: 400, message: 'Bad request'});
   }
