@@ -15,10 +15,10 @@ function getAllPurchaseBundles(purchase_id) {
   )
 }
 
-function createPurchaseBundle(purchaseId, bundle_id, bundle_qty, completed, staff_id) {
-  console.log(purchaseId, bundle_id, bundle_qty, completed, staff_id);
+function createPurchaseBundle(purchase_id, bundle_id, bundle_qty, completed, staff_id) {
+  console.log(purchase_id, bundle_id, bundle_qty, completed, staff_id);
     const toCreate = {}
-    toCreate.purchase_id = purchaseId
+    toCreate.purchase_id = purchase_id
     toCreate.bundle_id = bundle_id
     completed ? toCreate.completed = completed : false
     bundle_qty ? toCreate.bundle_qty = bundle_qty : 1

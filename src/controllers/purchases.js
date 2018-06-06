@@ -22,7 +22,7 @@ function createPurchases(req, res, next){
   if (!req.params.shopId) {
     return next({status: 400, message: 'Missing shop creation fields'})
   }
-  purchasesModel.createPurchases(req.params.shopId, req.body.store_id, req.body.delivery_date, req.body.staff_id, req.body.purchase_date, req.body.order_id, req.body.service, req.body.tracking)
+  purchasesModel.createPurchases(req.params.shopId, req.body.store_id, req.body.delivery_date, req.body.staff_id, req.body.purchase_date, req.body.order_id, req.body.service, req.body.tracking, req.body.items, req.body.bundles)
   .then(function(data) {
     console.log("back to purchase");
     return res.status(201).send({data})
