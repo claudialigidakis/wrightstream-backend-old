@@ -22,9 +22,11 @@ app.use(cors())
 app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(cookieParser());
-
 //user routes
+
 app.use('/shops', require('./routes/shops'))
+app.use('/auth', require('./routes/auth'))
+app.use('/auth/etsy', require('./routes/authEtsy'))
 app.use('/etsy', require('./routes/etsy'))
 
 app.use('/stores', require('./routes/stores'))
@@ -33,8 +35,7 @@ app.use('/purchases', require('./routes/purchases'))
 app.use('/purchases_statuses', require('./routes/purchases_statuses'))
 app.use('/purchases_items', require('./routes/purchases_items'))
 app.use('/purchases_bundles', require('./routes/purchases_bundles'))
-app.use('/auth', require('./routes/auth'))
-app.use('/auth/etsy', require('./routes/authEtsy'))
+
 
 app.use('/bundles', require('./routes/bundles'))
 app.use('/categories', require('./routes/categories'))
@@ -43,62 +44,6 @@ app.use('/kinds', require('./routes/kinds'))
 app.use('/sources', require('./routes/sources'))
 app.use('/supplies', require('./routes/supplies'))
 app.use('/types', require('./routes/types'))
-
-
-//
-//
-// app.use(cookieSession({
-//     keys: ['keyboard', 'cat']
-// }));
-//
-//
-//
-// app.use(passport.initialize())
-// app.use(passport.session())
-//
-// passport.serializeUser(function (object, done) {
-//   console.log("serializeUser", {token: object})
-//   done(null, {token: object.token});
-// });
-// passport.deserializeUser(function (object, done) {
-//   console.log("deserializeUser", object)
-//   done(null, object);
-// });
-//
-// passport.use(new EtsyStrategy({
-//     consumerKey: CONSUMER_KEY,
-//     consumerSecret: CONSUMER_SECRET,
-//     callbackURL: 'http://localhost:3000/auth/etsy/callback'
-//   },
-//   function (token, tokenSecret, profile, done){
-//     // console.log(token)
-//     User.findOrCreate({etsyID: profile.id})
-//   }
-// ));
-//
-//
-// app.get('/auth/etsy', passport.authenticate('etsy', {
-//   scope: ['profile_r', 'email_r', 'listings_r', 'profile_w']
-// }));
-//
-// app.get('/auth/etsy/callback', (req, res, next) => {
-//   console.log('Hitting callback')
-//   console.log(req)
-//   next()
-// }, passport.authenticate('etsy', {
-//   failureRedirect: '/back',
-//   successRedirect: '/home'
-//   })
-// );
-//
-// app.get('/home', function(req, res, next){
-//   console.log("made it home")
-// })
-//
-// app.get('/back', function(req, res, next){
-//   console.log("made it back to login")
-// })
-// //
 
 
 //////////////////////////////////////////////////////////////////////////////

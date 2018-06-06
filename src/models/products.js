@@ -1,9 +1,10 @@
 const knex = require('../../db');
 
-function getAllProducts(storeId) {
+function getAllProducts(shopId) {
     return (
       knex('products')
-    .where({store_id: storeId})
+      .innerJoin('stores', 'stores.id', 'products.store_id')
+    .where({shops_id: shopId})
   )
 }
 
