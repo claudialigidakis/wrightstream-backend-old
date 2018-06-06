@@ -40,7 +40,6 @@ function removePurchaseStatuses(purchase_id, status_id) {
 
 function updatePurchaseStatus(purchase_id, status_id, priority, completed, staff_id) {
   const toUpdate = {}
-  console.log("completed:", completed);
   priority ? toUpdate.priority = priority : null
   completed ? toUpdate.completed = completed : null
   staff_id ? toUpdate.staff_id = staff_id : null

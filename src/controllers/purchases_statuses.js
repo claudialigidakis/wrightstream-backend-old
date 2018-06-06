@@ -19,20 +19,20 @@ function getAllPurchaseStatuses(req, res, next){
 }
 
 function createPurchaseStatus(req, res, next){
-  if (!req.params.purchaseId) {
+  if (!req.params.purchase_id) {
     return next({status: 400, message: 'Missing purchase status creation fields'})
   }
-  purchasesModel.createPurchaseStatus(req.params.purchaseId, req.body.status_id, req.body.priority, req.body.completed, req.body.staff_id)
+  purchasesModel.createPurchaseStatus(req.params.purchase_id, req.body.staff_id)
   .then(function(data) {
     return res.status(201).send({data})
   }).catch(next)
 }
 
 function removePurchaseStatuses(req, res, next){
-  if (!req.params.purchase_status) {
+  if (!req.params.purchase_id) {
     return next({status: 400, message: 'Missing purchase id'})
   }
-  purchasesModel.removePurchaseStatuses(req.params.purchase_status, req.params.status_id)
+  purchasesModel.removePurchaseStatuses(req.params.purchase_id, req.params.status_id)
   .then(function(data) {
     res.status(200).send({data})
   })
@@ -50,6 +50,7 @@ function updatePurchaseStatus(req, res, next){
   })
   .catch(next)
 }
+
 
 
 module.exports = {

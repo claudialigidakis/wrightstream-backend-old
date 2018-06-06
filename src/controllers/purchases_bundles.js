@@ -23,10 +23,10 @@ function getAllPurchaseBundles(req, res, next){
 }
 
 function createPurchaseBundle(req, res, next){
-  if (!req.params.purchaseId || !req.body) {
+  if (!req.params.purchase_id || !req.body) {
     return next({status: 400, message: 'Missing purchase item fields'})
   }
-  purchasesModel.createPurchaseBundle(req.params.purchaseId, req.body.bundle_id, req.body.bundle_qty, req.body.completed, req.body.staff_id)
+  purchasesModel.createPurchaseBundle(req.params.purchase_id, req.body.bundle_id, req.body.bundle_qty, req.body.completed, req.body.staff_id)
   .then(function(data) {
     return res.status(201).send({data})
   }).catch(next)
