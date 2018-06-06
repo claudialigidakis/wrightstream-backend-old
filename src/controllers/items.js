@@ -27,7 +27,7 @@ function createItems(req, res, next) {
   if (!req.params.shopId || !req.body) {
     return next({status: 400, message: 'Need proper item inputs'})
   }
-  itemsModel.createItem(req.body, parseInt(req.params.shopId))
+  itemsModel.createItems(req.body, parseInt(req.params.shopId))
   .then(data => {
     res.status(200).send({data})
   })
@@ -38,7 +38,7 @@ function updateItems(req, res, next) {
   if (!req.params.itemId|| !req.body) {
     return next({ status: 400, message: 'Bad request'})
   }
-  itemsModel.updateItems(req.params.itemId, req.body)
+  itemsModel.updateItems(parseInt(req.params.itemId), req.body.name, req.body.stock, req.body.steps, req.body.category, req.body.product, req.body.supplies)
   .then(data => {
     res.status(200).send({ data })
   })

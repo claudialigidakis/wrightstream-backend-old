@@ -30,7 +30,9 @@ app.use('/etsy', require('./routes/etsy'))
 app.use('/stores', require('./routes/stores'))
 app.use('/products', require('./routes/products'))
 app.use('/purchases', require('./routes/purchases'))
-
+app.use('/purchases_statuses', require('./routes/purchases_statuses'))
+app.use('/purchases_items', require('./routes/purchases_items'))
+app.use('/purchases_bundles', require('./routes/purchases_bundles'))
 app.use('/auth', require('./routes/auth'))
 app.use('/auth/etsy', require('./routes/authEtsy'))
 
@@ -117,7 +119,7 @@ errorMessage.stack = err.stack
 
 errorMessage.status = err.status || 500
 errorMessage.message = err.message || 'Internal Server Error'
-
+console.log(errorMessage)
 res.status(errorMessage.status).send(errorMessage)
 })
 

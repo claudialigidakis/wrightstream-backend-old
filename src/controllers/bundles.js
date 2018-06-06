@@ -27,7 +27,7 @@ function createBundles(req, res, next) {
   if (!req.params.shopId || !req.body) {
     return next({status: 400, message: 'Need proper bundle inputs'})
   }
-  bundlesModel.createBundle(req.body, parseInt(req.params.shopId))
+  bundlesModel.createBundles(req.body, parseInt(req.params.shopId))
   .then(data => {
     res.status(200).send({data})
   })
@@ -38,7 +38,7 @@ function updateBundles(req, res, next) {
   if (!req.params.bundleId|| !req.body) {
     return next({ status: 400, message: 'Bad request'})
   }
-  bundlesModel.updateBundles(req.params.bundleId, req.body)
+  bundlesModel.updateBundles(req.params.bundleId, req.body.name, req.body.stock, req.body.category_id, req.body.product_id, req.body.steps, req.body.items)
   .then(data => {
     res.status(200).send({ data })
   })
