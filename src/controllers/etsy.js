@@ -21,22 +21,16 @@ function getSelf(req, res, next) {
 function AllListingActive(req, res, next) {
   etsyOAuth.get(`https://openapi.etsy.com/v2/shops/${shopId}/listings/active`, req.etsyTokens.accessToken, req.etsyTokens.accessTokenSecret, function(err, data, response) {
     if (err) return next(err)
-
-    ///results are empty -- need to fix ///
     let listingData = JSON.parse(data)
-    console.log(listingData);
     listingData = listingData.results
-    console.log("listingDataL", listingData);
     const products = listingData.map(productListing => {
-      console.log(productListing);
       const product = {}
       product.listing_id = productListing.listing_id
       product.title = productListing.title
       product.quantity = productListing.quantity
       return new Promise((resolve, reject) => {
         etsyOAuth.get(`https://openapi.etsy.com/v2/listings/${productListing.listing_id}/images`, req.etsyTokens.accessToken, req.etsyTokens.accessTokenSecret, function(err, data, response) {
-          if (err)
-            reject(err)
+          if (err) reject(err)
           const photoUrl = JSON.parse(data)
           product.photo = photoUrl.results.map(photos => photos.url_fullxfull)
           resolve(product)
@@ -44,33 +38,49 @@ function AllListingActive(req, res, next) {
       })
     })
     Promise.all(products)
-  .then(products => {
-    // console.log(products);
+    .then(products => {
       const promises = products.map(product => {
-        console.log(product.listing_id);
-        return (
-          knex('products')
-          .insert({name: "Etsy", image:product.photo[0], listing_id:product.listing_id, quantity:product.quantity, title:product.title, store_id:req.claim.shops_id})
-          .returning('*')
-        )
+        return (knex('products').insert({
+          name: "Etsy",
+          image: product.photo[0],
+          listing_id: product.listing_id,
+          quantity: product.quantity,
+          title: product.title,
+          store_id: req.claim.shops_id
+        }).returning('*'))
       })
       return Promise.all(promises)
-    })
-    .then(finalData => {
+    }).then(finalData => {
       res.send(finalData)
     })
   })
 }
 
-
-function findAllPurchases(req, res, next){
-  console.log("made it to find purchase controller");
+function findAllPurchases(req, res, next) {
   etsyOAuth.get(`https://openapi.etsy.com/v2/shops/${shopId}/transactions`, req.etsyTokens.accessToken, req.etsyTokens.accessTokenSecret, function(err, data, response) {
-    console.log(err)
-    if (err) return next(err)
-    console.log("data", data)
-    // return data
-    res.send(data)
+    if (err)
+      return next(err)
+    const purchase = {}
+    data = JSON.parse(data)
+    purchase.order_id = data.results[0].transactions
+    purchase.shop_id = req.claim.shops_id
+    purchase.store_id = null
+    purchase.purchase_date = null
+    purchase.service = null
+    purchase.tracking = null
+    purchase.delivery_date = null
+    console.log(purchase);
+    return new Promise((resolve, reject) => {
+      etsyOAuth.get(`https://openapi.etsy.com/v2/shops/transactions/${purchase.order_id}`, req.etsyTokens.accessToken, req.etsyTokens.accessTokenSecret, function(err, data, response) {
+        if (err) return next(err)
+        console.log(data);
+        resolve(product)
+      })
+    })
+    Promise.all(purchase)
+    .then(purchases => {
+      res.send(purchases)
+    })
   })
 }
 

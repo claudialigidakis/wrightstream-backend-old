@@ -49,7 +49,7 @@ function updateSource(req, res, next){
   if (!req.params.sourceId|| !req.body) {
     return next({ status: 400, message: 'Bad request'})
   }
-  sourcesModel.updateSource(req.params.sourceId, req.body.name, req.body.link, req.body.type)
+  sourcesModel.updateSource(req.params.sourceId, req.body.name, req.body.link, req.body.type_id)
   .then(data => {
     res.status(200).send({ data })
   })
