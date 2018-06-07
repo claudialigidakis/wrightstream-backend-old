@@ -8,7 +8,9 @@ function getOnePurchase(purchaseId) {
 }
 
 function getAllPurchases(shopId) {
-  return (knex('purchases').where({shop_id: shopId}))
+  return (knex('purchases')
+  .where({shop_id: shopId})
+)
 }
 
 function createPurchases(shop_id, store_id, delivery_date, staff_id, purchase_date, order_id, service, tracking, items, bundles) {
@@ -21,7 +23,6 @@ function createPurchases(shop_id, store_id, delivery_date, staff_id, purchase_da
   purchase_date ? toCreate.purchase_date = purchase_date : null
   service ? toCreate.service = service : null
   tracking ? toCreate.tracking = tracking : null
-
   return (
     knex('purchases')
   .insert(toCreate)
@@ -32,7 +33,11 @@ function createPurchases(shop_id, store_id, delivery_date, staff_id, purchase_da
   }).then(data => {
     if (items) {
       const itemPromises = items.map(item => {
-        return PurchaseItemModel.createPurchaseStatus(purchase.id, {item_id, item_qty, completed, staff_id})
+        let item_id = item.item_id
+        let item_qty = item.item_qty
+        let completed = null
+        let staff_id = null
+        return PurchaseItemModel.createPurchaseItem(newPurchase.createdPurchase[0].id, item_id, item_qty, completed, staff_id)
       })
       return Promise.all(itemPromises)
     } else
@@ -41,17 +46,23 @@ function createPurchases(shop_id, store_id, delivery_date, staff_id, purchase_da
   .then(itemsData => {
     if (bundles) {
       const bundlePromises = bundles.map(bundle => {
-        return PurchaseBundleModel.createPurchaseStatus(purchase.id, {bundle_id, bundle_qty, completed, staff_id})
+        let bundle_id = bundle.bundle_id
+        let bundle_qty = bundle.bundle_qty
+        let completed = null
+        let staff_id = null
+        return PurchaseBundleModel.createPurchaseBundle(newPurchase.createdPurchase[0].id, bundle_id, bundle_qty, completed, staff_id)
       })
       return Promise.all(bundlePromises)
     } else
-      return itemsData
+    return itemsData
   })
   .then(purchaseItemsBundles => {
     console.log(purchaseItemsBundles);
     return newPurchase
   })
 }
+
+
 
 function removePurchases(purchaseId) {
   return (knex('purchases').where({id: purchaseId}).del())
