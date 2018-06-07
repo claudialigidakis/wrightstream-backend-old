@@ -21,7 +21,6 @@ function createPurchases(shop_id, store_id, delivery_date, staff_id, purchase_da
   purchase_date ? toCreate.purchase_date = purchase_date : null
   service ? toCreate.service = service : null
   tracking ? toCreate.tracking = tracking : null
-
   return (
     knex('purchases')
   .insert(toCreate)
@@ -31,6 +30,7 @@ function createPurchases(shop_id, store_id, delivery_date, staff_id, purchase_da
     return PurchaseStatusModel.createPurchaseStatus(purchase[0].id, null)
   }).then(data => {
     if (items) {
+      console.log(items, items.length);
       const itemPromises = items.map(item => {
         return PurchaseItemModel.createPurchaseStatus(purchase.id, {item_id, item_qty, completed, staff_id})
       })
@@ -39,7 +39,7 @@ function createPurchases(shop_id, store_id, delivery_date, staff_id, purchase_da
       return data
   })
   .then(itemsData => {
-    if (bundles) {
+    if (bundles > 0) {
       const bundlePromises = bundles.map(bundle => {
         return PurchaseBundleModel.createPurchaseStatus(purchase.id, {bundle_id, bundle_qty, completed, staff_id})
       })
@@ -52,6 +52,8 @@ function createPurchases(shop_id, store_id, delivery_date, staff_id, purchase_da
     return newPurchase
   })
 }
+
+
 
 function removePurchases(purchaseId) {
   return (knex('purchases').where({id: purchaseId}).del())
