@@ -6,32 +6,15 @@ let shopId;
 
 function getSelf(req, res, next) {
   const { accessToken, accessTokenSecret } = req.etsyTokens
-
   etsyModel.getSelf(accessToken, accessTokenSecret)
   .then(response => {
     res.send(response)
   })
   .catch(next)
-
-  // etsyOAuth.get('https://openapi.etsy.com/v2/users/__SELF__',accessToken, accessTokenSecret,
-  // function(err, data, response) {
-  //   if (err)
-  //     return next(err)
-  //   const parsedUser = JSON.parse(data).results
-  //   const userId = parsedUser[0].user_id
-  //   etsyOAuth.get(`https://openapi.etsy.com/v2/users/${userId}/shops`, accessToken, accessTokenSecret,
-  //   function(err, data, response) {
-  //     if (err)
-  //       return next(err)
-  //     console.log(data)
-  //     const parsedShop = JSON.parse(data).results
-  //     shopId = parsedShop[0].shop_id
-  //   })
-  //   res.send(data)
-  // })
 }
 
 function AllListingActive(req, res, next) {
+  console.log("made it to controller");
   etsyOAuth.get(`https://openapi.etsy.com/v2/shops/${shopId}/listings/active`, req.etsyTokens.accessToken, req.etsyTokens.accessTokenSecret, function(err, data, response) {
     if (err) return next(err)
     let listingData = JSON.parse(data)
