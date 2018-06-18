@@ -1,8 +1,8 @@
 const knex = require('../../db');
 
-function getOneSupply(suppliesId){
+function getOneSupply(supplyId){
   return (knex('supplies')
-  .where({id: suppliesId})
+  .where({id: supplyId})
   .first())
 }
 
@@ -19,29 +19,29 @@ function createSupplies(body, shopId){
   let kind = body.kind_id || null
     return (
       knex('supplies')
-    .insert({name: body.name, stock_qty: stock, stock_qty_measure_type: body.measure_type, shop_id: shopId,  source_id: source, kind_id: kind})
+    .insert({name: body.name, stock_qty: stock, stock_qty_measure_type: body.stock_measure_type, measure_type: body.measure_type, shop_id: shopId,  source_id: source, kind_id: kind})
     .returning('*')
   )
 }
 
-function removeSupplies(suppliesId){
+function removeSupplies(supplyId){
   return (knex('supplies')
-  .where({id: suppliesId})
+  .where({id: supplyId})
   .del())
 }
 
-function updateSupplies(suppliesId, name, stock, measure_type, source_id, kind_id){
+function updateSupplies(supplyId, name, stock, measure_type, source_id, kind_id){
   const toUpdate = {}
   name ? toUpdate.name = name : null
   stock ? toUpdate.stock = stock : null
   measure_type ? toUpdate.measure_type = measure_type : null
   source_id ? toUpdate.source_id = source_id : null
   kind_id ? toUpdate.kind_id = kind_id : null
-  
+
   return (
     knex('supplies')
     .update(toUpdate)
-    .where({id: suppliesId})
+    .where({id: supplyId})
     .returning('*'))
 }
 

@@ -49,7 +49,7 @@ function updateTypes(req, res, next){
   if (!req.params.typeId|| !req.body) {
     return next({ status: 400, message: 'Bad request'})
   }
-  typesModel.updateTypes(req.params.typeId, req.body)
+  typesModel.updateTypes(req.params.typeId, req.body.name)
   .then(data => {
     res.status(200).send({ data })
   })

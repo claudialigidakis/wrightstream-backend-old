@@ -21,17 +21,17 @@ function createTypes(body, shopId){
 )
 }
 
-function removeTypes(typesId){
+function removeTypes(typeId){
   return (knex('type')
-  .where({id: typesId})
+  .where({id: typeId})
   .del())
 }
 
-function updateTypes(typesId, body){
+function updateTypes(typeId, name){
   return (
     knex('type')
-    .update({name: body.name})
-    .where({id: typesId})
+    .update({name: name})
+    .where({id: typeId})
     .returning('*'))
 }
 
