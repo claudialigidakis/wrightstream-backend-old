@@ -8,10 +8,41 @@ function getOnePurchase(purchaseId) {
 }
 
 function getAllPurchases(shopId) {
-  return (knex('purchases')
+  return knex('purchases')
   .where({shop_id: shopId})
-)
+  .then(purchases => {
+    const promises = purchases.map(purchase => {
+      return knex('purchases_statuses')
+        .join('statuses', 'statuses.id', 'purchases_statuses.status_id')
+        .where('purchases_statuses.purchase_id', purchase.id)
+        .then(status => {
+          purchase.statuses = status
+          return purchase
+        })
+    })
+    return Promise.all(promises)
+  })
 }
+
+function getAllBundles(shopId) {
+  return knex('bundles')
+  .where({shop_id: shopId})
+  .then(bundles => {
+    const promises = bundles.map(bundle => {
+      return knex('bundles_items')
+        .join('items', 'items.id', 'bundles_items.item_id')
+        .where('bundles_items.bundles_id', bundle.id)
+        .then(item => {
+          bundle.items = item
+          return bundle
+        })
+      })
+      return Promise.all(promises)
+})
+}
+
+
+
 
 function createPurchases(shop_id, store_id, delivery_date, staff_id, purchase_date, order_id, service, tracking, items, bundles) {
   const toCreate = {}
