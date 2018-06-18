@@ -15,7 +15,7 @@ function getOAuthRequestToken(shops_id){
 
 async function getOAuthAccessToken(shops_id, requestToken, requestVerifier){
   try{
-    const shop = await db('shops').where({id:shops_id}).first()
+    const shop = await db('stores').where({shops_id}).andWhere({name:'Etsy'}).first()
 
     return new Promise((resolve, reject) => {
       etsyOAuth.getOAuthAccessToken(requestToken, shop.tokenSecret, requestVerifier,
@@ -34,9 +34,10 @@ async function getOAuthAccessToken(shops_id, requestToken, requestVerifier){
 }
 
 function setAccessToken(shops_id, accessToken, accessTokenSecret){
-  return db('shops')
-  .update({accessToken, accessTokenSecret})
-  .where({ id: shops_id })
+  return db('stores')
+  .update({ accessToken, accessTokenSecret })
+  .where({ shops_id })
+  .andWhere({ name: 'Etsy' })
   .returning('*')
   .then(([data]) => {
     return data
