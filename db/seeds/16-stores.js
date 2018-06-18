@@ -4,7 +4,7 @@ exports.seed = function(knex, Promise) {
     .then(function () {
       // Inserts seed entries
       return knex('stores').insert([
-        {id: 1, name: 'Etsy', refresh_token: 60231, access_token: 231231, shops_id: 1},
+        {id: 1, name: 'Etsy', shops_id: 1},
       ])
     })
     .then(() => {

@@ -1,21 +1,34 @@
 const {etsyOAuth} = require('../../config/oauth.js')
 const knex = require('../../db');
+const etsyModel = require('../models/etsy')
+
 let shopId;
 
 function getSelf(req, res, next) {
-  etsyOAuth.get('https://openapi.etsy.com/v2/users/__SELF__', req.etsyTokens.accessToken, req.etsyTokens.accessTokenSecret, function(err, data, response) {
-    if (err)
-      return next(err)
-    const parsedUser = JSON.parse(data).results
-    const userId = parsedUser[0].user_id
-    etsyOAuth.get(`https://openapi.etsy.com/v2/users/${userId}/shops`, req.etsyTokens.accessToken, req.etsyTokens.accessTokenSecret, function(err, data, response) {
-      if (err)
-        return next(err)
-      const parsedShop = JSON.parse(data).results
-      shopId = parsedShop[0].shop_id
-    })
-    res.send(data)
+  const { accessToken, accessTokenSecret } = req.etsyTokens
+
+  etsyModel.getSelf(accessToken, accessTokenSecret)
+  .then(response => {
+    res.send(response)
   })
+  .catch(next)
+
+  // etsyOAuth.get('https://openapi.etsy.com/v2/users/__SELF__',accessToken, accessTokenSecret,
+  // function(err, data, response) {
+  //   if (err)
+  //     return next(err)
+  //   const parsedUser = JSON.parse(data).results
+  //   const userId = parsedUser[0].user_id
+  //   etsyOAuth.get(`https://openapi.etsy.com/v2/users/${userId}/shops`, accessToken, accessTokenSecret,
+  //   function(err, data, response) {
+  //     if (err)
+  //       return next(err)
+  //     console.log(data)
+  //     const parsedShop = JSON.parse(data).results
+  //     shopId = parsedShop[0].shop_id
+  //   })
+  //   res.send(data)
+  // })
 }
 
 function AllListingActive(req, res, next) {

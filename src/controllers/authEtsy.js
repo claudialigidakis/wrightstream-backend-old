@@ -5,12 +5,17 @@ const db = require('../../db')
 async function getLogin(req, res, next){
   try{
     const requestTokens = await authEtsyModel.getOAuthRequestToken(req.claim.shops_id)
-    const [ updatedShop ] = await db('shops').update({tokenSecret: requestTokens.tokenSecret}).where({id:req.claim.shops_id}).returning('*')
+
+    const [ updatedStore ] = await db('stores')
+                                  .update({tokenSecret: requestTokens.tokenSecret})
+                                  .where({shops_id:req.claim.shops_id})
+                                  .andWhere({ name: 'Etsy'})
+                                  .returning('*')
 
     if(req.claim.role_id !== 1){
       return next({status:403, message: "Not admin"})
     }
-    else if(updatedShop.accessToken && updatedShop.accessTokenSecret) {
+    else if(updatedStore.accessToken && updatedStore.accessTokenSecret) {
       return res.status(200).send({loginUrl: '' })
     }
     else {
@@ -25,8 +30,13 @@ async function getLogin(req, res, next){
 
 async function etsyRequestToken(req, res, next){
   try {
-    const tokens = await authEtsyModel.getOAuthAccessToken(req.claim.shops_id, req.body.oauth_token, req.body.oauth_verifier)
-    const shop = await authEtsyModel.setAccessToken(req.claim.shops_id, tokens.accessToken, tokens.accessTokenSecret)
+    const shops_id = req.claim.shops_id
+    const { oauth_token, oauth_verifier } = req.body
+
+    const { accessToken, accessTokenSecret } = await authEtsyModel
+                                                     .getOAuthAccessToken(shops_id, oauth_token, oauth_verifier)
+
+    const shop = await authEtsyModel.setAccessToken(shops_id, accessToken, accessTokenSecret)
     return res.sendStatus(200)
   }
   catch(err){
@@ -36,13 +46,17 @@ async function etsyRequestToken(req, res, next){
 
 async function withEtsyTokens(req, res, next){
   try{
-    const shop = await db('shops').where({id: req.claim.shops_id}).first()
+    const { shops_id } = req.claim
+    const { accessToken, accessTokenSecret } = await db('stores')
+                       .where({ shops_id })
+                       .andWhere({name:'Etsy'})
+                       .first()
 
-    if(!shop.accessToken && !shop.accessTokenSecret){
+    if(!accessToken && !accessTokenSecret){
       return next({ status: 403, message: 'Etsy Access Tokens Not Available' })
     }
 
-    req.etsyTokens = { accessToken: shop.accessToken, accessTokenSecret: shop.accessTokenSecret }
+    req.etsyTokens = { accessToken, accessTokenSecret }
 
     next()
   }
