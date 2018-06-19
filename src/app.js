@@ -35,6 +35,7 @@ app.use('/purchases', require('./routes/purchases'))
 app.use('/purchases_statuses', require('./routes/purchases_statuses'))
 app.use('/purchases_items', require('./routes/purchases_items'))
 app.use('/purchases_bundles', require('./routes/purchases_bundles'))
+app.use('/inventory', require('./routes/inventory'))
 
 
 app.use('/bundles', require('./routes/bundles'))
