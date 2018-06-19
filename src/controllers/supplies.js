@@ -49,7 +49,7 @@ function updateSupplies(req, res, next){
   if (!req.params.suppliesId|| !req.body) {
     return next({ status: 400, message: 'Bad request'})
   }
-  suppliesModel.updateSupplies(req.params.suppliesId, req.body.name, req.body.stock, req.body.measure_type, req.body.source_id, req.body.kind_id)
+  suppliesModel.updateSupplies(req.params.suppliesId, req.body.name, req.body.stock_qty, req.body.measure_type, req.body.stock_qty_measure_type, req.body.source_id, req.body.kind_id)
   .then(data => {
     res.status(200).send({ data })
   })

@@ -30,14 +30,14 @@ function removeSupplies(supplyId){
   .del())
 }
 
-function updateSupplies(supplyId, name, stock, measure_type, source_id, kind_id){
+function updateSupplies(supplyId, name, stock_qty, measure_type, stock_qty_measure_type, source_id, kind_id){
   const toUpdate = {}
   name ? toUpdate.name = name : null
-  stock ? toUpdate.stock = stock : null
+  stock_qty ? toUpdate.stock_qty = stock_qty : null
+  stock_qty_measure_type ? toUpdate.stock_qty_measure_type = stock_qty_measure_type : null
   measure_type ? toUpdate.measure_type = measure_type : null
   source_id ? toUpdate.source_id = source_id : null
   kind_id ? toUpdate.kind_id = kind_id : null
-
   return (
     knex('supplies')
     .update(toUpdate)

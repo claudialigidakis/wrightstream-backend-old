@@ -4,7 +4,7 @@ function getAllProducts(shopId) {
     return (
       knex('products')
       .innerJoin('stores', 'stores.id', 'products.store_id')
-    .where({shops_id: shopId})
+      .where({shops_id: shopId})
   )
 }
 

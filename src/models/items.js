@@ -41,7 +41,7 @@ function createItems(body, shopId) {
     if(body.supplies){
       const suppliesArray = JSON.parse(body.supplies)
       suppliesArray.map(supply => {
-        return (knex('items_supplies').insert({stock_qty: suppliesArray.stock_qty, stock_qty_measure: suppliesArray.stock_qty_measure, item_id: newItem.id, supplies_id: supply.id}).returning('*'))
+        return (knex('items_supplies').insert({qty: suppliesArray.qty, qty_measure: suppliesArray.qty_measure, item_id: newItem.id, supplies_id: supply.id}).returning('*'))
       })
     }
     return newItem
@@ -81,7 +81,7 @@ function updateItems(itemId, name, stock, steps, category, product, supplies, ph
       .del())
       .then(newdata => {
         supplies.map(supply => {
-          return (knex('items_supplies').insert({stock_qty: body.supply_stock_qty, stock_qty_measure: body.supply_stock_qty_measure, item_id: data.id, supplies_id: supply.id}).returning('*'))
+          return (knex('items_supplies').insert({qty: body.supply_qty, qty_measure: body.supply_qty_measure, item_id: data.id, supplies_id: supply.id}).returning('*'))
         })
       })
     }

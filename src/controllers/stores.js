@@ -29,8 +29,6 @@ function createStore(req, res, next) {
   // }
   storeModel.createStore(req.body, parseInt(req.params.shopId))
   .then(data => {
-    //need to know what i need to delete
-    // delete data.password
     res.status(200).send({data})
   })
   .catch(next)
@@ -46,8 +44,6 @@ function removeStore(req, res, next) {
   }
   storeModel.removeStore(parseInt(req.params.storeId))
   .then(function(data) {
-    //need to know what to filter from returned data
-    // delete data.password
     res.status(200).send({data})
   })
   .catch(next)
