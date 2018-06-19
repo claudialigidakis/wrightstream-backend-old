@@ -3,8 +3,8 @@ exports.up = function(knex, Promise) {
     table.increments();
     table.string('name').notNullable();
     table.integer('shop_id').notNullable().references('shops.id');
-    table.integer('stock_qty').defaultsTo('0');
-    table.string('steps').defaultsTo('[]');
+    table.decimal('stock_qty').defaultsTo('0');
+    table.text('steps').defaultsTo('[]');
     table.integer('category_id').references('categories.id');
     table.integer('product_id').references('products.id');
     table.text('photo').defaultsTo(null);

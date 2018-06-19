@@ -2,7 +2,7 @@ exports.up = function(knex, Promise) {
   return knex.schema.createTable('supplies', (table) => {
     table.increments();
     table.string('name').notNullable();
-    table.integer('stock_qty').defaultsTo('0');
+    table.decimal('stock_qty').defaultsTo('0');
     table.string('stock_qty_measure_type');
     table.string('measure_type');
     table.integer('shop_id').notNullable().references('shops.id');
