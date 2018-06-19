@@ -3,6 +3,7 @@ exports.up = function(knex, Promise) {
     table.increments();
     table.string('name').notNullable();
     table.integer('shop_id').notNullable().references('shops.id');
+    table.boolean('deleted').defaultsTo(false);
     table.decimal('stock_qty').defaultsTo('0');
     table.text('steps').defaultsTo('[]');
     table.integer('category_id').references('categories.id');

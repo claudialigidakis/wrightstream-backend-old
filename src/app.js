@@ -24,27 +24,28 @@ app.use(bodyParser.json())
 app.use(cookieParser());
 //user routes
 
-app.use('/shops', require('./routes/shops'))
-app.use('/auth', require('./routes/auth'))
-app.use('/auth/etsy', require('./routes/authEtsy'))
-app.use('/etsy', require('./routes/etsy'))
-
-app.use('/stores', require('./routes/stores'))
-app.use('/products', require('./routes/products'))
-app.use('/purchases', require('./routes/purchases'))
-app.use('/purchases_statuses', require('./routes/purchases_statuses'))
-app.use('/purchases_items', require('./routes/purchases_items'))
-app.use('/purchases_bundles', require('./routes/purchases_bundles'))
-app.use('/inventory', require('./routes/inventory'))
+app.use('/shops', require('./routes/Shop/shops'))
+app.use('/auth', require('./routes/Shop/auth'))
+app.use('/auth/etsy', require('./routes/Shop/authEtsy'))
+app.use('/etsy', require('./routes/Shop/etsy'))
+app.use('/stores', require('./routes/Shop/stores'))
 
 
-app.use('/bundles', require('./routes/bundles'))
-app.use('/categories', require('./routes/categories'))
-app.use('/items', require('./routes/items'))
-app.use('/kinds', require('./routes/kinds'))
-app.use('/sources', require('./routes/sources'))
-app.use('/supplies', require('./routes/supplies'))
-app.use('/types', require('./routes/types'))
+app.use('/purchases', require('./routes/WorkStream/purchases'))
+app.use('/purchases_statuses', require('./routes/WorkStream/purchases_statuses'))
+app.use('/purchases_items', require('./routes/WorkStream/purchases_items'))
+app.use('/purchases_bundles', require('./routes/WorkStream/purchases_bundles'))
+
+app.use('/inventory', require('./routes/Inventory/inventory'))
+
+app.use('/products', require('./routes/Products/products'))
+app.use('/bundles', require('./routes/Products/bundles'))
+app.use('/categories', require('./routes/Products/categories'))
+app.use('/items', require('./routes/Products/items'))
+app.use('/kinds', require('./routes/Products/kinds'))
+app.use('/sources', require('./routes/Products/sources'))
+app.use('/supplies', require('./routes/Products/supplies'))
+app.use('/types', require('./routes/Products/types'))
 
 
 //////////////////////////////////////////////////////////////////////////////
