@@ -37,6 +37,7 @@ app.use('/purchases_items', require('./routes/WorkStream/purchases_items'))
 app.use('/purchases_bundles', require('./routes/WorkStream/purchases_bundles'))
 
 app.use('/inventory', require('./routes/Inventory/inventory'))
+app.use('/orders', require('./routes/Inventory/orders'))
 
 app.use('/products', require('./routes/Products/products'))
 app.use('/bundles', require('./routes/Products/bundles'))
