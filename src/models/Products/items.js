@@ -64,7 +64,7 @@ function removeItems(itemId) {
 function updateItems(itemId, name, deleted, stock, steps, category, product, supplies, photo) {
   const toUpdate = {}
   name ? toUpdate.name = name : null
-  deleted ? toUpdate.delete = deleted : null
+  deleted ? toUpdate.deleted = deleted : null
   stock ? toUpdate.stock_qty = stock : null
   category ? toUpdate.category_id = category : null
   product ? toUpdate.product_id = product : null
