@@ -19,7 +19,7 @@ function getAllBundles(shopId) {
 
 function getOneBundle(bundleId) {
   return knex('bundles')
-  .where({id: bundleId, deleted:false})
+  .where({id: bundleId, archived:false})
   .first()
   }
 

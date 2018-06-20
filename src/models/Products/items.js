@@ -38,7 +38,7 @@ function getAllArchivedItems(shopId) {
 
 function getOneItem(itemId) {
   return knex('items')
-  .where({id: itemId, deleted:false})
+  .where({id: itemId, archived:false})
   .first()
 }
 
