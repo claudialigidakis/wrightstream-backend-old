@@ -23,6 +23,17 @@ function getAllBundles(req, res, next) {
   .catch(next)
 }
 
+function getAllArchivedBundles(req, res, next) {
+  if (!req.params.shopId) {
+    return next({status: 400, message: "Need specified shop to get the bundles"})
+  }
+  bundlesModel.getAllArchivedBundles(req.params.shopId)
+  .then(data => {
+    res.status(200).send({data})
+  })
+  .catch(next)
+}
+
 function createBundles(req, res, next) {
   if (!req.params.shopId || !req.body) {
     return next({status: 400, message: 'Need proper bundle inputs'})
@@ -38,7 +49,7 @@ function updateBundles(req, res, next) {
   if (!req.params.bundleId|| !req.body) {
     return next({ status: 400, message: 'Bad request'})
   }
-  bundlesModel.updateBundles(req.params.bundleId, req.body.name, req.body.deleted, req.body.stock, req.body.category_id, req.body.product_id, req.body.steps, req.body.items)
+  bundlesModel.updateBundles(req.params.bundleId, req.body.name, req.body.archived, req.body.stock, req.body.category_id, req.body.product_id, req.body.steps, req.body.items)
   .then(data => {
     res.status(200).send({ data })
   })
@@ -58,6 +69,7 @@ function removeBundles(req, res, next) {
 
 module.exports = {
 getOneBundle,
+getAllArchivedBundles,
 getAllBundles,
 createBundles,
 removeBundles,

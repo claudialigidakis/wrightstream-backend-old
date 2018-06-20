@@ -23,6 +23,17 @@ function getAllItems(req, res, next) {
   .catch(next)
 }
 
+function getAllArchivedItems(req, res, next) {
+  if (!req.params.shopId) {
+    return next({status: 400, message: "Need specified shop to get the items"})
+  }
+  itemsModel.getAllArchivedItems(req.params.shopId)
+  .then(data => {
+    res.status(200).send({data})
+  })
+  .catch(next)
+}
+
 function createItems(req, res, next) {
   if (!req.params.shopId || !req.body) {
     return next({status: 400, message: 'Need proper item inputs'})
@@ -59,6 +70,7 @@ function removeItems(req, res, next) {
 module.exports = {
   getOneItem,
   getAllItems,
+  getAllArchivedItems,
   createItems,
   removeItems,
   updateItems

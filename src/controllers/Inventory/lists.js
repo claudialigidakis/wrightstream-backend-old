@@ -1,65 +1,67 @@
-const bundlesModel = require('../../models/Products/bundles')
+const listsModel = require('../../models/Inventory/lists')
 
 
-function getOneBundle(req, res, next) {
-  if (!req.params.bundleId) {
-    return next({status: 400, message: 'No bundle indicated'})
+function getOneList(req, res, next) {
+  if (!req.params.listId) {
+    return next({status: 400, message: 'No list indicated'})
   }
-  bundlesModel.getOneBundle(req.params.bundleId)
+  listsModel.getOneList(req.params.listId)
   .then(data => {
     res.status(200).send({data})
   })
   .catch(next)
 }
 
-function getAllBundles(req, res, next) {
+function getAllLists(req, res, next) {
   if (!req.params.shopId) {
-    return next({status: 400, message: "Need specified shop to get the bundles"})
+    return next({status: 400, message: "Need specified shop to get the lists"})
   }
-  bundlesModel.getAllBundles(req.params.shopId)
+  listsModel.getAllLists(req.params.shopId)
   .then(data => {
     res.status(200).send({data})
   })
   .catch(next)
 }
 
-function createBundles(req, res, next) {
+function createList(req, res, next) {
   if (!req.params.shopId || !req.body) {
-    return next({status: 400, message: 'Need proper bundle inputs'})
+    return next({status: 400, message: 'Need proper list inputs'})
   }
-  bundlesModel.createBundles(req.body, parseInt(req.params.shopId))
+  listsModel.createList(req.body, parseInt(req.params.shopId))
   .then(data => {
+    console.log(data);
     res.status(200).send({data})
   })
   .catch(next)
 }
 
-function updateBundles(req, res, next) {
-  if (!req.params.bundleId|| !req.body) {
+function updateList(req, res, next) {
+  if (!req.params.listId|| !req.body) {
     return next({ status: 400, message: 'Bad request'})
   }
-  bundlesModel.updateBundles(req.params.bundleId, req.body.name, req.body.deleted, req.body.stock, req.body.category_id, req.body.product_id, req.body.steps, req.body.items)
+  listsModel.updateList(req.params.listId, req.body)
   .then(data => {
     res.status(200).send({ data })
   })
   .catch(next)
 }
 
-function removeBundles(req, res, next) {
-  if (!req.params.bundleId) {
-    return next({status: 400, message: 'Need to know indicated bundle'})
+function removeList(req, res, next) {
+  if (!req.params.listId) {
+    return next({status: 400, message: 'Need to know indicated list'})
   }
-  bundlesModel.removeBundles(parseInt(req.params.bundleId))
+  listsModel.removeList(parseInt(req.params.listId))
   .then(function(data) {
+    console.log(data);
     res.status(200).send({data})
   })
   .catch(next)
 }
 
 module.exports = {
-getOneBundle,
-getAllBundles,
-createBundles,
-removeBundles,
-updateBundles
+getOneList,
+getAllLists,
+createList,
+removeList,
+updateList
 }
