@@ -2,7 +2,7 @@ const knex = require('../../../db');
 
 function getAllItems(shopId) {
   return knex('items')
-  .where({shop_id: shopId, deleted:false})
+  .where({shop_id: shopId, archived:false})
   .then(items => {
     const promises = items.map(item => {
       return knex('items_supplies')
@@ -16,6 +16,25 @@ function getAllItems(shopId) {
       return Promise.all(promises)
 })
 }
+
+
+function getAllArchivedItems(shopId) {
+  return knex('items')
+  .where({shop_id: shopId, archived:true})
+  .then(items => {
+    const promises = items.map(item => {
+      return knex('items_supplies')
+        .join('supplies', 'supplies.id', 'items_supplies.supplies_id')
+        .where('items_supplies.item_id', item.id)
+        .then(supply => {
+          item.supplies = supply
+          return item
+        })
+      })
+      return Promise.all(promises)
+})
+}
+
 
 function getOneItem(itemId) {
   return knex('items')
@@ -38,11 +57,16 @@ function createItems(body, shopId) {
     photo: body.photo
   }).returning('*'))
   .then(newItem => {
+    console.log(newItem);
     if(body.supplies){
-      const suppliesArray = JSON.parse(body.supplies)
-      suppliesArray.map(supply => {
-        return (knex('items_supplies').insert({qty: suppliesArray.qty, qty_measure: suppliesArray.qty_measure, item_id: newItem.id, supplies_id: supply.id}).returning('*'))
+      const suppliesArray = body.supplies
+      const supplyPromise = suppliesArray.map(supply => {
+        console.log(supply, supply.qty, supply.qty_measure, newItem[0].id, supply.id);
+        return (knex('items_supplies')
+        .insert({qty: supply.qty, qty_measure: supply.qty_measure, item_id: newItem[0].id, supplies_id: supply.id})
+        .returning('*'))
       })
+      return Promise.all(supplyPromise)
     }
     return newItem
   })
@@ -64,7 +88,7 @@ function removeItems(itemId) {
 function updateItems(itemId, name, deleted, stock, steps, category, product, supplies, photo) {
   const toUpdate = {}
   name ? toUpdate.name = name : null
-  deleted ? toUpdate.deleted = deleted : null
+  archived ? toUpdate.archived = archived : null
   stock ? toUpdate.stock_qty = stock : null
   category ? toUpdate.category_id = category : null
   product ? toUpdate.product_id = product : null
@@ -93,6 +117,7 @@ function updateItems(itemId, name, deleted, stock, steps, category, product, sup
 module.exports = {
   getOneItem,
   getAllItems,
+  getAllArchivedItems,
   createItems,
   removeItems,
   updateItems

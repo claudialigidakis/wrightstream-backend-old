@@ -2,7 +2,7 @@ const knex = require('../../../db');
 
 function getAllBundles(shopId) {
   return knex('bundles')
-  .where({shop_id: shopId, deleted:false})
+  .where({shop_id: shopId, archived:false})
   .then(bundles => {
     const promises = bundles.map(bundle => {
       return knex('bundles_items')
@@ -17,12 +17,30 @@ function getAllBundles(shopId) {
 })
 }
 
-
 function getOneBundle(bundleId) {
   return knex('bundles')
   .where({id: bundleId, deleted:false})
   .first()
   }
+
+
+  function getAllArchivedBundles(shopId) {
+    return knex('bundles')
+    .where({shop_id: shopId, archived:true})
+    .then(bundles => {
+      const promises = bundles.map(bundle => {
+        return knex('bundles_items')
+          .join('items', 'items.id', 'bundles_items.item_id')
+          .where('bundles_items.bundles_id', bundle.id)
+          .then(item => {
+            bundle.items = item
+            return bundle
+          })
+        })
+        return Promise.all(promises)
+  })
+  }
+
 
 function createBundles(body, shopId) {
   let stock = body.stock || 0
@@ -64,10 +82,10 @@ function removeBundles(bundleId) {
   })
 }
 
-function updateBundles(bundleId, name, deleted, stock, categoryId, product_id, steps, items, photo) {
+function updateBundles(bundleId, name, archived, stock, categoryId, product_id, steps, items, photo) {
   const toUpdate = {}
   name ? toUpdate.name = name : null
-  deleted ? toUpdate.deleted = deleted : null
+  archived ? toUpdate.archived = archived : null
   stock ? toUpdate.stock = stock : null
   categoryId ? toUpdate.category_id = categoryId : null
   product_id ? toUpdate.product_id = product_id : null
@@ -99,6 +117,7 @@ function updateBundles(bundleId, name, deleted, stock, categoryId, product_id, s
 
 module.exports = {
   getOneBundle,
+  getAllArchivedBundles,
   getAllBundles,
   createBundles,
   removeBundles,

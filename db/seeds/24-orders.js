@@ -2,8 +2,8 @@ exports.seed = function(knex, Promise) {
   return knex('orders').del()
     .then(function () {
       return knex('orders').insert([
-        {id: 1, status_id: 1},
-        {id: 2, status_id: 1}
+        {id: 1, shop_id: 1, status_id: 1},
+        {id: 2, shop_id: 1, status_id: 1}
       ])
     })
     .then(() => {
