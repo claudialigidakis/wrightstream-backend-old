@@ -1,3 +1,4 @@
+const helperModel = require('../../models/Helper/measurement')
 var convert = require('convert-units')
 
 function volume(req, res, next) {
@@ -10,14 +11,20 @@ function length(req, res, next) {
   res.status(200).send({lengthMeasures})
 }
 
-
 function mass(req, res, next) {
   const massMeasures = convert().possibilities('mass')
   res.status(200).send({massMeasures})
 }
 
 function predictor(req, res, next) {
-  
+  if (!req.body) {
+    return next({status: 400, message: 'Need proper supplies inputs'})
+  }
+  helperModel.predictor(req.body)
+  .then(data => {
+    res.status(200).send({data})
+  })
+  .catch(next)
 }
 
 

@@ -14,7 +14,7 @@ exports.seed = function(knex, Promise) {
         {id: 7, name: 'Cupcake Wrapper', stock_qty: 6, stock_qty_measure_type: 'unit', measure_type: 'unit', shop_id: 1, source_id: 3, kind_id: 3},
         {id: 8, name: 'Eggs', stock_qty: 30, stock_qty_measure_type: 'unit', measure_type: 'unit', shop_id: 1, source_id: 1, kind_id: 1},
         {id: 9, name: 'White Sugar', stock_qty: 45, stock_qty_measure_type: 'cup', measure_type: 'volume', shop_id: 1, source_id: 3, kind_id: 4},
-        {id: 10, name: 'Butter', stock_qty: 20, stock_qty_measure_type: 'tbs', measure_type: 'volume', shop_id: 1, source_id: 1, kind_id: 1},
+        {id: 10, name: 'Butter', stock_qty: 20, stock_qty_measure_type: 'Tbs', measure_type: 'volume', shop_id: 1, source_id: 1, kind_id: 1},
         {id: 11, name: 'Salt', stock_qty: 10, stock_qty_measure_type: 'tsp', measure_type: 'volume', shop_id: 1, source_id: 3, kind_id: 4},
         {id: 12, name: 'Cocoa Powder', stock_qty: 30, stock_qty_measure_type: 'cup', measure_type: 'volume', shop_id: 1, source_id: 3, kind_id: 4},
         {id: 13, name: 'Baking Powder', stock_qty: 40, stock_qty_measure_type: 'tsp', measure_type: 'volume', shop_id: 1, source_id: 3, kind_id: 4},
@@ -23,7 +23,7 @@ exports.seed = function(knex, Promise) {
         {id: 16, name: 'Strawberry Jello', stock_qty: 60, stock_qty_measure_type: 'oz', measure_type: 'mass', shop_id: 1, source_id: 3, kind_id: 4},
         {id: 17, name: 'Strawberries', stock_qty: 60, stock_qty_measure_type: 'cup', measure_type: 'volume', shop_id: 1, source_id: 3, kind_id: 4},
         {id: 18, name: 'Canola Oil', stock_qty: 60, stock_qty_measure_type: 'cup', measure_type: 'volume', shop_id: 1, source_id: 3, kind_id: 4},
-        {id: 19, name: 'Cinnamon', stock_qty: 60, stock_qty_measure_type: 'tbs', measure_type: 'volume', shop_id: 1, source_id: 3, kind_id: 4}
+        {id: 19, name: 'Cinnamon', stock_qty: 60, stock_qty_measure_type: 'Tbs', measure_type: 'volume', shop_id: 1, source_id: 3, kind_id: 4}
       ])
     })
     .then(() => {
