@@ -85,7 +85,7 @@ function removeItems(itemId) {
 }
 
 
-function updateItems(itemId, name, deleted, stock, steps, category, product, supplies, photo) {
+function updateItems(itemId, name, archived, stock, steps, category, product, supplies, photo) {
   const toUpdate = {}
   name ? toUpdate.name = name : null
   archived ? toUpdate.archived = archived : null
