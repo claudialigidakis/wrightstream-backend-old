@@ -49,24 +49,25 @@ function createBundles(body, shopId) {
   let photo = body.photo || null
   return (
     knex('bundles').insert({
-    name: body.name,
-    shop_id: shopId,
-    stock_qty: stock,
-    steps: body.steps,
-    category_id: category,
-    product_id: product,
-    photo: photo
-  }).returning('*'))
-  .then(bundles => {
-    if(body.items){
-      const itemArray = JSON.parse(body.items)
-      itemArray.map(ele => {
-        return (knex('bundles_items')
-        .insert({item_qty: ele.item_qty, bundles_id: bundles.id, item_id: ele.id})
-        .returning('*'))
-      })
+      name: body.name,
+      shop_id: shopId,
+      stock_qty: stock,
+      steps: body.steps,
+      category_id: category,
+      product_id: product,
+      photo: photo
+    }).returning('*'))
+    .then(bundle => {
+      if(body.items){
+        const itemsArray = body.items
+        const itemsPromise = itemsArray.map(item => {
+          return (knex('bundles_items')
+          .insert({item_qty: item.item_qty, bundles_id: bundle[0].id, item_id: item.id})
+          .returning('*'))
+        })
+      return Promise.all(itemsPromise)
     }
-    else return bundles
+    return bundle
   })
 }
 
