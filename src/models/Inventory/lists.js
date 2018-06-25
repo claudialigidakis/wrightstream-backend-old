@@ -25,6 +25,7 @@ function getOneList(listId) {
   .first()
   }
 
+
 function createList(body, shopId) {
   return (
     knex('lists')
