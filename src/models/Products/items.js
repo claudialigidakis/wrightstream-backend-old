@@ -47,28 +47,27 @@ function createItems(body, shopId) {
   let category = body.categoryId || null
   let product = body.productId || null
   let photo = body.photo || null
-  return (knex('items').insert({
-    name: body.name,
-    stock_qty: stock,
-    steps: body.steps,
-    shop_id: shopId,
-    category_id: category,
-    product_id: product,
-    photo: body.photo
-  }).returning('*'))
-  .then(newItem => {
-    console.log(newItem);
-    if(body.supplies){
-      const suppliesArray = body.supplies
-      const supplyPromise = suppliesArray.map(supply => {
-        console.log(supply, supply.qty, supply.qty_measure, newItem[0].id, supply.id);
-        return (knex('items_supplies')
-        .insert({qty: supply.qty, qty_measure: supply.qty_measure, item_id: newItem[0].id, supplies_id: supply.id})
-        .returning('*'))
-      })
-      return Promise.all(supplyPromise)
+  return (
+    knex('items').insert({
+      name: body.name,
+      stock_qty: stock,
+      steps: body.steps,
+      shop_id: shopId,
+      category_id: category,
+      product_id: product,
+      photo: photo
+    }).returning('*'))
+    .then(item => {
+      if(body.supplies){
+        const suppliesArray = body.supplies
+        const suppliesPromise = suppliesArray.map(supply => {
+          return (knex('items_supplies')
+          .insert({qty: supply.qty, qty_measure: supply.qty_measure, item_id: item[0].id, supplies_id: supply.id})
+          .returning('*'))
+        })
+      return Promise.all(suppliesPromise)
     }
-    return newItem
+    return item
   })
 }
 
@@ -85,7 +84,7 @@ function removeItems(itemId) {
 }
 
 
-function updateItems(itemId, name, deleted, stock, steps, category, product, supplies, photo) {
+function updateItems(itemId, name, archived, stock, steps, category, product, supplies, photo) {
   const toUpdate = {}
   name ? toUpdate.name = name : null
   archived ? toUpdate.archived = archived : null
