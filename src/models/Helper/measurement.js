@@ -56,6 +56,39 @@ function predictor(body){
   })
 }
 
+function orderPredictor(body){
+  const items = body.items
+  const bundles = body.bundles
+  let comBunSupp;
+  //link bundles and items
+  return bundleItems(bundles)
+  .then(data => {
+    //link bundle/items to supplies
+    return bundleSupplies(data, bundles)
+  })
+  .then(bundleSupplies => {
+    //create a supplies list that can be added together
+    return createBundleSuppliesList(bundleSupplies)
+  })
+  .then(completedBundleSupplies => {
+    comBunSupp = completedBundleSupplies
+    //link supplies and items
+    return itemSupplies(items)
+  })
+  .then(suppliesList => {
+    //create a supplies list from items
+  return createItemsList(suppliesList)
+  })
+  .then(lists =>{
+    //add together the bundles and the items
+  return combine(lists, comBunSupp)
+  })
+  .then(addedSupplies => {
+    //send data to frontEnd in an organized way
+  return orderData(addedSupplies)
+  })
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////Item helper functions/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -235,8 +268,23 @@ return Promise.resolve(bundledItems)
 function combine(lists, comBunSupp){
   let items = lists
   let bundles = comBunSupp
-  console.log(items, bundles);
-///need to combine both lists 
+
+  let arrayItems = Object.values(items)
+  let arrayBundles = Object.values(bundles)
+  let result = arrayItems.concat(arrayBundles);
+  return result
+  .reduce((acc, ele) => {
+    if(acc.hasOwnProperty(ele.id)){
+      let newSuppliesNeeded = ele.neededSupplies
+      acc[ele.id].neededSupplies += parseFloat(newSuppliesNeeded)
+    }
+    else {
+      acc[ele.id] = ele
+      let suppliesNeeded = acc[ele.id].neededSupplies
+      acc[ele.id].neededSupplies = parseFloat(suppliesNeeded)
+    }
+    return acc
+  }, {})
 }
 
 
@@ -252,7 +300,24 @@ function presentData(addedSupplies){
 }
 
 
+function orderData(addedSupplies){
+ let supplies = []
+ let data = {}
+ for(var i in addedSupplies){
+   data = {}
+   convertedSupplies = convert(addedSupplies[i].neededSupplies).from(addedSupplies[i].new_measure).toBest({exclude: ['fl-oz', 'ft3', 'yd3', 'in3']})
+   convertedSupplies.val = convertedSupplies.val.toPrecision(3);
+   data.supply_qty = convertedSupplies.val
+   data.supply_measure_type = convertedSupplies.unit
+   data.supply_id = addedSupplies[i].id
+  supplies.push(data)
+ }
+ return supplies
+}
+
+
 module.exports = {
   wrightStream,
-  predictor
+  predictor,
+  orderPredictor
 }

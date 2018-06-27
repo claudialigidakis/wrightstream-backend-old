@@ -5,7 +5,8 @@ exports.up = function(knex, Promise) {
     table.integer('shop_id').notNullable().references('shops.id');
     table.integer('staff_id').nullable().references('staff.id');
     table.string('purchase_date').nullable();
-    table.integer('priority_id').nullable();
+    table.text('notes').nullable();
+    table.boolean('inventory').defaultsTo(false);
     table.integer('order_id').nullable();
     table.string('service').nullable();
     table.string('tracking').nullable();

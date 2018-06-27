@@ -45,9 +45,21 @@ function updateOrder(req, res, next) {
   .catch(next)
 }
 
+function updateOrderSupply(req, res, next) {
+  if (!req.params.orderId|| !req.body) {
+    return next({ status: 400, message: 'Bad request'})
+  }
+  ordersModel.updateOrderSupply(req.params.orderId, req.body)
+  .then(data => {
+    res.status(200).send({ data })
+  })
+  .catch(next)
+}
+
 module.exports = {
 getOneOrder,
 getAllOrders,
 createOrder,
-updateOrder
+updateOrder,
+updateOrderSupply
 }

@@ -44,7 +44,7 @@ function updatePurchases(req, res, next){
   if (!req.params.purchaseId|| !req.body) {
     return next({ status: 400, message: 'Bad request'})
   }
-  purchasesModel.updatePurchases(req.params.purchaseId, req.body.delivery_date, req.body.store_id, req.body.shop_id, req.body.staff_id, req.body.purchase_date, req.body.service, req.body.tracking)
+  purchasesModel.updatePurchases(req.params.purchaseId, req.body.delivery_date, req.body.store_id, req.body.shop_id, req.body.staff_id, req.body.purchase_date, req.body.service, req.body.tracking, req.body.notes)
   .then(data => {
     res.status(200).send({ data })
   })
