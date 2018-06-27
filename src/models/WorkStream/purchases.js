@@ -8,57 +8,80 @@ function getOnePurchase(purchaseId) {
 }
 
 function getAllPurchases(shopId) {
-  return knex('purchases')
-  .where({shop_id: shopId})
-  .then(purchases => {
+  return knex('purchases').where({shop_id: shopId}).then(purchases => {
     const promises = purchases.map(purchase => {
-      return knex('purchases_statuses')
-        .join('statuses', 'statuses.id', 'purchases_statuses.status_id')
-        .where('purchases_statuses.purchase_id', purchase.id)
-        .then(status => {
-          purchase.statuses = status
+      return knex('purchases_statuses').join('statuses', 'statuses.id', 'purchases_statuses.status_id').where('purchases_statuses.purchase_id', purchase.id)
+      .then(status => {
+        purchase.statuses = status
+        return purchase
+      })
+      .then(bundles => {
+        return knex('purchases_bundles').join('bundles', 'bundles.id', 'purchases_bundles.bundle_id').select('bundles.id', 'bundle_qty', 'bundles.name', 'completed', 'archived', 'steps', 'photo', 'purchases_bundles.updated_at', 'purchases_bundles.created_at', 'staff_id').where('purchases_bundles.purchase_id', purchase.id)
+        .then(bundlesList => {
+          purchase.bundles = bundlesList
           return purchase
         })
+        .then(bundleItems => {
+          const bundlepromises = bundleItems.bundles.map(bundless => {
+            return knex('bundles_items').join('items', 'items.id', 'bundles_items.item_id').select('items.id', 'item_qty', 'items.name', 'bundles_id', 'steps', 'photo', 'stock_qty').where('bundles_items.bundles_id', bundless.id)
+            .then(bundle_items => {
+              bundless.bundle_items = bundle_items
+              return bundles
+            })
+          })
+          return Promise.all(bundlepromises)
+        })
+        .then(supplies => {
+          return knex('purchases_supplies')
+          .join('supplies', 'supplies.id', 'purchases_supplies.supplies_id')
+          .select('supplies_id', 'supplies_qty', 'supplies_measurement', 'completed', 'name')
+          .where('purchases_supplies.purchase_id', purchase.id)
+          .then(supplyList => {
+            purchase.supplies = supplyList
+            return purchase
+          })
+        })
+        .then(items => {
+          return knex('purchases_items')
+          .join('items', 'items.id', 'purchases_items.item_id')
+          .select('items.id', 'item_qty', 'items.name', 'completed', 'archived', 'steps', 'photo', 'purchases_items.updated_at', 'purchases_items.created_at', 'staff_id')
+          .where('purchases_items.purchase_id', purchase.id)
+          .then(itemsList => {
+            purchase.items = itemsList
+            return purchase
+          })
+        })
+      })
     })
     return Promise.all(promises)
   })
 }
 
-function getAllBundles(shopId) {
-  return knex('bundles')
-  .where({shop_id: shopId})
-  .then(bundles => {
-    const promises = bundles.map(bundle => {
-      return knex('bundles_items')
-        .join('items', 'items.id', 'bundles_items.item_id')
-        .where('bundles_items.bundles_id', bundle.id)
-        .then(item => {
-          bundle.items = item
-          return bundle
-        })
-      })
-      return Promise.all(promises)
-})
-}
-
-
-
-
 function createPurchases(shop_id, store_id, delivery_date, staff_id, purchase_date, order_id, service, tracking, items, bundles) {
   const toCreate = {}
   const newPurchase = {}
-  shop_id ? toCreate.shop_id = shop_id : null
-  delivery_date ? toCreate.delivery_date = delivery_date : null
-  store_id ? toCreate.store_id = store_id : null
-  staff_id ? toCreate.staff_id = staff_id : null
-  purchase_date ? toCreate.purchase_date = purchase_date : null
-  service ? toCreate.service = service : null
-  tracking ? toCreate.tracking = tracking : null
-  return (
-    knex('purchases')
-  .insert(toCreate)
-  .returning('*'))
-  .then(purchase => {
+  shop_id
+    ? toCreate.shop_id = shop_id
+    : null
+  delivery_date
+    ? toCreate.delivery_date = delivery_date
+    : null
+  store_id
+    ? toCreate.store_id = store_id
+    : null
+  staff_id
+    ? toCreate.staff_id = staff_id
+    : null
+  purchase_date
+    ? toCreate.purchase_date = purchase_date
+    : null
+  service
+    ? toCreate.service = service
+    : null
+  tracking
+    ? toCreate.tracking = tracking
+    : null
+  return (knex('purchases').insert(toCreate).returning('*')).then(purchase => {
     newPurchase.createdPurchase = purchase
     return PurchaseStatusModel.createPurchaseStatus(purchase[0].id, null)
   }).then(data => {
@@ -73,8 +96,7 @@ function createPurchases(shop_id, store_id, delivery_date, staff_id, purchase_da
       return Promise.all(itemPromises)
     } else
       return data
-  })
-  .then(itemsData => {
+  }).then(itemsData => {
     if (bundles) {
       const bundlePromises = bundles.map(bundle => {
         let bundle_id = bundle.bundle_id
@@ -85,21 +107,18 @@ function createPurchases(shop_id, store_id, delivery_date, staff_id, purchase_da
       })
       return Promise.all(bundlePromises)
     } else
-    return itemsData
-  })
-  .then(purchaseItemsBundles => {
+      return itemsData
+  }).then(purchaseItemsBundles => {
     console.log(purchaseItemsBundles);
     return newPurchase
   })
 }
 
-
-
 function removePurchases(purchaseId) {
   return (knex('purchases').where({id: purchaseId}).del())
 }
 
-function updatePurchases(purchaseId, delivery_date, store_id, shop_id, staff_id, purchase_date, service, tracking) {
+function updatePurchases(purchaseId, delivery_date, store_id, shop_id, staff_id, purchase_date, service, tracking, notes) {
   const toUpdate = {}
   delivery_date
     ? toUpdate.delivery_date = delivery_date
@@ -122,7 +141,9 @@ function updatePurchases(purchaseId, delivery_date, store_id, shop_id, staff_id,
   tracking
     ? toUpdate.tracking = tracking
     : null
-  console.log(toUpdate);
+  notes
+    ? toUpdate.notes = notes
+    : null
   return (knex('purchases').update(toUpdate).where({id: purchaseId}).returning('*'))
 }
 

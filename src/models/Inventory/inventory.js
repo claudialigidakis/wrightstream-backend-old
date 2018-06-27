@@ -3,8 +3,9 @@ const knex = require('../../../db');
 
 function getAllInventorySupplies(shopId) {
   return knex('supplies')
-  .select('name', 'stock_qty', 'stock_qty_measure_type', 'measure_type', 'id')
-  .where({shop_id: shopId})
+  .join('kinds', 'kinds.id', 'supplies.kind_id')
+  .select('supplies.name', 'stock_qty', 'kind_id', 'stock_qty_measure_type', 'measure_type', 'supplies.id')
+  .where({'supplies.shop_id': shopId})
 }
 
 function getAllInventoryProducts(shopId) {

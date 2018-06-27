@@ -16,6 +16,17 @@ function mass(req, res, next) {
   res.status(200).send({massMeasures})
 }
 
+function wrightStream(req, res, next){
+  if (!req.params.shopId) {
+    return next({status: 400, message: 'Need proper shop inputs'})
+  }
+  helperModel.wrightStream(req.params.shopId)
+  .then(data => {
+    res.status(200).send({data})
+  })
+  .catch(next)
+}
+
 function predictor(req, res, next) {
   if (!req.body) {
     return next({status: 400, message: 'Need proper supplies inputs'})
@@ -27,10 +38,23 @@ function predictor(req, res, next) {
   .catch(next)
 }
 
+function orderPredictor(req, res, next) {
+  if (!req.body) {
+    return next({status: 400, message: 'Need proper supplies inputs'})
+  }
+  helperModel.orderPredictor(req.body)
+  .then(data => {
+    res.status(200).send({data})
+  })
+  .catch(next)
+}
+
 
 module.exports = {
   volume,
   length,
   mass,
-  predictor
+  wrightStream,
+  predictor,
+  orderPredictor
 }
