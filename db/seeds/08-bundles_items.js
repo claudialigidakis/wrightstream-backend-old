@@ -13,9 +13,9 @@ exports.seed = function(knex, Promise) {
         {id: 8, item_qty: 6, bundles_id: 1, item_id: 12},
         {id: 9, item_qty: 2, bundles_id: 2, item_id: 6},
         {id: 10, item_qty: 2, bundles_id: 2, item_id: 7},
-        {id: 11, item_qty: 1, bundles_id: 3, item_id: 9},
+        {id: 11, item_qty: 1, bundles_id: 3, item_id: 8},
         {id: 12, item_qty: 1, bundles_id: 3, item_id: 3},
-        {id: 13, item_qty: 2, bundles_id: 1, item_id: 20},
+        {id: 13, item_qty: 2, bundles_id: 1, item_id: 9},
       ])
     })
     .then(() => {

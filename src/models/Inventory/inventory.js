@@ -45,6 +45,8 @@ function createBacklog(shopId, purchase_ids){
   })
   .then(supplies => {
     return supplies.map(supply => {
+
+      //need to add up all supplies needed and then add it to a list
       return supply.supplies
     })
   })
