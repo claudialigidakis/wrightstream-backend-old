@@ -16,7 +16,6 @@ function getAllPurchaseBundles(purchase_id) {
 }
 
 function createPurchaseBundle(purchase_id, bundle_id, bundle_qty, completed, staff_id) {
-  console.log(purchase_id, bundle_id, bundle_qty, completed, staff_id);
     const toCreate = {}
     toCreate.purchase_id = purchase_id
     toCreate.bundle_id = bundle_id
@@ -30,7 +29,6 @@ function createPurchaseBundle(purchase_id, bundle_id, bundle_qty, completed, sta
 }
 
 function updatePurchaseBundle(purchaseId, bundle_id, bundle_qty, completed, staff_id) {
-  console.log(purchaseId, bundle_id);
   const toUpdate = {}
   completed ? toUpdate.completed = completed : null
   bundle_qty ? toUpdate.bundle_qty = bundle_qty : null

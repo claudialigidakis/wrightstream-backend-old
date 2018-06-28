@@ -2,6 +2,9 @@ const knex = require('../../../db');
 const PurchaseStatusModel = require('../WorkStream/purchases_statuses')
 const PurchaseItemModel = require('../WorkStream/purchases_items')
 const PurchaseBundleModel = require('../WorkStream/purchases_bundles')
+const Helper = require('../Helper/measurement')
+
+
 
 function getOnePurchase(purchaseId) {
   return (knex('purchases').where({id: purchaseId}))
@@ -81,13 +84,16 @@ function createPurchases(shop_id, store_id, delivery_date, staff_id, purchase_da
   tracking
     ? toCreate.tracking = tracking
     : null
-  return (knex('purchases').insert(toCreate).returning('*')).then(purchase => {
+  return (knex('purchases')
+  .insert(toCreate)
+  .returning('*'))
+  .then(purchase => {
     newPurchase.createdPurchase = purchase
     return PurchaseStatusModel.createPurchaseStatus(purchase[0].id, null)
   }).then(data => {
     if (items) {
       const itemPromises = items.map(item => {
-        let item_id = item.item_id
+        let item_id = item.id
         let item_qty = item.item_qty
         let completed = null
         let staff_id = null
@@ -99,7 +105,7 @@ function createPurchases(shop_id, store_id, delivery_date, staff_id, purchase_da
   }).then(itemsData => {
     if (bundles) {
       const bundlePromises = bundles.map(bundle => {
-        let bundle_id = bundle.bundle_id
+        let bundle_id = bundle.id
         let bundle_qty = bundle.bundle_qty
         let completed = null
         let staff_id = null
@@ -109,9 +115,20 @@ function createPurchases(shop_id, store_id, delivery_date, staff_id, purchase_da
     } else
       return itemsData
   }).then(purchaseItemsBundles => {
-    console.log(purchaseItemsBundles);
-    return newPurchase
-  })
+    return Helper.orderPredictor({items, bundles})
+    })
+    .then(supplies => {
+      const purchaseSupplies = supplies.map(supply => {
+        console.log("supply", supply);
+        return knex('purchases_supplies')
+        .insert({'purchase_id':newPurchase.createdPurchase[0].id, 'supplies_id': parseInt(supply.supply_id), 'supplies_qty': parseInt(supply.supply_qty), 'supplies_measurement':supply.supply_measure_type})
+        .returning('*')
+      })
+      return Promise.all(purchaseSupplies)
+    })
+    .then(data => {
+      return newPurchase
+    })
 }
 
 function removePurchases(purchaseId) {

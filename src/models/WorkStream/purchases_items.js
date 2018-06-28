@@ -16,7 +16,6 @@ function getAllPurchaseItem(purchase_id) {
 }
 
 function createPurchaseItem(purchaseId, item_id, item_qty, completed, staff_id) {
-  console.log("made it to purchase model", purchaseId, item_id, item_qty, completed, staff_id);
     const toCreate = {}
     toCreate.purchase_id = purchaseId
     toCreate.item_id = item_id
@@ -30,7 +29,6 @@ function createPurchaseItem(purchaseId, item_id, item_qty, completed, staff_id) 
 }
 
 function updatePurchaseItem(purchaseId, item_id, item_qty, completed, staff_id) {
-  console.log(purchaseId, item_id, item_qty, completed, staff_id);
   const toUpdate = {}
   completed ? toUpdate.completed = completed : null
   item_qty ? toUpdate.item_qty = item_qty : null
