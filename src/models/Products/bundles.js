@@ -83,13 +83,13 @@ function removeBundles(bundleId) {
   })
 }
 
-function updateBundles(bundleId, name, archived, stock, categoryId, product_id, steps, items, photo) {
+function updateBundles(bundleId, name, archived, stock, categoryId, productId, steps, items, photo) {
   const toUpdate = {}
   name ? toUpdate.name = name : null
   archived ? toUpdate.archived = archived : null
   stock ? toUpdate.stock = stock : null
   categoryId ? toUpdate.category_id = categoryId : null
-  product_id ? toUpdate.product_id = product_id : null
+  productId ? toUpdate.product_id = productId : null
   steps ? toUpdate.steps = steps : null
   photo ? toUpdate.photo = photo : null
 
@@ -104,12 +104,12 @@ function updateBundles(bundleId, name, archived, stock, categoryId, product_id, 
       .where({bundles_id: bundleId})
       .del())
       .then(newdata => {
-          const itemArray = JSON.parse(body.items)
-          itemArray.map(ele => {
+        const itemsPromise = items.map(item => {
             return (knex('bundles_items')
-            .insert({item_qty: ele.item_qty, bundles_id: bundles.id, item_id: ele.id})
+            .insert({item_qty: item.item_qty, bundles_id: data[0].id, item_id: item.id})
             .returning('*'))
           })
+        return Promise.all(itemsPromise)
       })
     }
     return data

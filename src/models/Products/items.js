@@ -44,8 +44,8 @@ function getOneItem(itemId) {
 
 function createItems(body, shopId) {
   let stock = body.stock || 0
-  let category = body.categoryId || null
-  let product = body.productId || null
+  let categoryId = body.categoryId || null
+  let productId = body.productId || null
   let photo = body.photo || null
   return (
     knex('items').insert({
@@ -53,8 +53,8 @@ function createItems(body, shopId) {
       stock_qty: stock,
       steps: body.steps,
       shop_id: shopId,
-      category_id: category,
-      product_id: product,
+      category_id: categoryId,
+      product_id: productId,
       photo: photo
     }).returning('*'))
     .then(item => {
@@ -84,13 +84,13 @@ function removeItems(itemId) {
 }
 
 
-function updateItems(itemId, name, archived, stock, steps, category, product, supplies, photo) {
+function updateItems(itemId, name, archived, stock, steps, categoryId, productId, supplies, photo) {
   const toUpdate = {}
   name ? toUpdate.name = name : null
   archived ? toUpdate.archived = archived : null
   stock ? toUpdate.stock_qty = stock : null
-  category ? toUpdate.category_id = category : null
-  product ? toUpdate.product_id = product : null
+  categoryId ? toUpdate.category_id = categoryId : null
+  productId ? toUpdate.product_id = productId : null
   steps ? toUpdate.steps = steps : null
   photo ? toUpdate.photo = photo : null
 
@@ -104,9 +104,10 @@ function updateItems(itemId, name, archived, stock, steps, category, product, su
       .where({item_id: itemId})
       .del())
       .then(newdata => {
-        supplies.map(supply => {
-          return (knex('items_supplies').insert({qty: body.qty, qty_measure: body.qty_measure, item_id: data.id, supplies_id: supply.id}).returning('*'))
+        const suppliesPromise = supplies.map(supply => {
+          return (knex('items_supplies').insert({qty: supply.qty, qty_measure: supply.qty_measure, item_id: data[0].id, supplies_id: supply.id}).returning('*'))
         })
+      return Promise.all(suppliesPromise)
       })
     }
     return data

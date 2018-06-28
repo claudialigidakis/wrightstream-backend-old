@@ -49,7 +49,7 @@ function updateItems(req, res, next) {
   if (!req.params.itemId|| !req.body) {
     return next({ status: 400, message: 'Bad request'})
   }
-  itemsModel.updateItems(parseInt(req.params.itemId), req.body.name, req.body.archived, req.body.stock, req.body.steps, req.body.category, req.body.product, req.body.supplies)
+  itemsModel.updateItems(parseInt(req.params.itemId), req.body.name, req.body.archived, req.body.stock, req.body.steps, req.body.categoryId, req.body.productId, req.body.supplies)
   .then(data => {
     res.status(200).send({ data })
   })
