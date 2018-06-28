@@ -191,6 +191,7 @@ function createBundleSuppliesList(bundleSupplies){
     }
     else {
       acc[ele.id] = ele
+      let measure_type;
       let suppliesNeeded = (acc[ele.id].qty * acc[ele.id].item_qty) * acc[ele.id].bundle_qty
 
       if(acc[ele.id].measure_type === 'volume') {
@@ -198,11 +199,14 @@ function createBundleSuppliesList(bundleSupplies){
         measure_type = 'tsp'
       }
 
+      else if(acc[ele.id].measure_type === 'unit') {
+        suppliesNeeded = suppliesNeeded
+        measure_type = 'unit'
+      }
       else if(acc[ele.id].measure_type === 'length'){
         suppliesNeeded = convert(suppliesNeeded).from(acc[ele.id].qty_measure).to('ft')
         measure_type = 'ft'
       }
-
       else if(acc[ele.id].measure_type === 'mass'){
         suppliesNeeded = convert(suppliesNeeded).from(acc[ele.id].qty_measure).to('oz')
         measure_type = 'oz'
@@ -306,13 +310,21 @@ function orderData(addedSupplies){
  let data = {}
  for(var i in addedSupplies){
    data = {}
-   convertedSupplies = convert(addedSupplies[i].neededSupplies).from(addedSupplies[i].new_measure).toBest({exclude: ['fl-oz', 'ft3', 'yd3', 'in3']})
-   convertedSupplies.val = convertedSupplies.val.toPrecision(3);
-   data.supply_qty = convertedSupplies.val
-   data.supply_measure_type = convertedSupplies.unit
-   data.supply_id = addedSupplies[i].id
-  supplies.push(data)
- }
+   if(addedSupplies[i].new_measure !== 'unit'){
+     convertedSupplies = convert(addedSupplies[i].neededSupplies).from(addedSupplies[i].new_measure).toBest({exclude: ['fl-oz', 'ft3', 'yd3', 'in3']})
+     convertedSupplies.val = convertedSupplies.val.toPrecision(3);
+     data.supply_qty = convertedSupplies.val
+     data.supply_measure_type = convertedSupplies.unit
+     data.supply_id = addedSupplies[i].id
+    supplies.push(data)
+    }
+    else {
+      data.supply_qty = addedSupplies[i].neededSupplies
+      data.supply_measure_type = 'unit'
+      data.supply_id = addedSupplies[i].id
+     supplies.push(data)
+    }
+   }
  return supplies
 }
 
