@@ -23,7 +23,11 @@ exports.seed = function(knex, Promise) {
         {id: 16, name: 'Strawberry Jello', stock_qty: 60, stock_qty_measure_type: 'oz', measure_type: 'mass', shop_id: 1, source_id: 3, kind_id: 4},
         {id: 17, name: 'Strawberries', stock_qty: 60, stock_qty_measure_type: 'cup', measure_type: 'volume', shop_id: 1, source_id: 3, kind_id: 4},
         {id: 18, name: 'Canola Oil', stock_qty: 60, stock_qty_measure_type: 'cup', measure_type: 'volume', shop_id: 1, source_id: 3, kind_id: 4},
-        {id: 19, name: 'Cinnamon', stock_qty: 60, stock_qty_measure_type: 'Tbs', measure_type: 'volume', shop_id: 1, source_id: 3, kind_id: 4}
+        {id: 19, name: 'Cinnamon', stock_qty: 60, stock_qty_measure_type: 'Tbs', measure_type: 'volume', shop_id: 1, source_id: 3, kind_id: 4},
+        {id: 20, name: 'Candle Stick', stock_qty: 60, stock_qty_measure_type: 'unit', measure_type: 'unit', shop_id: 1, source_id: 3, kind_id: 3},
+        {id: 21, name: 'Cutting Knife', stock_qty: 60, stock_qty_measure_type: 'unit', measure_type: 'unit', shop_id: 1, source_id: 3, kind_id: 3},
+        {id: 22, name: 'Chocolate Chips', stock_qty: 60, stock_qty_measure_type: 'cup', measure_type: 'volume', shop_id: 1, source_id: 2, kind_id: 3},
+        {id: 23, name: 'Glaze', stock_qty: 30, stock_qty_measure_type: 'cup', measure_type: 'volume', shop_id: 1, source_id: 2, kind_id: 2},
       ])
     })
     .then(() => {

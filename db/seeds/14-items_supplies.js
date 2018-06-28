@@ -44,6 +44,28 @@ exports.seed = function(knex, Promise) {
         {qty: 1, qty_measure: 'Tbs', item_id: 4, supplies_id: 3},
         {qty: 1.25, qty_measure: 'cup', item_id: 4, supplies_id: 1},
 
+        {qty: 2, qty_measure: 'cup', item_id: 5, supplies_id: 9},
+        {qty: 1.75, qty_measure: 'cup', item_id: 5, supplies_id: 2},
+        {qty: .75, qty_measure: 'cup', item_id: 5, supplies_id: 12},
+        {qty: 1.5, qty_measure: 'tsp', item_id: 5, supplies_id: 13},
+        {qty: 1.5, qty_measure: 'tsp', item_id: 5, supplies_id: 14},
+        {qty: 1, qty_measure: 'tsp', item_id: 5, supplies_id: 11},
+        {qty: 2, qty_measure: 'unit', item_id: 5, supplies_id: 8},
+        {qty: 1, qty_measure: 'cup', item_id: 5, supplies_id: 1},
+        {qty: .5, qty_measure: 'cup', item_id: 5, supplies_id: 18},
+        {qty: 2, qty_measure: 'tsp', item_id: 5, supplies_id: 19},
+        {qty: 2, qty_measure: 'tsp', item_id: 5, supplies_id: 3},
+
+        {qty: 1.25, qty_measure: 'cup', item_id: 6, supplies_id: 10},
+        {qty: 2, qty_measure: 'cup', item_id: 6, supplies_id: 9},
+        {qty: 2, qty_measure: 'unit', item_id: 6, supplies_id: 8},
+        {qty: 2, qty_measure: 'tsp', item_id: 6, supplies_id: 3},
+        {qty: 2, qty_measure: 'cup', item_id: 6, supplies_id: 2},
+        {qty: .75, qty_measure: 'cup', item_id: 6, supplies_id: 12},
+        {qty: 1, qty_measure: 'tsp', item_id: 6, supplies_id: 14},
+        {qty: .5, qty_measure: 'tsp', item_id: 6, supplies_id: 11},
+        {qty: 2, qty_measure: 'cup', item_id: 6, supplies_id: 22},
+
         {qty: .5, qty_measure: 'cup', item_id: 7, supplies_id: 10},
         {qty: .75, qty_measure: 'cup', item_id: 7, supplies_id: 9},
         {qty: 1, qty_measure: 'unit', item_id: 7, supplies_id: 8},
@@ -52,7 +74,50 @@ exports.seed = function(knex, Promise) {
         {qty: 1.5, qty_measure: 'cup', item_id: 7, supplies_id: 2},
         {qty: .75, qty_measure: 'tsp', item_id: 7, supplies_id: 13},
         {qty: .25, qty_measure: 'tsp', item_id: 7, supplies_id: 11},
-        {qty: 1, qty_measure: 'Tbs', item_id: 7, supplies_id: 19}
+        {qty: 1, qty_measure: 'Tbs', item_id: 7, supplies_id: 19},
+
+        {qty: 2.75, qty_measure: 'cup', item_id: 8, supplies_id: 2},
+        {qty: 1, qty_measure: 'tsp', item_id: 8, supplies_id: 14},
+        {qty: .5, qty_measure: 'tsp', item_id: 8, supplies_id: 13},
+        {qty: 1, qty_measure: 'cup', item_id: 8, supplies_id: 10},
+        {qty: 1.5, qty_measure: 'cup', item_id: 8, supplies_id: 9},
+        {qty: 1, qty_measure: 'unit', item_id: 8, supplies_id: 8},
+        {qty: 1, qty_measure: 'tsp', item_id: 8, supplies_id: 3},
+
+        {qty: 10, qty_measure: 'Tbs', item_id: 9, supplies_id: 10},
+        {qty: 1.25, qty_measure: 'cup', item_id: 9, supplies_id: 9},
+        {qty: .75, qty_measure: 'cup', item_id: 9, supplies_id: 12},
+        {qty: .25, qty_measure: 'tsp', item_id: 9, supplies_id: 11},
+        {qty: .5, qty_measure: 'tsp', item_id: 9, supplies_id: 3},
+        {qty: 1, qty_measure: 'tsp', item_id: 9, supplies_id: 3},
+        {qty: 2, qty_measure: 'unit', item_id: 9, supplies_id: 8},
+        {qty: .5, qty_measure: 'cup', item_id: 9, supplies_id: 2},
+
+        {qty: 1, qty_measure: 'unit', item_id: 10, supplies_id: 20},
+
+        {qty: 5, qty_measure: 'cup', item_id: 11, supplies_id: 18},
+        {qty: 1, qty_measure: 'cup', item_id: 11, supplies_id: 1},
+        {qty: 1, qty_measure: 'unit', item_id: 11, supplies_id: 8},
+        {qty: 2, qty_measure: 'cup', item_id: 11, supplies_id: 2},
+        {qty: 2, qty_measure: 'Tbs', item_id: 11, supplies_id: 9},
+        {qty: 4.5, qty_measure: 'tsp', item_id: 11, supplies_id: 13},
+        {qty: .5, qty_measure: 'tsp', item_id: 11, supplies_id: 11},
+        {qty: .25, qty_measure: 'cup', item_id: 11, supplies_id: 10},
+        {qty: 1, qty_measure: 'cup', item_id: 11, supplies_id: 23},
+
+        {qty: 2.5, qty_measure: 'cup', item_id: 12, supplies_id: 2},
+        {qty: 1, qty_measure: 'cup', item_id: 12, supplies_id: 12},
+        {qty: 2, qty_measure: 'tsp', item_id: 12, supplies_id: 13},
+        {qty: .5, qty_measure: 'tsp', item_id: 12, supplies_id: 14},
+        {qty: .25, qty_measure: 'tsp', item_id: 12, supplies_id: 11},
+        {qty: 1, qty_measure: 'cup', item_id: 12, supplies_id: 9},
+        {qty: .75, qty_measure: 'cup', item_id: 12, supplies_id: 1},
+        {qty: 2, qty_measure: 'unit', item_id: 12, supplies_id: 8},
+        {qty: .25, qty_measure: 'cup', item_id: 12, supplies_id: 10},
+        {qty: 2, qty_measure: 'tsp', item_id: 12, supplies_id: 3},
+        {qty: 1, qty_measure: 'cup', item_id: 12, supplies_id: 23},
+
+        {qty: 1, qty_measure: 'unit', item_id: 16, supplies_id: 21}
 
       ])
     })
