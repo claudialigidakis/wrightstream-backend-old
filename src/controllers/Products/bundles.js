@@ -49,7 +49,7 @@ function updateBundles(req, res, next) {
   if (!req.params.bundleId|| !req.body) {
     return next({ status: 400, message: 'Bad request'})
   }
-  bundlesModel.updateBundles(req.params.bundleId, req.body.name, req.body.archived, req.body.stock, req.body.category_id, req.body.product_id, req.body.steps, req.body.items)
+  bundlesModel.updateBundles(req.params.bundleId, req.body.name, req.body.archived, req.body.stock, req.body.categoryId, req.body.productId, req.body.steps, req.body.items)
   .then(data => {
     res.status(200).send({ data })
   })
