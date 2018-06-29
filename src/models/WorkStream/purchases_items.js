@@ -30,7 +30,7 @@ function createPurchaseItem(purchaseId, item_id, item_qty, completed, staff_id) 
 
 function updatePurchaseItem(purchaseId, item_id, item_qty, completed, staff_id) {
   const toUpdate = {}
-  completed ? toUpdate.completed = completed : null
+  completed || completed === false ? toUpdate.completed = completed : null
   item_qty ? toUpdate.item_qty = item_qty : null
   staff_id ? toUpdate.staff_id = staff_id : null
   return(
