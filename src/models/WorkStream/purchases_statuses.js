@@ -41,7 +41,7 @@ function removePurchaseStatuses(purchase_id, status_id) {
 function updatePurchaseStatus(purchase_id, status_id, priority, completed, staff_id) {
   const toUpdate = {}
   priority ? toUpdate.priority = priority : null
-  completed ? toUpdate.completed = completed : null
+  completed || completed === false ? toUpdate.completed = completed : null
   staff_id ? toUpdate.staff_id = staff_id : null
   return (knex('purchases_statuses')
   .update(toUpdate)
