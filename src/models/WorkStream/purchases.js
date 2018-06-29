@@ -135,7 +135,7 @@ function removePurchases(purchaseId) {
   return (knex('purchases').where({id: purchaseId}).del())
 }
 
-function updatePurchases(purchaseId, delivery_date, store_id, shop_id, staff_id, purchase_date, service, tracking, notes) {
+function updatePurchases(purchaseId, delivery_date, store_id, shop_id, staff_id, quality_check, pick_up, purchase_date, service, tracking, notes) {
   const toUpdate = {}
   delivery_date
     ? toUpdate.delivery_date = delivery_date
@@ -154,6 +154,9 @@ function updatePurchases(purchaseId, delivery_date, store_id, shop_id, staff_id,
     : null
   service
     ? toUpdate.service = service
+    : null
+    quality_check
+    ? toUpdate.quality_check = quality_check
     : null
   tracking
     ? toUpdate.tracking = tracking

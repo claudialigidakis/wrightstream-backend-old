@@ -27,7 +27,36 @@ function predictor(body){
   const items = body.items
   const bundles = body.bundles
   let comBunSupp;
-  //link bundles and items
+
+if(items && !bundles) {
+    return itemSupplies(items)
+  .then(suppliesList => {
+    //create a supplies list from items
+  return createItemsList(suppliesList)
+  })
+  .then(addedSupplies => {
+    //send data to frontEnd in an organized way
+  return presentData(addedSupplies)
+  })
+}
+
+else if (bundles && !items){
+  return bundleItems(bundles)
+  .then(data => {
+    //link bundle/items to supplies
+    return bundleSupplies(data, bundles)
+  })
+  .then(bundleSupplies => {
+    //create a supplies list that can be added together
+    return createBundleSuppliesList(bundleSupplies)
+  })
+  .then(completedBundleSupplies => {
+    //send data to frontEnd in an organized way
+  return presentData(completedBundleSupplies)
+  })
+}
+
+else if(items && bundles){
   return bundleItems(bundles)
   .then(data => {
     //link bundle/items to supplies
@@ -55,12 +84,42 @@ function predictor(body){
   return presentData(addedSupplies)
   })
 }
+}
 
 function orderPredictor(body){
   const items = body.items
   const bundles = body.bundles
   let comBunSupp;
-  //link bundles and items
+
+if(items && !bundles) {
+    return itemSupplies(items)
+  .then(suppliesList => {
+    //create a supplies list from items
+  return createItemsList(suppliesList)
+  })
+  .then(addedSupplies => {
+    //send data to frontEnd in an organized way
+  return orderData(addedSupplies)
+  })
+}
+
+else if (bundles && !items){
+  return bundleItems(bundles)
+  .then(data => {
+    //link bundle/items to supplies
+    return bundleSupplies(data, bundles)
+  })
+  .then(bundleSupplies => {
+    //create a supplies list that can be added together
+    return createBundleSuppliesList(bundleSupplies)
+  })
+  .then(completedBundleSupplies => {
+    //send data to frontEnd in an organized way
+  return orderData(completedBundleSupplies)
+  })
+}
+
+else if(items && bundles){
   return bundleItems(bundles)
   .then(data => {
     //link bundle/items to supplies
@@ -87,6 +146,7 @@ function orderPredictor(body){
     //send data to frontEnd in an organized way
   return orderData(addedSupplies)
   })
+}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -191,6 +251,7 @@ function createBundleSuppliesList(bundleSupplies){
     }
     else {
       acc[ele.id] = ele
+      let measure_type;
       let suppliesNeeded = (acc[ele.id].qty * acc[ele.id].item_qty) * acc[ele.id].bundle_qty
 
       if(acc[ele.id].measure_type === 'volume') {
@@ -198,11 +259,14 @@ function createBundleSuppliesList(bundleSupplies){
         measure_type = 'tsp'
       }
 
+      else if(acc[ele.id].measure_type === 'unit') {
+        suppliesNeeded = suppliesNeeded
+        measure_type = 'unit'
+      }
       else if(acc[ele.id].measure_type === 'length'){
         suppliesNeeded = convert(suppliesNeeded).from(acc[ele.id].qty_measure).to('ft')
         measure_type = 'ft'
       }
-
       else if(acc[ele.id].measure_type === 'mass'){
         suppliesNeeded = convert(suppliesNeeded).from(acc[ele.id].qty_measure).to('oz')
         measure_type = 'oz'
@@ -292,10 +356,17 @@ function combine(lists, comBunSupp){
 function presentData(addedSupplies){
   let data = {}
   for(var i in addedSupplies){
+    if(addedSupplies[i].new_measure !== 'unit'){
   convertedSupplies = convert(addedSupplies[i].neededSupplies).from(addedSupplies[i].new_measure).toBest({exclude: ['fl-oz', 'ft3', 'yd3', 'in3']})
   convertedSupplies.val = convertedSupplies.val.toPrecision(3);
   convertedSupplies.val <= 1 ? data[addedSupplies[i].name] = `${convertedSupplies.val} ${convertedSupplies.singular}` : null
   convertedSupplies.val > 1 ? data[addedSupplies[i].name] = `${convertedSupplies.val} ${convertedSupplies.plural}` : null
+    }
+    else {
+      data[addedSupplies[i].name] = addedSupplies[i].neededSupplies
+      addedSupplies[i].neededSupplies <= 1 ? data[addedSupplies[i].name] = `${addedSupplies[i].neededSupplies} unit` : null
+      addedSupplies[i].neededSupplies > 1 ? data[addedSupplies[i].name] = `${addedSupplies[i].neededSupplies} units` : null
+    }
   }
   return data
 }
@@ -306,13 +377,21 @@ function orderData(addedSupplies){
  let data = {}
  for(var i in addedSupplies){
    data = {}
-   convertedSupplies = convert(addedSupplies[i].neededSupplies).from(addedSupplies[i].new_measure).toBest({exclude: ['fl-oz', 'ft3', 'yd3', 'in3']})
-   convertedSupplies.val = convertedSupplies.val.toPrecision(3);
-   data.supply_qty = convertedSupplies.val
-   data.supply_measure_type = convertedSupplies.unit
-   data.supply_id = addedSupplies[i].id
-  supplies.push(data)
- }
+   if(addedSupplies[i].new_measure !== 'unit'){
+     convertedSupplies = convert(addedSupplies[i].neededSupplies).from(addedSupplies[i].new_measure).toBest({exclude: ['fl-oz', 'ft3', 'yd3', 'in3']})
+     convertedSupplies.val = convertedSupplies.val.toPrecision(3);
+     data.supply_qty = convertedSupplies.val
+     data.supply_measure_type = convertedSupplies.unit
+     data.supply_id = addedSupplies[i].id
+    supplies.push(data)
+    }
+    else {
+      data.supply_qty = addedSupplies[i].neededSupplies
+      data.supply_measure_type = 'unit'
+      data.supply_id = addedSupplies[i].id
+     supplies.push(data)
+    }
+   }
  return supplies
 }
 
