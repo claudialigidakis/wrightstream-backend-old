@@ -49,7 +49,8 @@ app.use('/sources', require('./routes/Products/sources'))
 app.use('/supplies', require('./routes/Products/supplies'))
 app.use('/types', require('./routes/Products/types'))
 
-app.use('/admin', require('./routes/Admin/staff'))
+app.use('/adminStaff', require('./routes/Admin/staff'))
+app.use('/adminProducts', require('./routes/Admin/products'))
 
 
 app.use('/helper', require('./routes/Helper/measurement'))

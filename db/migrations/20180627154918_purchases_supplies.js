@@ -5,7 +5,7 @@ exports.up = function(knex, Promise) {
     table.decimal('supplies_qty').notNullable()
     table.string('supplies_measurement').notNullable()
     table.boolean('completed').notNullable().defaultsTo(false);
-    table.timestamps('true', 'true');
+    table.timestamps(true, true);
   });
 };
 

@@ -49,6 +49,28 @@ function orderPredictor(req, res, next) {
   .catch(next)
 }
 
+function comparePredictor(req, res, next) {
+  if (!req.body || !req.params.shopId) {
+    return next({status: 400, message: "Need proper supplies inputs"})
+  }
+  helperModel.comparePredictor(req.body, req.params.shopId)
+  .then(data => {
+    res.status(200).send({data})
+  })
+  .catch(next)
+}
+
+function compareOrderPredictor(req, res, next) {
+  if (!req.body || !req.params.shopId) {
+    return next({status: 400, message: "Need proper supplies inputs"})
+  }
+  helperModel.compareOrderPredictor(req.body, req.params.shopId)
+  .then(data => {
+    res.status(200).send({data})
+  })
+  .catch(next)
+}
+
 
 module.exports = {
   volume,
@@ -56,5 +78,7 @@ module.exports = {
   mass,
   wrightStream,
   predictor,
-  orderPredictor
+  orderPredictor,
+  comparePredictor,
+  compareOrderPredictor
 }

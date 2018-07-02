@@ -5,21 +5,37 @@ var convert = require('convert-units')
 function wrightStream(shopId){
  return knex('purchases')
  .where({shop_id: shopId})
- .select('id', 'store_id', 'purchase_date', 'priority_id')
+ .select('id', 'store_id')
  .then(purchases => {
    const purchasePromise = purchases.map(purchase => {
-     return knex('purchases_statuses')
-     .innerJoin('purchases_items', 'purchases_items.purchase_id', 'purchases_statuses.purchase_id')
-     .where({'purchases_statuses.purchase_id': purchase.id, 'status_id': 1, 'purchases_statuses.completed':false})
-     .select('status_id', 'purchases_statuses.completed')
-     .then(statuses => {
-       purchase.status = statuses
+     return knex('purchases_items')
+     .innerJoin('items', 'purchases_items.item_id', 'items.id')
+     .innerJoin('purchases_statuses', 'purchases_items.purchase_id', 'purchases_statuses.purchase_id')
+     .select('purchases_items.item_id', 'purchases_items.item_qty', 'items.name', )
+     .where({'purchases_items.purchase_id': purchase.id})
+     .andWhere({'purchases_statuses.purchase_id': purchase.id, 'status_id': 1, 'purchases_statuses.completed':false})
+     .then(items => {
+       purchase.items = items
        return purchase
+     })
+     .then(bundles => {
+       return knex('purchases_bundles')
+       .innerJoin('bundles', 'bundles.id', 'purchases_bundles.bundle_id')
+       .innerJoin('purchases_statuses', 'purchases_bundles.purchase_id', 'purchases_statuses.purchase_id')
+       .select('bundle_id', 'bundle_qty', 'bundles.name')
+       .where({'purchases_bundles.purchase_id': purchase.id})
+       .andWhere({'purchases_statuses.purchase_id': purchase.id, 'status_id': 1, 'purchases_statuses.completed':false})
+       .then(bundlesList => {
+         purchase.bundles = bundlesList
+         return purchase
+       })
      })
    })
      return Promise.all(purchasePromise)
  })
 }
+
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,6 +161,152 @@ else if(items && bundles){
   .then(addedSupplies => {
     //send data to frontEnd in an organized way
   return orderData(addedSupplies)
+  })
+}
+}
+
+
+function comparePredictor(body, shopId){
+  const items = body.items
+  const bundles = body.bundles
+  let comBunSupp;
+
+if(items && !bundles) {
+    return itemSupplies(items)
+  .then(suppliesList => {
+    //create a supplies list from items
+  return createItemsList(suppliesList)
+  })
+  .then(added => {
+    return supplyCompare(added, shopId)
+  })
+  .then(addedSupplies => {
+    //send data to frontEnd in an organized way
+  return presentData(addedSupplies)
+  })
+}
+
+else if (bundles && !items){
+  return bundleItems(bundles)
+  .then(data => {
+    //link bundle/items to supplies
+    return bundleSupplies(data, bundles)
+  })
+  .then(bundleSupplies => {
+    //create a supplies list that can be added together
+    return createBundleSuppliesList(bundleSupplies)
+  })
+  .then(added => {
+    return supplyCompare(added, shopId)
+  })
+  .then(completedBundleSupplies => {
+      //send data to frontEnd in an organized way
+    return presentData(completedBundleSupplies)
+  })
+}
+
+else if(items && bundles){
+  return bundleItems(bundles)
+  .then(data => {
+    //link bundle/items to supplies
+    return bundleSupplies(data, bundles)
+  })
+  .then(bundleSupplies => {
+    //create a supplies list that can be added together
+    return createBundleSuppliesList(bundleSupplies)
+  })
+  .then(completedBundleSupplies => {
+    comBunSupp = completedBundleSupplies
+    //link supplies and items
+    return itemSupplies(items)
+  })
+  .then(suppliesList => {
+    //create a supplies list from items
+  return createItemsList(suppliesList)
+  })
+  .then(lists =>{
+    //add together the bundles and the items
+  return combine(lists, comBunSupp)
+  })
+  .then(addedSupply => {
+    return supplyCompare(addedSupply, shopId)
+  })
+    .then(addedSupplies => {
+    //send data to frontEnd in an organized way
+  return presentData(addedSupplies)
+  })
+}
+}
+
+
+function compareOrderPredictor(body, shopId){
+  const items = body.items
+  const bundles = body.bundles
+  let comBunSupp;
+
+if(items && !bundles) {
+    return itemSupplies(items)
+  .then(suppliesList => {
+    //create a supplies list from items
+  return createItemsList(suppliesList)
+  })
+  .then(added => {
+    return supplyCompare(added, shopId)
+  })
+  .then(addedSupplies => {
+    //send data to frontEnd in an organized way
+  return orderData(addedSupplies)
+  })
+}
+
+else if (bundles && !items){
+  return bundleItems(bundles)
+  .then(data => {
+    //link bundle/items to supplies
+    return bundleSupplies(data, bundles)
+  })
+  .then(bundleSupplies => {
+    //create a supplies list that can be added together
+    return createBundleSuppliesList(bundleSupplies)
+  })
+  .then(added => {
+    return supplyCompare(added, shopId)
+  })
+  .then(completedBundleSupplies => {
+    //send data to frontEnd in an organized way
+  return orderData(completedBundleSupplies)
+  })
+}
+
+else if(items && bundles){
+  return bundleItems(bundles)
+  .then(data => {
+    //link bundle/items to supplies
+    return bundleSupplies(data, bundles)
+  })
+  .then(bundleSupplies => {
+    //create a supplies list that can be added together
+    return createBundleSuppliesList(bundleSupplies)
+  })
+  .then(completedBundleSupplies => {
+    comBunSupp = completedBundleSupplies
+    //link supplies and items
+    return itemSupplies(items)
+  })
+  .then(suppliesList => {
+    //create a supplies list from items
+  return createItemsList(suppliesList)
+  })
+  .then(lists =>{
+    //add together the bundles and the items
+  return combine(lists, comBunSupp)
+  })
+  .then(addedSupply => {
+    return supplyCompare(addedSupply, shopId)
+  })
+    .then(addedSupplies => {
+      //send data to frontEnd in an organized way
+    return orderData(addedSupplies)
   })
 }
 }
@@ -358,19 +520,18 @@ function presentData(addedSupplies){
   for(var i in addedSupplies){
     if(addedSupplies[i].new_measure !== 'unit'){
   convertedSupplies = convert(addedSupplies[i].neededSupplies).from(addedSupplies[i].new_measure).toBest({exclude: ['fl-oz', 'ft3', 'yd3', 'in3']})
-  convertedSupplies.val = convertedSupplies.val.toPrecision(3);
+  convertedSupplies.val = Number(convertedSupplies.val.toPrecision(3))
   convertedSupplies.val <= 1 ? data[addedSupplies[i].name] = `${convertedSupplies.val} ${convertedSupplies.singular}` : null
   convertedSupplies.val > 1 ? data[addedSupplies[i].name] = `${convertedSupplies.val} ${convertedSupplies.plural}` : null
     }
     else {
-      data[addedSupplies[i].name] = addedSupplies[i].neededSupplies
-      addedSupplies[i].neededSupplies <= 1 ? data[addedSupplies[i].name] = `${addedSupplies[i].neededSupplies} unit` : null
-      addedSupplies[i].neededSupplies > 1 ? data[addedSupplies[i].name] = `${addedSupplies[i].neededSupplies} units` : null
+      data[addedSupplies[i].name] = Number(addedSupplies[i].neededSupplies)
+      addedSupplies[i].neededSupplies <= 1 ? data[addedSupplies[i].name] = `${Number(addedSupplies[i].neededSupplies)} unit` : null
+      addedSupplies[i].neededSupplies > 1 ? data[addedSupplies[i].name] = `${Number(addedSupplies[i].neededSupplies)} units` : null
     }
   }
   return data
 }
-
 
 function orderData(addedSupplies){
  let supplies = []
@@ -380,13 +541,13 @@ function orderData(addedSupplies){
    if(addedSupplies[i].new_measure !== 'unit'){
      convertedSupplies = convert(addedSupplies[i].neededSupplies).from(addedSupplies[i].new_measure).toBest({exclude: ['fl-oz', 'ft3', 'yd3', 'in3']})
      convertedSupplies.val = convertedSupplies.val.toPrecision(3);
-     data.supply_qty = convertedSupplies.val
+     data.supply_qty = Number(convertedSupplies.val)
      data.supply_measure_type = convertedSupplies.unit
      data.supply_id = addedSupplies[i].id
     supplies.push(data)
     }
     else {
-      data.supply_qty = addedSupplies[i].neededSupplies
+      data.supply_qty = Number(addedSupplies[i].neededSupplies)
       data.supply_measure_type = 'unit'
       data.supply_id = addedSupplies[i].id
      supplies.push(data)
@@ -395,9 +556,16 @@ function orderData(addedSupplies){
  return supplies
 }
 
+function supplyCompare(addedSupply, shopId){
+  console.log("added", addedSupply, shopId);
+  return addedSupply
+}
+
 
 module.exports = {
   wrightStream,
   predictor,
-  orderPredictor
+  orderPredictor,
+  comparePredictor,
+  compareOrderPredictor
 }
