@@ -5,7 +5,7 @@ exports.up = function(knex, Promise) {
     table.integer('bundle_qty').notNullable()
     table.boolean('completed').nullable().defaultsTo(false);
     table.integer('staff_id').nullable().references('staff.id');
-    table.timestamps('true', 'true');
+    table.timestamps(true, true);
   });
 };
 

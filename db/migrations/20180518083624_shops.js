@@ -7,7 +7,7 @@ exports.up = function(knex, Promise) {
     // table.string('tokenSecret')
     // table.string('accessToken')
     // table.string('accessTokenSecret')
-    table.timestamp('true', 'true');
+    table.timestamps(true, true);
   });
 };
 

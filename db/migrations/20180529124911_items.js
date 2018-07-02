@@ -9,7 +9,7 @@ exports.up = function(knex, Promise) {
     table.integer('category_id').references('categories.id');
     table.integer('product_id').references('products.id');
     table.text('photo').defaultsTo(null);
-    table.timestamps('true', 'true');
+    table.timestamps(true, true);
   });
 };
 

@@ -39,7 +39,9 @@ function getOneOrder(orderId) {
 }
 
 function createOrder(shopId, body) {
-  return knex('orders').insert({shop_id: shopId}).returning('*')
+  return knex('orders')
+  .insert({shop_id: shopId})
+  .returning('*')
   .then(order => {
     if (body.order) {
       return helperModel.orderPredictor(body.order)
@@ -143,7 +145,7 @@ function addInventory(newSupply){
           newSupplyType = 'oz'
         }
 
-        newUpdate.stock_qty = parseInt(currentSupply) + parseInt(newSuppliesNeeded)
+        newUpdate.stock_qty = Number(currentSupply) + Number(newSuppliesNeeded)
         newUpdate.stock_qty_measure_type = newSupplyType
       }
     }
