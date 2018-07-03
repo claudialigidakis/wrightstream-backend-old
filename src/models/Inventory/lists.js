@@ -73,7 +73,7 @@ function updateList(listId, body) {
   body.name
     ? toUpdate.name = body.name
     : null
-  body.deleted
+  body.deleted || body.deleted === false
     ? toUpdate.deleted = body.deleted
     : null
   return (knex('lists').update(toUpdate).where({id: listId}).returning('*')).then(data => {

@@ -74,7 +74,7 @@ function updateOrder(orderId, body) {
 
 function updateOrderSupply(orderId, body){
   const toUpdate = {}
-  body.supply_qty ? toUpdate.supply_qty = body.supply_qty : null
+  supply_qty || supply_qty === 0 ? toUpdate.supply_qty = body.supply_qty : null
   body.supply_measure_type ? toUpdate.supply_measure_type = body.supply_measure_type : null
   body.supply_status ? toUpdate.supply_status = body.supply_status : null
   return (

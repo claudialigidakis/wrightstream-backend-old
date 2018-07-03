@@ -23,11 +23,32 @@ function getPastStaff(req, res, next) {
   .catch(next)
 }
 
+function totalStaff(req, res, next){
+  if (!req.params.shopId){
+    return next({status:400, message:"Need specified shop to get staff"})
+  }
+  adminModel.totalStaff(req.params.shopId)
+  .then(data => {
+    res.status(200).send({data})
+  })
+  .catch(next)
+}
 
-
+function currentWorkingStaff(req, res, next){
+  if (!req.params.shopId){
+    return next({status:400, message:"Need specified shop to get staff"})
+  }
+  adminModel.currentWorkingStaff(req.params.shopId)
+  .then(data => {
+    res.status(200).send({data})
+  })
+  .catch(next)
+}
 
 
 module.exports = {
 getCurrentStaff,
 getPastStaff,
+totalStaff,
+currentWorkingStaff
 }

@@ -6,6 +6,7 @@ const passport = require('passport')
 const EtsyStrategy = require('passport-etsy').Strategy
 const cookieSession = require('cookie-session')
 const cookieParser = require('cookie-parser')
+const onFinished = require('on-finished')
 
 
 
@@ -22,6 +23,13 @@ app.use(cors())
 app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(cookieParser());
+
+// app.use(function(req, res, next){
+//   onFinished(res, function(err, res){
+//
+//   })
+//   next()
+// })
 //user routes
 
 app.use('/shops', require('./routes/Shop/shops'))
@@ -51,6 +59,7 @@ app.use('/types', require('./routes/Products/types'))
 
 app.use('/adminStaff', require('./routes/Admin/staff'))
 app.use('/adminProducts', require('./routes/Admin/products'))
+app.use('/adminPurchases', require('./routes/Admin/purchases'))
 
 
 app.use('/helper', require('./routes/Helper/measurement'))
