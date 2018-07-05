@@ -480,7 +480,6 @@ return Promise.resolve(bundledItems)
     .select('items_supplies.qty', 'items_supplies.qty_measure', 'supplies.measure_type', 'supplies.name', 'supplies.id')
     .then(supplies => {
       item.supply = supplies.map(ele => ({...ele, item_qty: items.find(ele => ele.item_id === item.item_id).item_qty, bundle_qty:bundles.find(ele => ele.bundle_id === bundles.id).bundle_qty}))
-
       return item
     })
   })

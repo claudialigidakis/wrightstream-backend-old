@@ -38,8 +38,65 @@ function createStatusList(list){
   }, {})
 }
 
+function newPurchases(shopId){
+  let pendingStatuses = 0
+  return purchaseStatuses(shopId)
+  .then(statuses => {
+    pendingStatuses = statuses[1].statusCount
+      return pendingStatuses
+  })
+}
+
+function productionPurchases(shopId){
+  let inProductionStatus = 0
+  return purchaseStatuses(shopId)
+  .then(statuses => {
+    const statuseses = Object.entries(statuses).map(ele => {
+        if(typeof(ele) === 'object' && ele[1].status_id !== 1){
+          inProductionStatus += ele[1].statusCount
+          return inProductionStatus
+        }
+    })
+      return inProductionStatus
+  })
+}
+
+function totalPurchases(shopId){
+  return knex('purchases')
+  .where({shop_id: shopId})
+  .then(data => {
+    return data.length
+  })
+}
+
+function completedPurchases(shopId){
+  let inProduction = 0
+  let purchaseTotal = 0
+    return totalPurchases(shopId)
+    .then(total => {
+      purchaseTotal = total
+      return purchaseStatuses(shopId)
+    })
+      .then(statuses => {
+        const statuseses = Object.entries(statuses).map(ele => {
+            if(typeof(ele) === 'object'){
+              inProduction += ele[1].statusCount
+              return inProduction
+            }
+        })
+          return inProduction
+    })
+    .then(data => {
+      return purchaseTotal - inProduction
+    })
+}
+
 
 
 module.exports = {
-purchaseStatuses
+purchaseStatuses,
+newPurchases,
+productionPurchases,
+totalPurchases,
+completedPurchases
 }
