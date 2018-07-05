@@ -43,8 +43,13 @@ function predictor(body){
   const items = body.items
   const bundles = body.bundles
   let comBunSupp;
+  let empty = {}
 
-if(items && !bundles) {
+if(!items.length >= 1 && !bundles.length >= 1){
+  return Promise.resolve(empty)
+}
+
+if(items.length >= 1 && !bundles.length >= 1) {
     return itemSupplies(items)
   .then(suppliesList => {
     //create a supplies list from items
@@ -56,7 +61,7 @@ if(items && !bundles) {
   })
 }
 
-else if (bundles && !items){
+else if (bundles.length >= 1 && !items.length >= 1){
   return bundleItems(bundles)
   .then(data => {
     //link bundle/items to supplies
@@ -72,7 +77,7 @@ else if (bundles && !items){
   })
 }
 
-else if(items && bundles){
+else if(items.length >= 1 && bundles.length >= 1){
   return bundleItems(bundles)
   .then(data => {
     //link bundle/items to supplies
@@ -107,7 +112,11 @@ function orderPredictor(body){
   const bundles = body.bundles
   let comBunSupp;
 
-if(items && !bundles) {
+  if(!items.length >= 1 && !bundles.length >= 1){
+    return Promise.resolve(empty)
+  }
+
+if(items.length >= 1 && !bundles.length >= 1) {
     return itemSupplies(items)
   .then(suppliesList => {
     //create a supplies list from items
@@ -119,7 +128,7 @@ if(items && !bundles) {
   })
 }
 
-else if (bundles && !items){
+else if (bundles.length >= 1 && !items.length >= 1){
   return bundleItems(bundles)
   .then(data => {
     //link bundle/items to supplies
@@ -135,7 +144,7 @@ else if (bundles && !items){
   })
 }
 
-else if(items && bundles){
+else if(items.length >= 1 && bundles.length >= 1){
   return bundleItems(bundles)
   .then(data => {
     //link bundle/items to supplies
@@ -556,7 +565,6 @@ function orderData(addedSupplies){
 }
 
 function supplyCompare(addedSupply, shopId){
-  console.log("added", addedSupply, shopId);
   return addedSupply
 }
 

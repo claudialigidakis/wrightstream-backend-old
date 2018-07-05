@@ -14,6 +14,9 @@ function getAllOrders(shopId) {
       .orderBy('supplies.source_id', 'asc')
       .where('orders_supplies.order_id', order.id)
       .then(supplies => {
+        supplies.map(supply => {
+        supply.supply_qty = Number(supply.supply_qty)
+        })
         order.supplies = supplies
         return order
       })
