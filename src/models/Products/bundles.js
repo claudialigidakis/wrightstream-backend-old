@@ -86,13 +86,12 @@ function removeBundles(bundleId) {
 function updateBundles(bundleId, name, archived, stock, categoryId, productId, steps, items, photo) {
   const toUpdate = {}
   name ? toUpdate.name = name : null
-  archived ? toUpdate.archived = archived : null
-  stock ? toUpdate.stock = stock : null
   categoryId ? toUpdate.category_id = categoryId : null
   productId ? toUpdate.product_id = productId : null
   steps ? toUpdate.steps = steps : null
   photo ? toUpdate.photo = photo : null
-
+  archived || archived === false ? toUpdate.archived = archived : null
+  stock || stock === 0 ? toUpdate.stock = stock : null
   return (
     knex('bundles')
     .update(toUpdate)

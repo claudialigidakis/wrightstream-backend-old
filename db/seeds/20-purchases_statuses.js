@@ -54,13 +54,13 @@ exports.seed = function(knex, Promise) {
 
         {purchase_id: 9, status_id: 1, completed: true},
         {purchase_id: 9, status_id: 2, completed: true},
-        {purchase_id: 9, status_id: 3, completed: true},
+        {purchase_id: 9, status_id: 3, staff_id: 1, completed: true},
         {purchase_id: 9, status_id: 4, completed: false},
         {purchase_id: 9, status_id: 5, completed: false},
 
         {purchase_id: 10, status_id: 1, completed: true},
         {purchase_id: 10, status_id: 2, completed: true},
-        {purchase_id: 10, status_id: 3, completed: false},
+        {purchase_id: 10, status_id: 3, staff_id: 1, completed: false},
         {purchase_id: 10, status_id: 4, completed: false},
         {purchase_id: 10, status_id: 5, completed: false},
 
@@ -78,19 +78,19 @@ exports.seed = function(knex, Promise) {
 
         {purchase_id: 13, status_id: 1, completed: true},
         {purchase_id: 13, status_id: 2, completed: true},
-        {purchase_id: 13, status_id: 3, completed: false},
+        {purchase_id: 13, status_id: 3, staff_id: 1, completed: false},
         {purchase_id: 13, status_id: 4, completed: false},
         {purchase_id: 13, status_id: 5, completed: false},
 
         {purchase_id: 14, status_id: 1, completed: true},
         {purchase_id: 14, status_id: 2, completed: true},
-        {purchase_id: 14, status_id: 3, completed: true},
-        {purchase_id: 14, status_id: 4, completed: false},
+        {purchase_id: 14, status_id: 3, staff_id: 1, completed: true},
+        {purchase_id: 14, status_id: 4, staff_id: 3, completed: false},
         {purchase_id: 14, status_id: 5, completed: false},
 
         {purchase_id: 15, status_id: 1, completed: true},
         {purchase_id: 15, status_id: 2, completed: true},
-        {purchase_id: 15, status_id: 3, completed: false},
+        {purchase_id: 15, status_id: 3, staff_id: 1, completed: false},
         {purchase_id: 15, status_id: 4, completed: false},
         {purchase_id: 15, status_id: 5, completed: false},
 
@@ -102,21 +102,21 @@ exports.seed = function(knex, Promise) {
 
         {purchase_id: 17, status_id: 1, completed: true},
         {purchase_id: 17, status_id: 2, completed: true},
-        {purchase_id: 17, status_id: 3, completed: true},
-        {purchase_id: 17, status_id: 4, completed: true},
+        {purchase_id: 17, status_id: 3, staff_id: 1, completed: true},
+        {purchase_id: 17, status_id: 4, staff_id: 1, completed: true},
         {purchase_id: 17, status_id: 5, completed: false},
 
         {purchase_id: 18, status_id: 1, completed: true},
         {purchase_id: 18, status_id: 2, completed: true},
         {purchase_id: 18, status_id: 3, completed: true},
-        {purchase_id: 18, status_id: 4, completed: false},
+        {purchase_id: 18, status_id: 4, staff_id: 1, completed: false},
         {purchase_id: 18, status_id: 5, completed: false},
 
         {purchase_id: 19, status_id: 1, completed: true},
         {purchase_id: 19, status_id: 2, completed: true},
         {purchase_id: 19, status_id: 3, completed: true},
         {purchase_id: 19, status_id: 4, completed: true},
-        {purchase_id: 19, status_id: 5, completed: false},
+        {purchase_id: 19, status_id: 5, staff_id: 1, completed: true},
 
         {purchase_id: 20, status_id: 1, completed: true},
         {purchase_id: 20, status_id: 2, completed: true},

@@ -6,9 +6,9 @@ function getPastStaff(shopId) {
   .then(staff => {
     const promises = staff.map(employee => {
       return knex('purchases')
-        .join('purchases_statuses', 'purchases_statuses.purchase_id', 'purchases.id')
-        .where({'purchases_statuses.staff_id': employee.id, 'purchases_statuses.completed': true})
-        .select('id', 'purchase_date', 'order_id', 'status_id', 'created_at', 'updated_at')
+        .innerJoin('purchases_statuses', 'purchases_statuses.purchase_id', 'purchases.id')
+        .where({'purchases_statuses.staff_id': employee.id}).whereNot({ 'purchases_statuses.completed': false })
+        .select('purchases.id as id', 'purchase_date', 'order_id', 'status_id', 'created_at', 'updated_at', 'purchases_statuses.staff_id')
         .then(status => {
           employee.completed = status
             return employee
@@ -24,21 +24,52 @@ function getCurrentStaff(shopId) {
   .where({shops_id: shopId})
   .then(staff => {
     const promises = staff.map(employee => {
-      return knex('staff')
-        .join('purchases', 'purchases.staff_id', 'staff.id')
-        .where({'purchases.staff_id': employee.id})
-        .select('purchases.id', 'purchase_date', 'order_id')
+      return knex('purchases')
+        .where({'staff_id': employee.id})
         .then(purchase => {
-          employee.completed = purchase
+          employee.inProduction = purchase
             return employee
         })
       })
       return Promise.all(promises)
-})
-  }
+  })
+}
 
+function totalStaff(shopId){
+  return knex('staff')
+  .where({shops_id: shopId})
+  .then(staff => {
+    staff[1]
+    return staff.length
+  })
+}
+
+function currentWorkingStaff(shopId){
+  return getCurrentStaff(shopId)
+  .then(staff => {
+    return staff
+    .map( staff => staff.inProduction )
+    .reduce((acc, ele) => [...acc, ...ele])
+    .reduce((acc, ele) => {
+      if(ele !== undefined && acc.hasOwnProperty(ele.staff_id)){
+        acc[ele.staff_id].productionCount += 1
+      }
+      else if(ele !== undefined){
+        acc[ele.staff_id] = ele
+        acc[ele.staff_id].productionCount = 1
+      }
+      return acc
+    }, {})
+  })
+  .then(production => {
+    let productionTotal = Object.entries(production)
+    return productionTotal.length
+  })
+}
 
 module.exports = {
 getCurrentStaff,
 getPastStaff,
+totalStaff,
+currentWorkingStaff,
 }

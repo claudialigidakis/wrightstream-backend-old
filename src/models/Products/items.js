@@ -87,13 +87,12 @@ function removeItems(itemId) {
 function updateItems(itemId, name, archived, stock, steps, categoryId, productId, supplies, photo) {
   const toUpdate = {}
   name ? toUpdate.name = name : null
-  archived ? toUpdate.archived = archived : null
-  stock ? toUpdate.stock_qty = stock : null
   categoryId ? toUpdate.category_id = categoryId : null
   productId ? toUpdate.product_id = productId : null
   steps ? toUpdate.steps = steps : null
   photo ? toUpdate.photo = photo : null
-
+  archived || archived === false ? toUpdate.archived = archived : null
+  stock || stock === 0 ? toUpdate.stock_qty = stock : null
   return (knex('items')
   .update(toUpdate)
   .where({id: itemId})
