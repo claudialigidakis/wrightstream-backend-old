@@ -9,45 +9,48 @@ const cookieParser = require('cookie-parser')
 const onFinished = require('on-finished')
 
 
-
 if(process.env.NODE_ENV !== 'production'){
   require('dotenv').load()
 }
 
-
 const app = express()
-
 app.use(cors())
 app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(cookieParser());
 
-app.use(function(req, res, next){
-  onFinished(res, function(err, res){
-    // console.log(data, res[0].ServerResponse);
-  })
-  next()
-})
+
+//WILL BE USED WHEN LOGGING USER ACTIVITY
+// app.use(function(req, res, next){
+//   onFinished(res, function(err, res){
+//     // console.log(data, res[0].ServerResponse);
+//   })
+//   next()
+// })
 
 
-//user routes
-
+//////////////////////////////////////////////////////////////////////////////
+// USER ROUTES
+//////////////////////////////////////////////////////////////////////////////
+//AUTH AND SHOP ROUTES
 app.use('/shops', require('./routes/Shop/shops'))
 app.use('/auth', require('./routes/Shop/auth'))
 app.use('/auth/etsy', require('./routes/Shop/authEtsy'))
 app.use('/etsy', require('./routes/Shop/etsy'))
 app.use('/stores', require('./routes/Shop/stores'))
 
-
+//WRIGTHSTREAM
 app.use('/purchases', require('./routes/WorkStream/purchases'))
 app.use('/purchases_statuses', require('./routes/WorkStream/purchases_statuses'))
 app.use('/purchases_items', require('./routes/WorkStream/purchases_items'))
 app.use('/purchases_bundles', require('./routes/WorkStream/purchases_bundles'))
 
+//INVENTORY
 app.use('/inventory', require('./routes/Inventory/inventory'))
 app.use('/orders', require('./routes/Inventory/orders'))
 app.use('/lists', require('./routes/Inventory/lists'))
 
+//PRODUCTS
 app.use('/products', require('./routes/Products/products'))
 app.use('/bundles', require('./routes/Products/bundles'))
 app.use('/categories', require('./routes/Products/categories'))
@@ -57,11 +60,13 @@ app.use('/sources', require('./routes/Products/sources'))
 app.use('/supplies', require('./routes/Products/supplies'))
 app.use('/types', require('./routes/Products/types'))
 
+//ADMIN
 app.use('/adminStaff', require('./routes/Admin/staff'))
 app.use('/adminProducts', require('./routes/Admin/products'))
 app.use('/adminPurchases', require('./routes/Admin/purchases'))
 app.use('/adminSupplies', require('./routes/Admin/supplies'))
 
+//MEASUREMENTS
 app.use('/helper', require('./routes/Helper/measurement'))
 
 

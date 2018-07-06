@@ -1,54 +1,44 @@
 const adminModel = require('../../models/Admin/staff')
 
-
 function getCurrentStaff(req, res, next) {
   if (!req.params.shopId) {
     return next({status: 400, message: 'Need specified shop to get the current staff'})
   }
-  adminModel.getCurrentStaff(req.params.shopId)
-  .then(data => {
+  adminModel.getCurrentStaff(req.params.shopId).then(data => {
     res.status(200).send({data})
-  })
-  .catch(next)
+  }).catch(next)
 }
 
 function getPastStaff(req, res, next) {
   if (!req.params.shopId) {
     return next({status: 400, message: "Need specified shop to get the past staff"})
   }
-  adminModel.getPastStaff(req.params.shopId)
-  .then(data => {
+  adminModel.getPastStaff(req.params.shopId).then(data => {
     res.status(200).send({data})
-  })
-  .catch(next)
+  }).catch(next)
 }
 
-function totalStaff(req, res, next){
-  if (!req.params.shopId){
-    return next({status:400, message:"Need specified shop to get staff"})
+function totalStaff(req, res, next) {
+  if (!req.params.shopId) {
+    return next({status: 400, message: "Need specified shop to get staff"})
   }
-  adminModel.totalStaff(req.params.shopId)
-  .then(data => {
+  adminModel.totalStaff(req.params.shopId).then(data => {
     res.status(200).send({data})
-  })
-  .catch(next)
+  }).catch(next)
 }
 
-function currentWorkingStaff(req, res, next){
-  if (!req.params.shopId){
-    return next({status:400, message:"Need specified shop to get staff"})
+function currentWorkingStaff(req, res, next) {
+  if (!req.params.shopId) {
+    return next({status: 400, message: "Need specified shop to get staff"})
   }
-  adminModel.currentWorkingStaff(req.params.shopId)
-  .then(data => {
+  adminModel.currentWorkingStaff(req.params.shopId).then(data => {
     res.status(200).send({data})
-  })
-  .catch(next)
+  }).catch(next)
 }
-
 
 module.exports = {
-getCurrentStaff,
-getPastStaff,
-totalStaff,
-currentWorkingStaff
+  getCurrentStaff,
+  getPastStaff,
+  totalStaff,
+  currentWorkingStaff
 }

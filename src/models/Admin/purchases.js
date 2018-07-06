@@ -7,8 +7,9 @@ function purchaseStatuses(shopId) {
   .then(purchases => {
     const promises = purchases.map(purchase => {
       return knex('purchases_statuses')
+        .innerJoin('statuses', 'status_id', 'statuses.id')
         .where({'purchases_statuses.purchase_id': purchase.id}).whereNot({ 'purchases_statuses.completed': true })
-        .select('purchase_id', 'status_id', 'created_at', 'updated_at', 'purchases_statuses.staff_id')
+        .select('purchase_id', 'name', 'status_id', 'created_at', 'updated_at', 'purchases_statuses.staff_id')
         .first()
         .then(status => {
           purchase.statuses = status
@@ -91,6 +92,32 @@ function completedPurchases(shopId){
     })
 }
 
+function purchasesHistory(shopId){
+  return knex('purchases')
+  .where({shop_id: shopId})
+  .then(purchases => {
+    return purchaseTimes(purchases)
+  })
+  .then(times => {
+    return times
+  })
+}
+
+function purchaseTimes(purchases){
+    return purchases
+    .reduce((acc, ele) => {
+      if(ele !== undefined && acc.hasOwnProperty(ele.purchase_date)){
+        acc[ele.purchase_date].purchaseAmount += 1
+      }
+      else if(ele !== undefined){
+        acc[ele.purchase_date] = ele
+        acc[ele.purchase_date].purchaseAmount = 1
+      }
+      return acc
+    }, {})
+  }
+
+
 
 
 module.exports = {
@@ -98,5 +125,6 @@ purchaseStatuses,
 newPurchases,
 productionPurchases,
 totalPurchases,
-completedPurchases
+completedPurchases,
+purchasesHistory
 }

@@ -158,7 +158,7 @@ function updatePurchases(purchaseId, delivery_date, store_id, shop_id, staff_id,
   service
     ? toUpdate.service = service
     : null
-    quality_check
+  quality_check || quality_check === false
     ? toUpdate.quality_check = quality_check
     : null
   tracking

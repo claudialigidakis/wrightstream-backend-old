@@ -16,61 +16,50 @@ function mass(req, res, next) {
   res.status(200).send({massMeasures})
 }
 
-function wrightStream(req, res, next){
+function wrightStream(req, res, next) {
   if (!req.params.shopId) {
     return next({status: 400, message: 'Need proper shop inputs'})
   }
-  helperModel.wrightStream(req.params.shopId)
-  .then(data => {
+  helperModel.wrightStream(req.params.shopId).then(data => {
     res.status(200).send({data})
-  })
-  .catch(next)
+  }).catch(next)
 }
 
 function predictor(req, res, next) {
   if (!req.body) {
     return next({status: 400, message: 'Need proper supplies inputs'})
   }
-  helperModel.predictor(req.body)
-  .then(data => {
+  helperModel.predictor(req.body).then(data => {
     res.status(200).send({data})
-  })
-  .catch(next)
+  }).catch(next)
 }
 
 function orderPredictor(req, res, next) {
   if (!req.body) {
     return next({status: 400, message: 'Need proper supplies inputs'})
   }
-  helperModel.orderPredictor(req.body)
-  .then(data => {
+  helperModel.orderPredictor(req.body).then(data => {
     res.status(200).send({data})
-  })
-  .catch(next)
+  }).catch(next)
 }
 
 function comparePredictor(req, res, next) {
   if (!req.body || !req.params.shopId) {
     return next({status: 400, message: "Need proper supplies inputs"})
   }
-  helperModel.comparePredictor(req.body, req.params.shopId)
-  .then(data => {
+  helperModel.comparePredictor(req.body, req.params.shopId).then(data => {
     res.status(200).send({data})
-  })
-  .catch(next)
+  }).catch(next)
 }
 
 function compareOrderPredictor(req, res, next) {
   if (!req.body || !req.params.shopId) {
     return next({status: 400, message: "Need proper supplies inputs"})
   }
-  helperModel.compareOrderPredictor(req.body, req.params.shopId)
-  .then(data => {
+  helperModel.compareOrderPredictor(req.body, req.params.shopId).then(data => {
     res.status(200).send({data})
-  })
-  .catch(next)
+  }).catch(next)
 }
-
 
 module.exports = {
   volume,
