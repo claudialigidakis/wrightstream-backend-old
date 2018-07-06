@@ -45,7 +45,6 @@ function updatePurchaseItem(req, res, next){
 }
 
 function removePurchaseItem(req, res, next){
-  console.log(req.params);
   if (!req.params.item_id || !req.params.purchase_id) {
     return next({status: 400, message: 'Missing purchase item fields'})
   }

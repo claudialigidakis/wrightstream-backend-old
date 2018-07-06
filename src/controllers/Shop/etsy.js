@@ -14,7 +14,6 @@ function getSelf(req, res, next) {
 }
 
 function AllListingActive(req, res, next) {
-  console.log("made it to controller");
   etsyOAuth.get(`https://openapi.etsy.com/v2/shops/${shopId}/listings/active`, req.etsyTokens.accessToken, req.etsyTokens.accessTokenSecret, function(err, data, response) {
     if (err) return next(err)
     let listingData = JSON.parse(data)
@@ -65,11 +64,9 @@ function findAllPurchases(req, res, next) {
     purchase.service = null
     purchase.tracking = null
     purchase.delivery_date = null
-    console.log(purchase);
     return new Promise((resolve, reject) => {
       etsyOAuth.get(`https://openapi.etsy.com/v2/shops/transactions/${purchase.order_id}`, req.etsyTokens.accessToken, req.etsyTokens.accessTokenSecret, function(err, data, response) {
         if (err) return next(err)
-        console.log(data);
         resolve(product)
       })
     })

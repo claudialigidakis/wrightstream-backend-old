@@ -98,7 +98,6 @@ function createPurchases(shop_id, store_id, delivery_date, staff_id, purchase_da
     return Helper.orderPredictor({items, bundles})
   }).then(supplies => {
     const purchaseSupplies = supplies.map(supply => {
-      console.log("supply", supply);
       return knex('purchases_supplies').insert({
         'purchase_id': newPurchase.createdPurchase[0].id,
         'supplies_id': parseInt(supply.supply_id),
@@ -142,7 +141,7 @@ function updatePurchases(purchaseId, delivery_date, store_id, shop_id, staff_id,
   delivery_date
     ? toUpdate.delivery_date = delivery_date
     : null
-   tracking 
+   tracking
    ? toUpdate.tracking = tracking
   : null
   notes
