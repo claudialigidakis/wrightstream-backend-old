@@ -1,37 +1,30 @@
 const inventoryModel = require('../../models/Inventory/inventory')
 
-
 function getAllInventorySupplies(req, res, next) {
   if (!req.params.shopId) {
     return next({status: 400, message: "Need specified shop to get the inventory supplies"})
   }
-  inventoryModel.getAllInventorySupplies(req.params.shopId)
-  .then(data => {
+  inventoryModel.getAllInventorySupplies(req.params.shopId).then(data => {
     res.status(200).send({data})
-  })
-  .catch(next)
+  }).catch(next)
 }
 
 function getAllInventoryProducts(req, res, next) {
   if (!req.params.shopId) {
     return next({status: 400, message: "Need specified shop to get the inventory products"})
   }
-  inventoryModel.getAllInventoryProducts(req.params.shopId)
-  .then(data => {
+  inventoryModel.getAllInventoryProducts(req.params.shopId).then(data => {
     res.status(200).send({data})
-  })
-  .catch(next)
+  }).catch(next)
 }
 
-function createBacklog(req, res, next){
+function createBacklog(req, res, next) {
   if (!req.params.shopId) {
     return next({status: 400, message: "Need specified shop to get the inventory products"})
   }
-  inventoryModel.createBacklog(req.params.shopId, req.body.purchase_ids)
-  .then(data => {
+  inventoryModel.createBacklog(req.params.shopId, req.body.purchase_ids).then(data => {
     res.status(200).send({data})
-  })
-  .catch(next)
+  }).catch(next)
 }
 
 module.exports = {

@@ -1,59 +1,48 @@
 const typesModel = require('../../models/Products/types')
 
-
-function getOneType(req, res, next){
+function getOneType(req, res, next) {
   if (!req.params.typeId) {
     return next({status: 400, message: 'No type indicated'})
   }
-  typesModel.getOneType(req.params.typeId)
-  .then(data => {
+  typesModel.getOneType(req.params.typeId).then(data => {
     res.status(200).send({data})
-  })
-  .catch(next)
+  }).catch(next)
 }
 
-function getAllTypes(req, res, next){
+function getAllTypes(req, res, next) {
   if (!req.params.shopId) {
     return next({status: 400, message: "Need specified shop to get the types"})
   }
-  typesModel.getAllTypes(req.params.shopId)
-  .then(data => {
+  typesModel.getAllTypes(req.params.shopId).then(data => {
     res.status(200).send({data})
-  })
-  .catch(next)
+  }).catch(next)
 }
 
-function createTypes(req, res, next){
+function createTypes(req, res, next) {
   if (!req.params.shopId || !req.body) {
     return next({status: 400, message: 'Need proper type inputs'})
   }
-  typesModel.createTypes(req.body, parseInt(req.params.shopId))
-  .then(data => {
+  typesModel.createTypes(req.body, parseInt(req.params.shopId)).then(data => {
     res.status(200).send({data})
-  })
-  .catch(next)
+  }).catch(next)
 }
 
-function removeTypes(req, res, next){
+function removeTypes(req, res, next) {
   if (!req.params.typeId) {
     return next({status: 400, message: 'Need to know indicated type'})
   }
-  typesModel.removeTypes(parseInt(req.params.typeId))
-  .then(function(data) {
+  typesModel.removeTypes(parseInt(req.params.typeId)).then(function(data) {
     res.status(200).send({data})
-  })
-  .catch(next)
+  }).catch(next)
 }
 
-function updateTypes(req, res, next){
-  if (!req.params.typeId|| !req.body) {
-    return next({ status: 400, message: 'Bad request'})
+function updateTypes(req, res, next) {
+  if (!req.params.typeId || !req.body) {
+    return next({status: 400, message: 'Bad request'})
   }
-  typesModel.updateTypes(req.params.typeId, req.body.name)
-  .then(data => {
-    res.status(200).send({ data })
-  })
-  .catch(next)
+  typesModel.updateTypes(req.params.typeId, req.body.name).then(data => {
+    res.status(200).send({data})
+  }).catch(next)
 }
 
 module.exports = {

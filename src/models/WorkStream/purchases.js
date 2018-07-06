@@ -152,6 +152,9 @@ function updatePurchases(purchaseId, delivery_date, store_id, shop_id, staff_id,
   purchase_date
     ? toUpdate.purchase_date = purchase_date
     : null
+  service
+    ? toUpdate.service = service
+    : null
   quality_check || quality_check === false
     ? toUpdate.quality_check = quality_check
     : null
@@ -161,8 +164,9 @@ function updatePurchases(purchaseId, delivery_date, store_id, shop_id, staff_id,
   delivery_date
     ? toUpdate.delivery_date = delivery_date
     : null
-  toUpdate.service = service
-  toUpdate.tracking = tracking
+   tracking 
+   ? toUpdate.tracking = tracking
+  : null
   notes
     ? toUpdate.notes = notes
     : null

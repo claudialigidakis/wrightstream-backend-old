@@ -4,7 +4,7 @@ exports.up = function(knex, Promise) {
     table.integer('store_id').nullable().references('stores.id');
     table.integer('shop_id').notNullable().references('shops.id');
     table.integer('staff_id').nullable().references('staff.id');
-    table.string('purchase_date').nullable();
+    table.date('purchase_date').nullable();
     table.text('notes').nullable();
     table.boolean('quality_check').defaultsTo(false);
     table.integer('order_id').nullable();

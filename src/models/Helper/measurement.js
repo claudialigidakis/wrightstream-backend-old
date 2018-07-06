@@ -43,7 +43,7 @@ function predictor(body){
   const items = body.items
   const bundles = body.bundles
   let comBunSupp;
-  let empty = {}
+  let empty = {"items": [], "bundles":[]}
 
 if(!items.length >= 1 && !bundles.length >= 1){
   return Promise.resolve(empty)

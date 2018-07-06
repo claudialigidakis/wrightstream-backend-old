@@ -8,6 +8,7 @@ router.get('/newPurchases/:shopId', purchaseController.newPurchases)
 router.get('/productionPurchases/:shopId', purchaseController.productionPurchases)
 router.get('/totalPurchases/:shopId', purchaseController.totalPurchases)
 router.get('/completedPurchases/:shopId', purchaseController.completedPurchases)
+router.get('/purchaseHistory/:shopId', purchaseController.purchasesHistory)
 
 
 

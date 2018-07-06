@@ -79,8 +79,9 @@ function mostOrdered(shopId) {
   .then(purchases => {
     const promises = purchases.map(purchase => {
       return knex('purchases_supplies')
+        .innerJoin('supplies', 'supplies.id', 'purchases_supplies.supplies_id')
         .where({'purchase_id': purchase.id})
-        .select('supplies_id', 'supplies_qty as qty', 'supplies_measurement as qty_measure')
+        .select('supplies_id', 'supplies_qty as qty', 'supplies.name', 'supplies_measurement as qty_measure')
         .then(supply => {
           purchase.supplies = supply
             return purchase
