@@ -140,9 +140,6 @@ function removePurchases(purchaseId) {
 
 function updatePurchases(purchaseId, delivery_date, store_id, shop_id, staff_id, quality_check, pick_up, purchase_date, service, tracking, notes) {
   const toUpdate = {}
-  delivery_date
-    ? toUpdate.delivery_date = delivery_date
-    : null
   store_id
     ? toUpdate.store_id = store_id
     : null
@@ -155,15 +152,17 @@ function updatePurchases(purchaseId, delivery_date, store_id, shop_id, staff_id,
   purchase_date
     ? toUpdate.purchase_date = purchase_date
     : null
-  service
-    ? toUpdate.service = service
-    : null
-    quality_check
+  quality_check || quality_check === false
     ? toUpdate.quality_check = quality_check
     : null
-  tracking
-    ? toUpdate.tracking = tracking
+  pick_up || pick_up === false
+    ? toUpdate.pick_up = pick_up
     : null
+  delivery_date
+    ? toUpdate.delivery_date = delivery_date
+    : null
+  toUpdate.service = service
+  toUpdate.tracking = tracking
   notes
     ? toUpdate.notes = notes
     : null
