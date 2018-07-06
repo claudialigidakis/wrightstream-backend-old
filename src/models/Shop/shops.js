@@ -23,37 +23,29 @@ function createShop(body) {
         status : 400,
         message: 'Shop exists'
       }
-    return (knex('shops')
-    .insert({shop_name: shopName, settings, logo})
-    .returning('*'))
+    return (knex('shops').insert({shop_name: shopName, settings, logo}).returning('*'))
   })
 }
 
 function updateShop(shopId, shop_name, logo, settings) {
-  return (knex('shops')
-  .update({shop_name, settings, logo})
-  .where({id: shopId}).returning('*'))
+  return (knex('shops').update({shop_name, settings, logo}).where({id: shopId}).returning('*'))
 }
 
 function removeShop(shopId) {
-    return (knex('staff')
-    .where({shops_id: shopId})
-    .del()
-  )
-  .then(data => {
+  return (knex('staff').where({shops_id: shopId}).del()).then(data => {
     return (knex('shops').where({id: shopId}).del())
   })
 }
 
-//Staff Routing//
+////////////////////////////////////////////////////////////////////////////////
+//STAFF ROUTING
+////////////////////////////////////////////////////////////////////////////////
 function getOneStaff(staffId, shopId) {
   return (knex('staff').where({id: staffId, shops_id: shopId}).first())
 }
 
 function getStaffByEmail(staffEmail) {
-  return (knex('staff')
-  .where({email: staffEmail})
-  .first())
+  return (knex('staff').where({email: staffEmail}).first())
 }
 
 function getAllStaff(shopId) {
@@ -64,7 +56,10 @@ function createStaff(body, ShopId) {
   let role = body.role || 1
   return getStaffByEmail(body.email).then(data => {
     if (data)
-      throw {status : 400,  message: 'Staff member already exists'}
+      throw {
+        status : 400,
+        message: 'Staff member already exists'
+      }
     return bcrypt.hash(body.password, 10)
   }).then(newPassword => {
     return (knex('staff').insert({
@@ -77,7 +72,10 @@ function createStaff(body, ShopId) {
       photo: body.photo
     }).returning('*'))
   }).then(function([
-    {password,...data}
+    {
+      password,
+      ...data
+    }
   ]) {
     return data
   })
@@ -85,17 +83,31 @@ function createStaff(body, ShopId) {
 
 function updateStaff(staffId, first_name, last_name, unhashed_password, email, photo, role) {
   const toUpdate = {}
-  first_name ? toUpdate.first_name = first_name : null
-  last_name ? toUpdate.last_name = last_name : null
-  email ? toUpdate.email = email : null
-  photo ? toUpdate.photo = photo : null
-  role ? toUpdate.role = role : null
+  first_name
+    ? toUpdate.first_name = first_name
+    : null
+  last_name
+    ? toUpdate.last_name = last_name
+    : null
+  email
+    ? toUpdate.email = email
+    : null
+  photo
+    ? toUpdate.photo = photo
+    : null
+  role
+    ? toUpdate.role = role
+    : null
   return bcrypt.hash(unhashed_password, 10).then(password => {
     return (knex('staff').update(toUpdate).where({id: staffId}).returning('*'))
   }).then(function([
-    {password,...data
+    {
+      password,
+      ...data
     }
-  ]) {return data})
+  ]) {
+    return data
+  })
 }
 
 function removeStaff(staffId) {

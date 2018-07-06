@@ -45,7 +45,6 @@ function updatePurchaseBundle(req, res, next){
 }
 
 function removePurchaseBundle(req, res, next){
-  console.log(req.params);
   if (!req.params.bundle_id || !req.params.purchase_id) {
     return next({status: 400, message: 'Missing purchase item fields'})
   }

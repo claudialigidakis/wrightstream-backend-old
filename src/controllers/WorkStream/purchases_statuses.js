@@ -43,7 +43,6 @@ function updatePurchaseStatus(req, res, next){
   if (!req.params.purchase_id || !req.body) {
     return next({ status: 400, message: 'Bad request'})
   }
-  console.log(req.body);
   purchasesModel.updatePurchaseStatus(req.params.purchase_id, req.params.status_id, req.body.priority, req.body.completed, req.body.staff_id)
   .then(data => {
     res.status(200).send({ data })

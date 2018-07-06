@@ -1,33 +1,24 @@
 const knex = require('../../../db');
 
 function getAllStore(shopId) {
-  return (
-    knex('stores')
-    .where({shops_id: shopId})
-  )
+  return (knex('stores').where({shops_id: shopId}))
 }
 
 function getOneStore(storeId) {
-  return (
-    knex('stores')
-    .where({id: storeId})
-    .first())
+  return (knex('stores').where({id: storeId}).first())
 }
 
-function createStore(body, shopId){
-  //creating the initial relationship
+function createStore(body, shopId) {
+  //CREATING INITIAL RELATIONSHIP
 
 }
 
-function removeStore(storeId){
-  return (
-    knex('stores')
-    .where({id: storeId})
-    .del())
+function removeStore(storeId) {
+  return (knex('stores').where({id: storeId}).del())
 }
 
-function updateStore(){
-//refreshing the token
+function updateStore() {
+  //REFRESHING TOKEN
 }
 
 module.exports = {

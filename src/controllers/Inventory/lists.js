@@ -23,7 +23,6 @@ function createList(req, res, next) {
     return next({status: 400, message: 'Need proper list inputs'})
   }
   listsModel.createList(req.body, parseInt(req.params.shopId)).then(data => {
-    console.log(data);
     res.status(200).send({data})
   }).catch(next)
 }
@@ -42,7 +41,6 @@ function removeList(req, res, next) {
     return next({status: 400, message: 'Need to know indicated list'})
   }
   listsModel.removeList(parseInt(req.params.listId)).then(function(data) {
-    console.log(data);
     res.status(200).send({data})
   }).catch(next)
 }
