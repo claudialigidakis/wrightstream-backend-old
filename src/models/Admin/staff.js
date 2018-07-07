@@ -15,7 +15,9 @@ function getPastStaff(shopId) {
 function getCurrentStaff(shopId) {
   return knex('staff').where({shops_id: shopId}).then(staff => {
     const promises = staff.map(employee => {
-      return knex('purchases').where({'staff_id': employee.id}).then(purchase => {
+      return knex('purchases')
+      .where({'purchases.staff_id': employee.id})
+      .then(purchase => {
         employee.inProduction = purchase
         return employee
       })
@@ -32,7 +34,8 @@ function totalStaff(shopId) {
 }
 
 function currentWorkingStaff(shopId) {
-  return getCurrentStaff(shopId).then(staff => {
+  return getCurrentStaff(shopId)
+  .then(staff => {
     return staff.map(staff => staff.inProduction).reduce((acc, ele) => [
       ...acc,
       ...ele
