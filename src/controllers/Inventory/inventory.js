@@ -18,17 +18,8 @@ function getAllInventoryProducts(req, res, next) {
   }).catch(next)
 }
 
-function createBacklog(req, res, next) {
-  if (!req.params.shopId) {
-    return next({status: 400, message: "Need specified shop to get the inventory products"})
-  }
-  inventoryModel.createBacklog(req.params.shopId, req.body.purchase_ids).then(data => {
-    res.status(200).send({data})
-  }).catch(next)
-}
 
 module.exports = {
   getAllInventorySupplies,
-  getAllInventoryProducts,
-  createBacklog
+  getAllInventoryProducts
 }

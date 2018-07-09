@@ -32,7 +32,7 @@ function updateShop(req, res, next) {
   if (!req.body.shop_name || !req.body.logo || !req.body.settings) {
     return next({ status: 400, message: 'Bad request'});
   }
-  shopModel.updateShop(parseInt(req.params.shopId), req.body.shop_name, req.body.logo, req.body.settings)
+  shopModel.updateShop(parseInt(req.params.shopId), req.body.shop_name, req.body.logo, req.body.settings, req.body.archived)
   .then(data => {
     res.status(200).send({ data });
   })
@@ -92,7 +92,7 @@ function updateStaff(req, res, next) {
   if (!req.body.password) {
     return next({ status: 400, message: 'Bad request'});
   }
-  shopModel.updateShop(parseInt(req.params.staffId), req.body.first_name, req.body.last_name, req.body.password, req.body.email, req.body.photo, req.body.role)
+  shopModel.updateShop(parseInt(req.params.staffId), req.body.first_name, req.body.last_name, req.body.password, req.body.email, req.body.photo, req.body.role, req.body.archived)
   .then(data => {
     res.status(200).send({ data });
   })
