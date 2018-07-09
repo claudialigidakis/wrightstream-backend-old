@@ -123,7 +123,7 @@ function updatePurchases(purchaseId, delivery_date, store_id, shop_id, staff_id,
   shop_id
     ? toUpdate.shop_id = shop_id
     : null
-  staff_id
+  staff_id || staff_id === null
     ? toUpdate.staff_id = staff_id
     : null
   purchase_date
@@ -147,6 +147,7 @@ function updatePurchases(purchaseId, delivery_date, store_id, shop_id, staff_id,
   notes
     ? toUpdate.notes = notes
     : null
+    console.log(toUpdate);
   return (knex('purchases').update(toUpdate).where({id: purchaseId}).returning('*'))
 }
 
