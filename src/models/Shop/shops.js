@@ -27,13 +27,26 @@ function createShop(body) {
   })
 }
 
-function updateShop(shopId, shop_name, logo, settings) {
-  return (knex('shops').update({shop_name, settings, logo}).where({id: shopId}).returning('*'))
+function updateShop(shopId, shop_name, logo, settings, archived) {
+  const toUpdate = {}
+  settings ? toUpdate.settings = settings : null
+  shop_name ? toUpdate.shop_name = shop_name : null
+  logo ? toUpdate.logo = logo : null
+  archived || archived === false ? toUpdate.archived = archived : null
+  return (knex('shops')
+  .update(toUpdate)
+  .where({id: shopId})
+  .returning('*'))
 }
 
 function removeShop(shopId) {
-  return (knex('staff').where({shops_id: shopId}).del()).then(data => {
-    return (knex('shops').where({id: shopId}).del())
+    return (knex('staff')
+    .where({shops_id: shopId})
+    .del())
+  .then(data => {
+    return (knex('shops')
+    .where({id: shopId})
+    .del())
   })
 }
 
@@ -81,7 +94,7 @@ function createStaff(body, ShopId) {
   })
 }
 
-function updateStaff(staffId, first_name, last_name, unhashed_password, email, photo, role) {
+function updateStaff(staffId, first_name, last_name, unhashed_password, email, photo, role, archived) {
   const toUpdate = {}
   first_name
     ? toUpdate.first_name = first_name
@@ -98,6 +111,10 @@ function updateStaff(staffId, first_name, last_name, unhashed_password, email, p
   role
     ? toUpdate.role = role
     : null
+  archived || archived === false
+    ? toUpdate.archived = archived
+    : null
+
   return bcrypt.hash(unhashed_password, 10).then(password => {
     return (knex('staff').update(toUpdate).where({id: staffId}).returning('*'))
   }).then(function([

@@ -4,11 +4,17 @@ var convert = require('convert-units')
 function wrightStream(shopId) {
   return knex('purchases').where({shop_id: shopId}).select('id', 'store_id').then(purchases => {
     const purchasePromise = purchases.map(purchase => {
-      return knex('purchases_items').innerJoin('items', 'purchases_items.item_id', 'items.id').innerJoin('purchases_statuses', 'purchases_items.purchase_id', 'purchases_statuses.purchase_id').select('purchases_items.item_id', 'purchases_items.item_qty', 'items.name',).where({'purchases_items.purchase_id': purchase.id}).andWhere({'purchases_statuses.purchase_id': purchase.id, 'status_id': 1, 'purchases_statuses.completed': false}).then(items => {
+      return knex('purchases_items')
+      .innerJoin('items', 'purchases_items.item_id', 'items.id')
+      .innerJoin('purchases_statuses', 'purchases_items.purchase_id', 'purchases_statuses.purchase_id')
+      .select('purchases_items.item_id', 'purchases_items.item_qty', 'items.name')
+      .where({'purchases_items.purchase_id': purchase.id}).andWhere({'purchases_statuses.purchase_id': purchase.id, 'status_id': 1, 'purchases_statuses.completed': false})
+      .then(items => {
         purchase.items = items
         return purchase
       }).then(bundles => {
-        return knex('purchases_bundles').innerJoin('bundles', 'bundles.id', 'purchases_bundles.bundle_id').innerJoin('purchases_statuses', 'purchases_bundles.purchase_id', 'purchases_statuses.purchase_id').select('bundle_id', 'bundle_qty', 'bundles.name').where({'purchases_bundles.purchase_id': purchase.id}).andWhere({'purchases_statuses.purchase_id': purchase.id, 'status_id': 1, 'purchases_statuses.completed': false}).then(bundlesList => {
+        return knex('purchases_bundles').innerJoin('bundles', 'bundles.id', 'purchases_bundles.bundle_id').innerJoin('purchases_statuses', 'purchases_bundles.purchase_id', 'purchases_statuses.purchase_id').select('bundle_id', 'bundle_qty', 'bundles.name').where({'purchases_bundles.purchase_id': purchase.id}).andWhere({'purchases_statuses.purchase_id': purchase.id, 'status_id': 1, 'purchases_statuses.completed': false})
+        .then(bundlesList => {
           purchase.bundles = bundlesList
           return purchase
         })
@@ -121,8 +127,15 @@ function compareOrderPredictor(body, shopId) {
   const items = body.items
   const bundles = body.bundles
   let comBunSupp;
+  let empty = {
+    "items": [],
+    "bundles": []
+  }
 
-  if (items && !bundles) {
+  if (!items.length >= 1 && !bundles.length >= 1) {
+    return Promise.resolve(empty)
+  }
+  if (items.length >= 1 && !bundles.length >= 1) {
     return itemSupplies(items).then(suppliesList => {
       return createItemsList(suppliesList)
     }).then(added => {
@@ -130,7 +143,7 @@ function compareOrderPredictor(body, shopId) {
     }).then(addedSupplies => {
       return orderData(addedSupplies)
     })
-  } else if (bundles && !items) {
+  } else if (bundles.length >= 1 && !items.length >= 1) {
     return bundleItems(bundles).then(data => {
       return bundleSupplies(data, bundles)
     }).then(bundleSupplies => {
@@ -140,7 +153,7 @@ function compareOrderPredictor(body, shopId) {
     }).then(completedBundleSupplies => {
       return orderData(completedBundleSupplies)
     })
-  } else if (items && bundles) {
+  } else if (items.length >= 1 && bundles.length >= 1) {
     return bundleItems(bundles).then(data => {
       return bundleSupplies(data, bundles)
     }).then(bundleSupplies => {
@@ -309,8 +322,16 @@ function bundleSupplies(bundleItems, bundles) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////Clean up code and send it//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////Compare and Combine////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+function supplyCompare(addedSupply, shopId) {
+  console.log(addedSupply);
+  return addedSupply
+
+}
+
 
 function combine(lists, comBunSupp) {
   let items = lists
@@ -331,6 +352,11 @@ function combine(lists, comBunSupp) {
     return acc
   }, {})
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////Clean up code and send it//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 function presentData(addedSupplies) {
   let data = {}
@@ -381,10 +407,6 @@ function orderData(addedSupplies) {
     }
   }
   return supplies
-}
-
-function supplyCompare(addedSupply, shopId) {
-  return addedSupply
 }
 
 module.exports = {
