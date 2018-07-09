@@ -45,6 +45,7 @@ async function etsyRequestToken(req, res, next){
 }
 
 async function withEtsyTokens(req, res, next){
+
   try{
     const { shops_id } = req.claim
     const { accessToken, accessTokenSecret } = await db('stores')
