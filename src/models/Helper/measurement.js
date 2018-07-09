@@ -76,11 +76,9 @@ function orderPredictor(body) {
     "items": [],
     "bundles": []
   }
-
   if (!items.length >= 1 && !bundles.length >= 1) {
     return Promise.resolve(empty)
   }
-
   if (items.length >= 1 && !bundles.length >= 1) {
     return itemSupplies(items).then(suppliesList => {
       return createItemsList(suppliesList)
@@ -118,49 +116,6 @@ function orderPredictor(body) {
 ////////Compare Routes
 //////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////
-
-function comparePredictor(body, shopId) {
-  const items = body.items
-  const bundles = body.bundles
-  let comBunSupp;
-
-  if (items && !bundles) {
-    return itemSupplies(items).then(suppliesList => {
-      return createItemsList(suppliesList)
-    }).then(added => {
-      return supplyCompare(added, shopId)
-    }).then(addedSupplies => {
-      return presentData(addedSupplies)
-    })
-  } else if (bundles && !items) {
-    return bundleItems(bundles).then(data => {
-      return bundleSupplies(data, bundles)
-    }).then(bundleSupplies => {
-      return createBundleSuppliesList(bundleSupplies)
-    }).then(added => {
-      return supplyCompare(added, shopId)
-    }).then(completedBundleSupplies => {
-      return presentData(completedBundleSupplies)
-    })
-  } else if (items && bundles) {
-    return bundleItems(bundles).then(data => {
-      return bundleSupplies(data, bundles)
-    }).then(bundleSupplies => {
-      return createBundleSuppliesList(bundleSupplies)
-    }).then(completedBundleSupplies => {
-      comBunSupp = completedBundleSupplies
-      return itemSupplies(items)
-    }).then(suppliesList => {
-      return createItemsList(suppliesList)
-    }).then(lists => {
-      return combine(lists, comBunSupp)
-    }).then(addedSupply => {
-      return supplyCompare(addedSupply, shopId)
-    }).then(addedSupplies => {
-      return presentData(addedSupplies)
-    })
-  }
-}
 
 function compareOrderPredictor(body, shopId) {
   const items = body.items
@@ -436,6 +391,5 @@ module.exports = {
   wrightStream,
   predictor,
   orderPredictor,
-  comparePredictor,
   compareOrderPredictor
 }

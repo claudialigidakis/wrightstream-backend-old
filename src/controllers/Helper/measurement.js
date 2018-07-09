@@ -43,15 +43,6 @@ function orderPredictor(req, res, next) {
   }).catch(next)
 }
 
-function comparePredictor(req, res, next) {
-  if (!req.body || !req.params.shopId) {
-    return next({status: 400, message: "Need proper supplies inputs"})
-  }
-  helperModel.comparePredictor(req.body, req.params.shopId).then(data => {
-    res.status(200).send({data})
-  }).catch(next)
-}
-
 function compareOrderPredictor(req, res, next) {
   if (!req.body || !req.params.shopId) {
     return next({status: 400, message: "Need proper supplies inputs"})
@@ -68,6 +59,5 @@ module.exports = {
   wrightStream,
   predictor,
   orderPredictor,
-  comparePredictor,
   compareOrderPredictor
 }
