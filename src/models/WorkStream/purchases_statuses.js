@@ -1,4 +1,4 @@
-const knex = require('../../../db');
+const knex = require('../../../db')
 
 function getOnePurchaseStatus(purchase_id, status_id) {
   return (knex('purchases_statuses').where({purchase_id: purchase_id, status_id: status_id}))

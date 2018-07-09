@@ -1,4 +1,4 @@
-const knex = require('../../../db');
+const knex = require('../../../db')
 var convert = require('convert-units')
 
 function wrightStream(shopId) {

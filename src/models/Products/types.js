@@ -1,4 +1,4 @@
-const knex = require('../../../db');
+const knex = require('../../../db')
 
 function getOneType(typeId) {
   return (knex('type').where({id: typeId}).first())

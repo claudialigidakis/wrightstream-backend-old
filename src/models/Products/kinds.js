@@ -1,4 +1,4 @@
-const knex = require('../../../db');
+const knex = require('../../../db')
 
 function getOneKind(kindId) {
   return (knex('kinds').where({id: kindId}).first())

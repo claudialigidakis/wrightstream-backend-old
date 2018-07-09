@@ -1,5 +1,5 @@
-const knex = require('../../../db');
-var convert = require('convert-units')
+const knex = require('../../../db')
+const convert = require('convert-units')
 
 function mostUsed(shopId) {
   return knex('items').where({shop_id: shopId, archived: false}).select('id', 'name').then(items => {
@@ -35,7 +35,6 @@ function mostOrdered(shopId) {
         ele.qty_measure !== 'unit'
           ? ele.measure_type = convert().describe(ele.qty_measure).measure
           : null
-
         let measure_type;
         let newSuppliesNeeded = ele.qty
         if (ele.measure_type === 'volume') {
