@@ -1,4 +1,4 @@
-const knex = require('../../../db');
+const knex = require('../../../db')
 
 function getAllCategories(shopId) {
   return (knex('categories').where({shop_id: shopId}))

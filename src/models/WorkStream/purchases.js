@@ -1,4 +1,4 @@
-const knex = require('../../../db');
+const knex = require('../../../db')
 const PurchaseStatusModel = require('../WorkStream/purchases_statuses')
 const PurchaseItemModel = require('../WorkStream/purchases_items')
 const PurchaseBundleModel = require('../WorkStream/purchases_bundles')
@@ -124,7 +124,7 @@ function updatePurchases(purchaseId, delivery_date, store_id, shop_id, staff_id,
     ? toUpdate.shop_id = shop_id
     : null
   staff_id
-    ? toUpdate.staff_id = staff_d
+    ? toUpdate.staff_id = staff_id
     : null
   purchase_date
     ? toUpdate.purchase_date = purchase_date
@@ -141,9 +141,9 @@ function updatePurchases(purchaseId, delivery_date, store_id, shop_id, staff_id,
   delivery_date
     ? toUpdate.delivery_date = delivery_date
     : null
-   tracking
-   ? toUpdate.tracking = tracking
-  : null
+  tracking
+    ? toUpdate.tracking = tracking
+    : null
   notes
     ? toUpdate.notes = notes
     : null

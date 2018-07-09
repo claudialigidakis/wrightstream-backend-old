@@ -1,4 +1,4 @@
-const knex = require('../../../db');
+const knex = require('../../../db')
 
 function getPastStaff(shopId) {
   return knex('staff').where({shops_id: shopId}).then(staff => {

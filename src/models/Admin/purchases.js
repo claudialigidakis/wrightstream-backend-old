@@ -1,4 +1,4 @@
-const knex = require('../../../db');
+const knex = require('../../../db')
 
 function purchaseStatuses(shopId) {
   return knex('purchases').where({shop_id: shopId}).select('id', 'shop_id', 'purchase_date').then(purchases => {

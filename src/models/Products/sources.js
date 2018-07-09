@@ -1,4 +1,4 @@
-const knex = require('../../../db');
+const knex = require('../../../db')
 
 function getOneSource(sourceId) {
   return (knex('sources').where({id: sourceId}).first())

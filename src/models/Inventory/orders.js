@@ -1,6 +1,6 @@
-const knex = require('../../../db');
+const knex = require('../../../db')
 const helperModel = require('../../models/Helper/measurement')
-var convert = require('convert-units')
+const convert = require('convert-units')
 
 function getAllOrders(shopId) {
   return knex('orders').where({shop_id: shopId}).then(orders => {

@@ -1,4 +1,4 @@
-const knex = require('../../../db');
+const knex = require('../../../db')
 
 function getAllBundles(shopId) {
   return knex('bundles').where({shop_id: shopId, archived: false}).then(bundles => {
