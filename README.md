@@ -11,3 +11,6 @@ Back-end for https://github.com/wrightaim/wrightstream
 - Create a database on your local called `wrightstream_dev`
 - `npm run knex migrate:latest`
 - `npm run knex seed:run`
+
+### Postman Documentation
+Routes: https://documenter.getpostman.com/view/4516090/RW8FFmFf#7d87909f-4bf7-4710-a4d0-01c143a4194d
