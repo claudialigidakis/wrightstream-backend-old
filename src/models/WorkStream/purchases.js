@@ -11,28 +11,47 @@ function getOnePurchase(purchaseId) {
 function getAllPurchases(shopId) {
   return knex('purchases').where({shop_id: shopId}).then(purchases => {
     const promises = purchases.map(purchase => {
-      return knex('purchases_statuses').join('statuses', 'statuses.id', 'purchases_statuses.status_id').where('purchases_statuses.purchase_id', purchase.id).then(status => {
+      return knex('purchases_statuses')
+      .join('statuses', 'statuses.id', 'purchases_statuses.status_id')
+      .where('purchases_statuses.purchase_id', purchase.id)
+      .then(status => {
         purchase.statuses = status
         return purchase
       }).then(bundles => {
-        return knex('purchases_bundles').join('bundles', 'bundles.id', 'purchases_bundles.bundle_id').select('bundles.id', 'bundle_qty', 'bundles.name', 'completed', 'archived', 'steps', 'photo', 'purchases_bundles.updated_at', 'purchases_bundles.created_at', 'staff_id').where('purchases_bundles.purchase_id', purchase.id).then(bundlesList => {
+        return knex('purchases_bundles')
+        .join('bundles', 'bundles.id', 'purchases_bundles.bundle_id')
+        .select('bundles.id', 'bundle_qty', 'bundles.name', 'completed', 'archived', 'steps', 'photo', 'purchases_bundles.updated_at', 'purchases_bundles.created_at', 'staff_id')
+        .where('purchases_bundles.purchase_id', purchase.id)
+        .then(bundlesList => {
           purchase.bundles = bundlesList
           return purchase
         }).then(bundleItems => {
           const bundlepromises = bundleItems.bundles.map(bundless => {
-            return knex('bundles_items').join('items', 'items.id', 'bundles_items.item_id').select('items.id', 'item_qty', 'items.name', 'bundles_id', 'steps', 'photo', 'stock_qty').where('bundles_items.bundles_id', bundless.id).then(bundle_items => {
+            return knex('bundles_items')
+            .join('items', 'items.id', 'bundles_items.item_id')
+            .select('items.id', 'item_qty', 'items.name', 'bundles_id', 'steps', 'photo', 'stock_qty')
+            .where('bundles_items.bundles_id', bundless.id)
+            .then(bundle_items => {
               bundless.bundle_items = bundle_items
               return bundles
             })
           })
           return Promise.all(bundlepromises)
         }).then(supplies => {
-          return knex('purchases_supplies').join('supplies', 'supplies.id', 'purchases_supplies.supplies_id').select('supplies_id', 'supplies_qty', 'supplies_measurement', 'completed', 'name').where('purchases_supplies.purchase_id', purchase.id).then(supplyList => {
+          return knex('purchases_supplies')
+          .join('supplies', 'supplies.id', 'purchases_supplies.supplies_id')
+          .select('supplies_id', 'supplies_qty', 'supplies_measurement', 'completed', 'name')
+          .where('purchases_supplies.purchase_id', purchase.id)
+          .then(supplyList => {
             purchase.supplies = supplyList
             return purchase
           })
         }).then(items => {
-          return knex('purchases_items').join('items', 'items.id', 'purchases_items.item_id').select('items.id', 'item_qty', 'items.name', 'completed', 'archived', 'steps', 'photo', 'purchases_items.updated_at', 'purchases_items.created_at', 'staff_id').where('purchases_items.purchase_id', purchase.id).then(itemsList => {
+          return knex('purchases_items')
+          .join('items', 'items.id', 'purchases_items.item_id')
+          .select('items.id', 'item_qty', 'items.name', 'completed', 'archived', 'steps', 'photo', 'purchases_items.updated_at', 'purchases_items.created_at', 'staff_id')
+          .where('purchases_items.purchase_id', purchase.id)
+          .then(itemsList => {
             purchase.items = itemsList
             return purchase
           })
@@ -44,6 +63,7 @@ function getAllPurchases(shopId) {
 }
 
 function createPurchases(shop_id, store_id, delivery_date, staff_id, purchase_date, receipt_id, service, tracking, items, bundles) {
+  console.log("shop_id", shop_id, "store_id", store_id, "delivery_date", delivery_date, "staff_id", staff_id, "purchase_date", purchase_date, "receipt_id", receipt_id, "service", service, "tracking", tracking, "items", items, "bundles", bundles);
   const toCreate = {}
   const newPurchase = {}
   shop_id
