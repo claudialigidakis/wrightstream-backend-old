@@ -14,11 +14,9 @@ const AllListingActive = (accessToken, accesTokenSecret, shop_id) => {
     userId = self[0].user_id
     return getStore(userId, accessToken, accesTokenSecret)
   }).then(storeInfo => {
-    console.log(storeInfo[0].shop_id);
     storeId = storeInfo[0].shop_id
     return etsyOAuthGet(`/shops/${storeId}/listings/active`, accessToken, accesTokenSecret)
   }).then(listingData => {
-    console.log(listingData);
     listingData = listingData.results
     const products = listingData.map(productListing => {
       const product = {}
@@ -41,7 +39,7 @@ const AllListingActive = (accessToken, accesTokenSecret, shop_id) => {
   })
 }
 
-const findAllPurchases = (accessToken, accesTokenSecret, shop_id) => {
+const findAllPurchases = function(accessToken, accesTokenSecret, shop_id){
   let userId;
   let storeId;
   let wrightStore;
@@ -56,119 +54,138 @@ const findAllPurchases = (accessToken, accesTokenSecret, shop_id) => {
     return etsyOAuthGet(`/shops/${storeId}/transactions`, accessToken, accesTokenSecret)
   }).then(data => {
     return createPurchaseList(data)
-  }).then(purchaseList => {
+  }).then(async function(purchaseList){
     let listedPurchaseData = []
-      for (var receipt in purchaseList) {
-        const purchase = {}
-        let purchaseTime = moment.utc(purchaseList[receipt][0].creation_tsz * 1000)
-        purchaseTime = moment(purchaseTime).format();
-        purchase.receipt_id = purchaseList[receipt][0].receipt_id
-        purchase.shop_id = shop_id
-        purchase.store_id = wrightStore
-        purchase.purchase_date = purchaseTime
-        purchase.service = null
-        purchase.tracking = null
-        purchase.delivery_date = null
-         listedPurchaseData.push(purchase)
+    for (var receipt in purchaseList) {
+      const purchase = {}
+      let purchaseTime = moment.utc(purchaseList[receipt][0].creation_tsz * 1000)
+      purchaseTime = moment(purchaseTime).format();
+      purchase.receipt_id = purchaseList[receipt][0].receipt_id
+      purchase.shop_id = shop_id
+      purchase.store_id = wrightStore
+      purchase.purchase_date = purchaseTime
+      purchase.service = null
+      purchase.tracking = null
+      purchase.delivery_date = null
+      purchase.items = []
+      purchase.bundles = []
+      for(const transaction of purchaseList[receipt]){
+        let item = {}
+        let bundle = {}
+
+        const product = await knex('products').where({listing_id: transaction.listing_id})
+        if(product){
+          const items = await knex('items').where({product_id: product[0].id}).first()
+          if(items){
+            item.id = items.id
+            item.item_qty = transaction.quantity
+            purchase.items.push(item)
+          }
+          else{
+            const bundles = await knex('bundles').where({product_id: product[0].id}).first()
+            if(bundles){
+              bundle.id = bundles[0].id
+              bundle.bundle_qty = transaction.quantity
+              purchase.bundles.push(bundle)
+            }
+          }
         }
-      return listedPurchaseData
+      }
+      listedPurchaseData.push(purchase)
+    }
+    const addedPurchases = listedPurchaseData.map(purchase => {
+      return addPurchases(purchase, wrightStore, shop_id)
     })
-    .then(purchaseData => {
-      const addedPurchases = purchaseData.map(purchase => {
-        return addPurchases(purchase, wrightStore, shop_id)
-      })
-      return Promise.all(addedPurchases)
-    })
+    return Promise.all(addedPurchases)
+  })
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 ///////////Helper Functions
 ////////////////////////////////////////////////////////////////////////////////////////////
 const addProducts = (products, store_id) => {
-  const promises = products.filter(product => {
-    return knex('products').where({store_id: store_id, listing_id: product.listing_id}).then(data => {
-      if (!data || data.length < 1) {
-        return (knex('products').insert({
-          name: "Etsy",
-          image: product.photo[0],
-          listing_id: product.listing_id,
-          quantity: product.quantity,
-          title: product.title,
-          store_id: store_id
-        }))
-      } else
-        return
-    })
+const promises = products.filter(product => {
+  return knex('products').where({store_id: store_id, listing_id: product.listing_id}).then(data => {
+    if (!data || data.length < 1) {
+      return (knex('products').insert({
+        name: "Etsy",
+        image: product.photo[0],
+        listing_id: product.listing_id,
+        quantity: product.quantity,
+        title: product.title,
+        store_id: store_id
+      }))
+    } else
+      return
   })
-  return Promise.all(promises)
+})
+return Promise.all(promises)
 }
 
 const addPurchases = (rawPurchases, wrightStore, shop_id) => {
-  let purchases = []
-  let items = []
-  let bundles = []
-  purchases.push(rawPurchases)
-  const promises = purchases.map(purchase => {
-    return knex('purchases').where({store_id: shop_id, receipt_id: purchase.receipt_id}).then(data => {
-      if (!data || data.length < 1) {
-        return purchaseModel.createPurchases(wrightStore, shop_id, purchase.delivery_date, purchase.staff_id, purchase.purchase_date, purchase.receipt_id, purchase.service, purchase.tracking, items, bundles)
-      } else
-        return
-    })
+console.log(rawPurchases);
+let purchases = []
+let items = []
+let bundles = []
+purchases.push(rawPurchases)
+const promises = purchases.map(purchase => {
+  return knex('purchases').where({store_id: shop_id, receipt_id: purchase.receipt_id}).then(data => {
+    if (!data || data.length < 1) {
+      return purchaseModel.createPurchases(wrightStore, shop_id, purchase.delivery_date, purchase.staff_id, purchase.purchase_date, purchase.receipt_id, purchase.service, purchase.tracking, purchase.items, purchase.bundles)
+    } else
+      return
   })
-  return Promise.all(promises)
+})
+return Promise.all(promises)
 }
 
 const createPurchaseList = (EtsyTransactions) => {
-  let transactions = []
-  let products;
-  return EtsyTransactions.results.reduce((acc, ele) => {
-    if (acc.hasOwnProperty(ele.receipt_id)) {
-      // transactions.push(ele.product_data)
-      acc[ele.receipt_id].push(ele)
-    } else {
-      acc[ele.receipt_id] = [ele]
-      // transactions.push(ele.product_data)
-      // acc[ele.receipt_id]= ele
-    }
-    return acc
-  }, {})
+let transactions = []
+let products;
+return EtsyTransactions.results.reduce((acc, ele) => {
+  if (acc.hasOwnProperty(ele.receipt_id)) {
+    acc[ele.receipt_id].push(ele)
+  } else {
+    acc[ele.receipt_id] = [ele]
+  }
+  return acc
+}, {})
 }
 
 const findEtsyStore = (shops_id) => {
-  return knex('stores').where({shops_id, name: 'Etsy'}).first()
+return knex('stores').where({shops_id, name: 'Etsy'}).first()
 }
 
 const getSelf = (accessToken, accessTokenSecret) => {
-  return new Promise((resolve, reject) => {
-    etsyOAuth.get('https://openapi.etsy.com/v2/users/__SELF__', accessToken, accessTokenSecret, function(err, data, response) {
-      if (err)
-        return reject(err)
-      resolve(JSON.parse(data).results)
-    })
+return new Promise((resolve, reject) => {
+  etsyOAuth.get('https://openapi.etsy.com/v2/users/__SELF__', accessToken, accessTokenSecret, function(err, data, response) {
+    if (err)
+      return reject(err)
+    resolve(JSON.parse(data).results)
   })
+})
 }
 
 const getStore = (userId, accessToken, accessTokenSecret) => {
-  return new Promise((resolve, reject) => {
-    etsyOAuth.get(`https://openapi.etsy.com/v2/users/${userId}/shops`, accessToken, accessTokenSecret, function(err, data, response) {
-      if (err)
-        return reject(err)
-      resolve(JSON.parse(data).results)
-    })
+return new Promise((resolve, reject) => {
+  etsyOAuth.get(`https://openapi.etsy.com/v2/users/${userId}/shops`, accessToken, accessTokenSecret, function(err, data, response) {
+    if (err)
+      return reject(err)
+    resolve(JSON.parse(data).results)
   })
+})
 }
 
 const etsyOAuthGet = (path, accessToken, accesTokenSecret) => new Promise((resolve, reject) => {
-  etsyOAuth.get(`https://openapi.etsy.com/v2${path}`, accessToken, accesTokenSecret, function(err, data, response) {
-    if (err)
-      return reject(err)
-    resolve(JSON.parse(data))
-  })
+etsyOAuth.get(`https://openapi.etsy.com/v2${path}`, accessToken, accesTokenSecret, function(err, data, response) {
+  if (err)
+    return reject(err)
+  resolve(JSON.parse(data))
+})
 })
 
 module.exports = {
-  getSelf,
-  AllListingActive,
-  findAllPurchases
+getSelf,
+AllListingActive,
+findAllPurchases
 }

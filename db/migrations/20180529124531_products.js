@@ -3,7 +3,7 @@ exports.up = function(knex, Promise) {
     table.increments();
     table.string('name').notNullable();
     table.string('image').notNullable();
-    table.integer('listing_id').notNullable();
+    table.bigInteger('listing_id').notNullable();
     table.integer('quantity').notNullable();
     table.string('title').notNullable();
     table.integer('store_id').notNullable().references('stores.id');
