@@ -16,10 +16,10 @@ function createPurchaseBundle(purchase_id, bundle_id, bundle_qty, completed, sta
     ? toCreate.staff_id = staff_id
     : null
   completed || completed === false
-    ? toUpdate.completed = completed
+    ? toCreate.completed = completed
     : null
   bundle_qty || bundle_qty === 0
-    ? toUpdate.bundle_qty = bundle_qty
+    ? toCreate.bundle_qty = bundle_qty
     : null
   return (knex('purchases_bundles').insert(toCreate).returning('*'))
 }

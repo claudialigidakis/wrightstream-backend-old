@@ -16,7 +16,6 @@ function AllListingActive(req, res, next) {
   const { accessToken, accessTokenSecret } = req.etsyTokens
   etsyModel.AllListingActive(accessToken, accessTokenSecret, shop_id)
   .then(response => {
-    console.log(response);
     res.send(response)
   })
   .catch(next)
@@ -28,6 +27,7 @@ function findAllPurchases(req, res, next) {
   const { accessToken, accessTokenSecret } = req.etsyTokens
   etsyModel.findAllPurchases(accessToken, accessTokenSecret, shop_id)
   .then(response => {
+    console.log(response);
     res.send(response)
   })
   .catch(next)

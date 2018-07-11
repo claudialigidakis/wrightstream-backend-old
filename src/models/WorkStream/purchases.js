@@ -43,7 +43,7 @@ function getAllPurchases(shopId) {
   })
 }
 
-function createPurchases(shop_id, store_id, delivery_date, staff_id, purchase_date, order_id, service, tracking, items, bundles) {
+function createPurchases(shop_id, store_id, delivery_date, staff_id, purchase_date, receipt_id, service, tracking, items, bundles) {
   const toCreate = {}
   const newPurchase = {}
   shop_id
@@ -57,6 +57,9 @@ function createPurchases(shop_id, store_id, delivery_date, staff_id, purchase_da
     : null
   staff_id
     ? toCreate.staff_id = staff_id
+    : null
+  receipt_id
+    ? toCreate.receipt_id = receipt_id
     : null
   purchase_date
     ? toCreate.purchase_date = purchase_date
@@ -95,8 +98,11 @@ function createPurchases(shop_id, store_id, delivery_date, staff_id, purchase_da
     } else
       return itemsData
   }).then(purchaseItemsBundles => {
-    return Helper.orderPredictor({items, bundles})
+    if(items || bundles) {
+      return Helper.orderPredictor({items, bundles})
+    } else return purchaseItemsBundles
   }).then(supplies => {
+    if(supplies && !supplies.items && ! supplies.bundles){
     const purchaseSupplies = supplies.map(supply => {
       return knex('purchases_supplies').insert({
         'purchase_id': newPurchase.createdPurchase[0].id,
@@ -106,6 +112,8 @@ function createPurchases(shop_id, store_id, delivery_date, staff_id, purchase_da
       }).returning('*')
     })
     return Promise.all(purchaseSupplies)
+  }
+  else return supplies
   }).then(data => {
     return newPurchase
   })
@@ -115,7 +123,7 @@ function removePurchases(purchaseId) {
   return (knex('purchases').where({id: purchaseId}).del())
 }
 
-function updatePurchases(purchaseId, delivery_date, store_id, shop_id, staff_id, quality_check, pick_up, purchase_date, service, tracking, notes) {
+function updatePurchases(purchaseId, delivery_date, store_id, shop_id, staff_id, quality_check, archived, pick_up, purchase_date, service, tracking, notes) {
   const toUpdate = {}
   store_id
     ? toUpdate.store_id = store_id
@@ -123,7 +131,7 @@ function updatePurchases(purchaseId, delivery_date, store_id, shop_id, staff_id,
   shop_id
     ? toUpdate.shop_id = shop_id
     : null
-  staff_id || staff_id === null
+  staff_id === "null" || staff_id
     ? toUpdate.staff_id = staff_id
     : null
   purchase_date
@@ -134,6 +142,9 @@ function updatePurchases(purchaseId, delivery_date, store_id, shop_id, staff_id,
     : null
   quality_check || quality_check === false
     ? toUpdate.quality_check = quality_check
+    : null
+  archived || archived === false
+    ? toUpdate.archived = archived
     : null
   pick_up || pick_up === false
     ? toUpdate.pick_up = pick_up

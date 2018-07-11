@@ -1,9 +1,13 @@
 const knex = require('../../../db')
 
 function getAllBundles(shopId) {
-  return knex('bundles').where({shop_id: shopId, archived: false}).then(bundles => {
+  return knex('bundles').where({shop_id: shopId, archived: false})
+  .then(bundles => {
     const promises = bundles.map(bundle => {
-      return knex('bundles_items').join('items', 'items.id', 'bundles_items.item_id').where('bundles_items.bundles_id', bundle.id).then(item => {
+      return knex('bundles_items')
+      .join('items', 'items.id', 'bundles_items.item_id')
+      .where('bundles_items.bundles_id', bundle.id)
+      .then(item => {
         bundle.items = item
         return bundle
       })

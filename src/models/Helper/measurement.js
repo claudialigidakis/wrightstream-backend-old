@@ -196,13 +196,10 @@ function itemSupplies(items) {
 }
 
 function createItemsList(suppliesList) {
-  return suppliesList.reduce((acc, ele) => [
-    ...acc,
-    ...ele
-  ]).map(supply => supply.supply).reduce((acc, ele) => [
-    ...acc,
-    ...ele
-  ]).reduce((acc, ele) => {
+  return suppliesList.reduce((acc, ele) => [...acc,...ele])
+  .map(supply => supply.supply)
+  .reduce((acc, ele) => [...acc,...ele])
+  .reduce((acc, ele) => {
     if (acc.hasOwnProperty(ele.id)) {
       let measure_type;
       let newSuppliesNeeded = ele.qty * ele.item_qty
