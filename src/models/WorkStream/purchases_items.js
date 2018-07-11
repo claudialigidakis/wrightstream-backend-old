@@ -32,7 +32,7 @@ function updatePurchaseItem(purchaseId, item_id, item_qty, completed, staff_id) 
   item_qty
     ? toUpdate.item_qty = item_qty
     : null
-  staff_id
+  staff_id || staff_id === null
     ? toUpdate.staff_id = staff_id
     : null
   return (knex('purchases_items').update(toUpdate).where({purchase_id: purchaseId, item_id: item_id}).returning('*'))
