@@ -7,7 +7,8 @@ exports.up = function(knex, Promise) {
     table.date('purchase_date').nullable();
     table.text('notes').nullable();
     table.boolean('quality_check').defaultsTo(false);
-    table.integer('order_id').nullable();
+    table.boolean('archived').defaultsTo(false);
+    table.integer('receipt_id').nullable();
     table.boolean('pick_up').nullable();
     table.string('service').nullable();
     table.string('tracking').nullable();

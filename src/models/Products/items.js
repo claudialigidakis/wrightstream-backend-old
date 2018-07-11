@@ -3,7 +3,10 @@ const knex = require('../../../db')
 function getAllItems(shopId) {
   return knex('items').where({shop_id: shopId, archived: false}).then(items => {
     const promises = items.map(item => {
-      return knex('items_supplies').join('supplies', 'supplies.id', 'items_supplies.supplies_id').where('items_supplies.item_id', item.id).then(supply => {
+      return knex('items_supplies')
+      .join('supplies', 'supplies.id', 'items_supplies.supplies_id')
+      .where('items_supplies.item_id', item.id)
+      .then(supply => {
         item.supplies = supply
         return item
       })
@@ -15,7 +18,10 @@ function getAllItems(shopId) {
 function getAllArchivedItems(shopId) {
   return knex('items').where({shop_id: shopId, archived: true}).then(items => {
     const promises = items.map(item => {
-      return knex('items_supplies').join('supplies', 'supplies.id', 'items_supplies.supplies_id').where('items_supplies.item_id', item.id).then(supply => {
+      return knex('items_supplies')
+      .join('supplies', 'supplies.id', 'items_supplies.supplies_id')
+      .where('items_supplies.item_id', item.id)
+      .then(supply => {
         item.supplies = supply
         return item
       })

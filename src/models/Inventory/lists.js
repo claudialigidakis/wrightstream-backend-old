@@ -3,15 +3,21 @@ const knex = require('../../../db')
 function getAllLists(shopId) {
   return knex('lists').where({shop_id: shopId}).then(lists => {
     const promises = lists.map(list => {
-      return knex('lists_items').join('items', 'items.id', 'lists_items.item_id').select('lists_items.item_id', 'lists_items.item_qty', 'items.name').where('lists_items.list_id', list.id).then(items => {
+      return knex('lists_items').join('items', 'items.id', 'lists_items.item_id')
+      .select('lists_items.item_id', 'lists_items.item_qty', 'items.name')
+      .where('lists_items.list_id', list.id)
+      .then(items => {
         list.item = items
         return list
       }).then(list => {
-        return knex('lists_bundles').join('bundles', 'bundles.id', 'lists_bundles.bundle_id').select('lists_bundles.bundle_id', 'lists_bundles.bundle_qty', 'bundles.name').where('lists_bundles.list_id', list.id).then(bundles => {
+        return knex('lists_bundles')
+        .join('bundles', 'bundles.id', 'lists_bundles.bundle_id')
+        .select('lists_bundles.bundle_id', 'lists_bundles.bundle_qty', 'bundles.name')
+        .where('lists_bundles.list_id', list.id)
+        .then(bundles => {
           list.bundles = bundles
           return list
         })
-
       })
     })
     return Promise.all(promises)
