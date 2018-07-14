@@ -84,7 +84,7 @@ const findAllPurchases = function(accessToken, accesTokenSecret, shop_id){
           else{
             const bundles = await knex('bundles').where({product_id: product[0].id}).first()
             if(bundles){
-              bundle.id = bundles[0].id
+              bundle.id = bundles.id
               bundle.bundle_qty = transaction.quantity
               purchase.bundles.push(bundle)
             }
@@ -123,7 +123,6 @@ return Promise.all(promises)
 }
 
 const addPurchases = (rawPurchases, wrightStore, shop_id) => {
-console.log(rawPurchases);
 let purchases = []
 let items = []
 let bundles = []

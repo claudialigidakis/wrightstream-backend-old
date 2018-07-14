@@ -6,9 +6,14 @@ function getAllInventorySupplies(shopId) {
 
 function getAllInventoryProducts(shopId) {
   let productData = {}
-  return knex('items').select('items.name', 'items.stock_qty', 'items.id').where({'items.shop_id': shopId}).then(items => {
+  return knex('items')
+  .select('items.name', 'items.stock_qty', 'items.id')
+  .where({'items.shop_id': shopId})
+  .then(items => {
     productData.items = items
-    return knex('bundles').select('bundles.name', 'bundles.stock_qty', 'bundles.id').where({'bundles.shop_id': shopId})
+    return knex('bundles')
+    .select('bundles.name', 'bundles.stock_qty', 'bundles.id')
+    .where({'bundles.shop_id': shopId})
   }).then(bundles => {
     productData.bundles = bundles
     return productData

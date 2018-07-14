@@ -75,8 +75,9 @@ function predictor(body) {
 }
 
 function orderPredictor(body) {
-  const items = body.items
-  const bundles = body.bundles
+  console.log(body);
+  const items = body.items || body.neededItems
+  const bundles = body.bundles || body.neededBundles
   let comBunSupp;
   let empty = {
     "items": [],
