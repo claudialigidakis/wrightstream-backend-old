@@ -32,11 +32,9 @@ function wrightStream(shopId) {
 function orderPredictor(body) {
   const items = body.items || body.neededItems
   const bundles = body.bundles || body.neededBundles
-  let comBunSupp;
-  let empty = {
-    "items": [],
-    "bundles": []
-  }
+  let comBunSupp
+  let empty = []
+
   if (!items.length >= 1 && !bundles.length >= 1) {
     return Promise.resolve(empty)
   }
