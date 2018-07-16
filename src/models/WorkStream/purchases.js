@@ -63,7 +63,6 @@ function getAllPurchases(shopId) {
 }
 
 function createPurchases(shop_id, store_id, delivery_date, staff_id, purchase_date, receipt_id, service, tracking, items, bundles) {
-  console.log("shop_id", shop_id, "store_id", store_id, "delivery_date", delivery_date, "staff_id", staff_id, "purchase_date", purchase_date, "receipt_id", receipt_id, "service", service, "tracking", tracking, "items", items, "bundles", bundles);
   const toCreate = {}
   const newPurchase = {}
   shop_id

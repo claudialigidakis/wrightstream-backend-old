@@ -29,54 +29,9 @@ function wrightStream(shopId) {
 ////////Predictor routes
 //////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////
-function predictor(body) {
-  const items = body.items
-  const bundles = body.bundles
-  let comBunSupp;
-  let empty = {
-    "items": [],
-    "bundles": []
-  }
-
-  if (!items.length >= 1 && !bundles.length >= 1) {
-    return Promise.resolve(empty)
-  }
-
-  if (items.length >= 1 && !bundles.length >= 1) {
-    return itemSupplies(items).then(suppliesList => {
-      return createItemsList(suppliesList)
-    }).then(addedSupplies => {
-      return presentData(addedSupplies)
-    })
-  } else if (bundles.length >= 1 && !items.length >= 1) {
-    return bundleItems(bundles).then(data => {
-      return bundleSupplies(data, bundles)
-    }).then(bundleSupplies => {
-      return createBundleSuppliesList(bundleSupplies)
-    }).then(completedBundleSupplies => {
-      return presentData(completedBundleSupplies)
-    })
-  } else if (items.length >= 1 && bundles.length >= 1) {
-    return bundleItems(bundles).then(data => {
-      return bundleSupplies(data, bundles)
-    }).then(bundleSupplies => {
-      return createBundleSuppliesList(bundleSupplies)
-    }).then(completedBundleSupplies => {
-      comBunSupp = completedBundleSupplies
-      return itemSupplies(items)
-    }).then(suppliesList => {
-      return createItemsList(suppliesList)
-    }).then(lists => {
-      return combine(lists, comBunSupp)
-    }).then(addedSupplies => {
-      return presentData(addedSupplies)
-    })
-  }
-}
-
 function orderPredictor(body) {
-  const items = body.items
-  const bundles = body.bundles
+  const items = body.items || body.neededItems
+  const bundles = body.bundles || body.neededBundles
   let comBunSupp;
   let empty = {
     "items": [],
@@ -236,7 +191,9 @@ function createItemsList(suppliesList) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function createBundleSuppliesList(bundleSupplies) {
-  return bundleSupplies.map(supply => supply.supply).reduce((acc, ele) => [
+  return bundleSupplies
+  .map(supply => supply.supply)
+  .reduce((acc, ele) => [
     ...acc,
     ...ele
   ]).reduce((acc, ele) => {
@@ -299,13 +256,19 @@ function bundleItems(bundles) {
 }
 
 function bundleSupplies(bundleItems, bundles) {
-  let bundledItems = bundleItems.map(ele => ele.item).reduce((acc, ele) => [
+  let bundledItems = bundleItems
+    .map(ele => ele.item)
+    .reduce((acc, ele) => [
     ...acc,
     ...ele
   ])
   return Promise.resolve(bundledItems).then(items => {
     const promises = items.map(item => {
-      return knex('items_supplies').join('supplies', 'supplies.id', 'items_supplies.supplies_id').where('items_supplies.item_id', item.item_id).select('items_supplies.qty', 'items_supplies.qty_measure', 'supplies.measure_type', 'supplies.name', 'supplies.id').then(supplies => {
+      return knex('items_supplies')
+      .join('supplies', 'supplies.id', 'items_supplies.supplies_id')
+      .where('items_supplies.item_id', item.item_id)
+      .select('items_supplies.qty', 'items_supplies.qty_measure', 'supplies.measure_type', 'supplies.name', 'supplies.id')
+      .then(supplies => {
         item.supply = supplies.map(ele => ({
           ...ele,
           item_qty: items.find(ele => ele.item_id === item.item_id).item_qty,
@@ -323,10 +286,55 @@ function bundleSupplies(bundleItems, bundles) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-function supplyCompare(addedSupply, shopId) {
-  console.log(addedSupply);
-  return addedSupply
-
+const supplyCompare = async function(addedSupply, shopId){
+  // console.log(typeof addedSupply["1"], addedSupply["1"]);
+  // const newDBSupplies = await Promise.all(addedSupply.map(supply => {
+  //   return knex('supplies')
+  //   .where({id: supply.id})
+  // }))
+  // const dbSupplies = newDBSupplies.reduce((acc, ele) => [...acc,...ele])
+  //MAPPING OVER AND MATCHING SUPPLIES
+  // let bundlePromiseArray = []
+  // for(const supply of addedSupply){
+  //   console.log(supply);
+  // const matchedSupply = dbSupplies.find(ele => ele.id === supply.supply_id)
+  // let newMeasureType;
+  // let newSupplyStock;
+  //
+  // if(matchedSupply.measure_type === 'unit'){
+  //   newMeasureType = 'unit'
+  //   newSupplyStock = parseInt(matchedSupply.stock_qty) - supply.supply_qty
+  // }
+  // else if (matchedSupply.measure_type === 'volume'){
+  //   newMeasureType = 'tsp'
+  //   matchedSupply.stock_qty = convert(parseInt(matchedSupply.stock_qty)).from(matchedSupply.stock_qty_measure_type).to('tsp')
+  //   supply.supply_qty = convert(supply.supply_qty).from(supply.supply_measure_type).to('tsp')
+  //   newSupplyStock = parseInt(matchedSupply.stock_qty) - supply.supply_qty
+  // }
+  // else if (matchedSupply.measure_type === 'length'){
+  //   newMeasureType = 'ft'
+  //   matchedSupply.stock_qty = convert(parseInt(matchedSupply.stock_qty)).from(matchedSupply.stock_qty_measure_type).to('ft')
+  //   supply.supply_qty = convert(supply.supply_qty).from(supply.supply_measure_type).to('ft')
+  //   newSupplyStock = parseInt(matchedSupply.stock_qty) - supply.supply_qty
+  // }
+  //   else if (matchedSupply.measure_type === 'mass'){
+  //     newMeasureType = 'oz'
+  //     matchedSupply.stock_qty = convert(parseInt(matchedSupply.stock_qty)).from(matchedSupply.stock_qty_measure_type).to('oz')
+  //     supply.supply_qty = convert(supply.supply_qty).from(supply.supply_measure_type).to('oz')
+  //     newSupplyStock = parseInt(matchedSupply.stock_qty) - supply.supply_qty
+  //   }
+  // if (matchedSupply.measure_type !== 'unit') {
+  //   convertedSupplies = convert(newSupplyStock).from(newMeasureType).toBest({
+  //     exclude: ['fl-oz', 'ft3', 'yd3', 'in3']
+  //   })
+  //   newMeasureType = convertedSupplies.unit
+  //   newSupplyStock = Number(convertedSupplies.val)
+  // }
+  // const updateSupplyArray = knex('supplies').where({id: matchedSupply.id}).update({stock_qty: newSupplyStock, stock_qty_measure_type: newMeasureType})
+  // bundlePromiseArray.push(updateSupplyArray)
+  // }
+  // Promise.all(bundlePromiseArray)
+    return addedSupply
 }
 
 
@@ -355,33 +363,6 @@ function combine(lists, comBunSupp) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-function presentData(addedSupplies) {
-  let data = {}
-  for (var i in addedSupplies) {
-    if (addedSupplies[i].new_measure !== 'unit') {
-      convertedSupplies = convert(addedSupplies[i].neededSupplies).from(addedSupplies[i].new_measure).toBest({
-        exclude: ['fl-oz', 'ft3', 'yd3', 'in3']
-      })
-      convertedSupplies.val = Number(convertedSupplies.val.toPrecision(3))
-      convertedSupplies.val <= 1
-        ? data[addedSupplies[i].name] = `${convertedSupplies.val} ${convertedSupplies.singular}`
-        : null
-      convertedSupplies.val > 1
-        ? data[addedSupplies[i].name] = `${convertedSupplies.val} ${convertedSupplies.plural}`
-        : null
-    } else {
-      data[addedSupplies[i].name] = Number(addedSupplies[i].neededSupplies)
-      addedSupplies[i].neededSupplies <= 1
-        ? data[addedSupplies[i].name] = `${Number(addedSupplies[i].neededSupplies)} unit`
-        : null
-      addedSupplies[i].neededSupplies > 1
-        ? data[addedSupplies[i].name] = `${Number(addedSupplies[i].neededSupplies)} units`
-        : null
-    }
-  }
-  return data
-}
-
 function orderData(addedSupplies) {
   let supplies = []
   let data = {}
@@ -408,7 +389,6 @@ function orderData(addedSupplies) {
 
 module.exports = {
   wrightStream,
-  predictor,
   orderPredictor,
   compareOrderPredictor
 }

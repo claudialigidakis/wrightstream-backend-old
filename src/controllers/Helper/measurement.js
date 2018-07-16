@@ -25,15 +25,6 @@ function wrightStream(req, res, next) {
   }).catch(next)
 }
 
-function predictor(req, res, next) {
-  if (!req.body) {
-    return next({status: 400, message: 'Need proper supplies inputs'})
-  }
-  helperModel.predictor(req.body).then(data => {
-    res.status(200).send({data})
-  }).catch(next)
-}
-
 function orderPredictor(req, res, next) {
   if (!req.body) {
     return next({status: 400, message: 'Need proper supplies inputs'})
@@ -57,7 +48,6 @@ module.exports = {
   length,
   mass,
   wrightStream,
-  predictor,
   orderPredictor,
   compareOrderPredictor
 }
