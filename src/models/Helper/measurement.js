@@ -81,11 +81,8 @@ function orderPredictor(body) {
 function compareOrderPredictor(body, shopId) {
   const items = body.items
   const bundles = body.bundles
-  let comBunSupp;
-  let empty = {
-    "items": [],
-    "bundles": []
-  }
+  let comBunSupp
+  let empty = []
 
   if (!items.length >= 1 && !bundles.length >= 1) {
     return Promise.resolve(empty)
