@@ -3,7 +3,11 @@ const knex = require('../../../db')
 function getPastStaff(shopId) {
   return knex('staff').where({shops_id: shopId}).then(staff => {
     const promises = staff.map(employee => {
-      return knex('purchases').innerJoin('purchases_statuses', 'purchases_statuses.purchase_id', 'purchases.id').where({'purchases_statuses.staff_id': employee.id}).whereNot({'purchases_statuses.completed': false}).select('purchases.id as id', 'purchase_date', 'order_id', 'status_id', 'created_at', 'updated_at', 'purchases_statuses.staff_id').then(status => {
+      return knex('purchases')
+      .innerJoin('purchases_statuses', 'purchases_statuses.purchase_id', 'purchases.id')
+      .where({'purchases_statuses.staff_id': employee.id})
+      .whereNot({'purchases_statuses.completed': false})
+      .select('purchases.id as id', 'purchase_date', 'receipt_id', 'status_id', 'created_at', 'updated_at', 'purchases_statuses.staff_id').then(status => {
         employee.completed = status
         return employee
       })

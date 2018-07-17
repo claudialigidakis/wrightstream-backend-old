@@ -56,43 +56,16 @@ function createList(body, shopId) {
 }
 
 function removeList(listId) {
-  return (knex('lists_items').where({list_id: listId}).del()).then(lists => {
-    knex('lists_bundles').where({list_id: listId}).del()
-  }).then(data => {
-    return (knex('lists').where({id: listId}).del())
+  return (knex('lists_items')
+  .where({list_id: listId})
+  .del())
+  .then(lists => {
+    return knex('lists_bundles')
+    .where({list_id: listId})
+    .del()
   })
-}
-
-function updateList(listId, body) {
-  const toUpdate = {}
-  body.name
-    ? toUpdate.name = body.name
-    : null
-  body.deleted || body.deleted === false
-    ? toUpdate.deleted = body.deleted
-    : null
-  return (knex('lists').update(toUpdate).where({id: listId}).returning('*')).then(data => {
-    if (body.items) {
-      return (knex('lists_items').where({list_id: listId}).del()).then(newdata => {
-        const newItems = body.items
-        const promiseItems = newItems.map(ele => {
-          return (knex('lists_items').insert({list_id: listId, item_id: ele.item_id, item_qty: ele.item_qty}).returning('*'))
-        })
-        return Promise.all(promiseItems)
-      })
-    } else
-      return data
-  }).then(listsBundles => {
-    if (body.bundles) {
-      return (knex('lists_bundles').where({list_id: listId}).del()).then(bundles => {
-        const newBundles = body.bundles
-        const promiseBundles = newBundles.map(ele => {
-          return (knex('lists_bundles').insert({list_id: listId, bundle_id: ele.bundle_id, bundle_qty: ele.bundle_qty}).returning('*'))
-        })
-        return Promise.all(promiseBundles)
-      })
-    } else
-      return listsBundles
+  .then(data => {
+    return (knex('lists').where({id: listId}).del())
   })
 }
 
@@ -100,6 +73,5 @@ module.exports = {
   getOneList,
   getAllLists,
   createList,
-  removeList,
-  updateList
+  removeList
 }

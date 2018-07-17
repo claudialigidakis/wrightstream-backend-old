@@ -23,7 +23,7 @@ function createOrder(req, res, next) {
     return next({status: 400, message: 'Need proper order inputs'})
   }
   ordersModel.createOrder(parseInt(req.params.shopId), req.body).then(data => {
-    res.status(200).send({data})
+    res.status(201).send({data})
   }).catch(next)
 }
 

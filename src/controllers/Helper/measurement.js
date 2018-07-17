@@ -30,7 +30,7 @@ function orderPredictor(req, res, next) {
     return next({status: 400, message: 'Need proper supplies inputs'})
   }
   helperModel.orderPredictor(req.body).then(data => {
-    res.status(200).send({data})
+    res.status(201).send({data})
   }).catch(next)
 }
 
@@ -39,7 +39,7 @@ function compareOrderPredictor(req, res, next) {
     return next({status: 400, message: "Need proper supplies inputs"})
   }
   helperModel.compareOrderPredictor(req.body, req.params.shopId).then(data => {
-    res.status(200).send({data})
+    res.status(201).send({data})
   }).catch(next)
 }
 
