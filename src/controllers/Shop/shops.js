@@ -83,12 +83,13 @@ function createStaff(req, res, next) {
   shopModel.createStaff(req.body, parseInt(req.params.shopId))
   .then(data => {
     delete data.password
-    res.status(200).send({data})
+    res.status(201).send({data})
   })
   .catch(next)
 }
 
 function updateStaff(req, res, next) {
+  console.log(req.body);
   if (!req.body.password) {
     return next({ status: 400, message: 'Bad request'});
   }

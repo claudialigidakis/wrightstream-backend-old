@@ -2,9 +2,6 @@ const express = require('express')
 const router = express.Router()
 const purchaseItemsController = require('../../controllers/WorkStream/purchases_items')
 
-
-
-
 router.get('/:purchase_id/allPurchaseItems', purchaseItemsController.getAllPurchaseItem)
 router.post('/:purchaseId', purchaseItemsController.createPurchaseItem)
 router.get('/:purchase_id/:item_id', purchaseItemsController.getOnePurchaseItem)

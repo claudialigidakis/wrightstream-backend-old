@@ -23,7 +23,7 @@ function createCategories(req, res, next) {
     return next({status: 400, message: 'Need proper staff inputs'})
   }
   categoiesModel.createCategories(req.body.name, parseInt(req.params.shopId)).then(data => {
-    res.status(200).send({data})
+    res.status(201).send({data})
   }).catch(next)
 }
 

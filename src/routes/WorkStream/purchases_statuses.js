@@ -2,8 +2,6 @@ const express = require('express')
 const router = express.Router()
 const purchaseStatusController = require('../../controllers/WorkStream/purchases_statuses')
 
-
-
 router.get('/:purchase_id/allPurchaseStatuses', purchaseStatusController.getAllPurchaseStatuses)
 router.post('/:purchase_id', purchaseStatusController.createPurchaseStatus)
 router.get('/:purchase_id/:status_id', purchaseStatusController.getOnePurchaseStatus)

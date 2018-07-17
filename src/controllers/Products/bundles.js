@@ -32,7 +32,7 @@ function createBundles(req, res, next) {
     return next({status: 400, message: 'Need proper bundle inputs'})
   }
   bundlesModel.createBundles(req.body, parseInt(req.params.shopId)).then(data => {
-    res.status(200).send({data})
+    res.status(201).send({data})
   }).catch(next)
 }
 
@@ -45,20 +45,10 @@ function updateBundles(req, res, next) {
   }).catch(next)
 }
 
-function removeBundles(req, res, next) {
-  if (!req.params.bundleId) {
-    return next({status: 400, message: 'Need to know indicated bundle'})
-  }
-  bundlesModel.removeBundles(parseInt(req.params.bundleId)).then(function(data) {
-    res.status(200).send({data})
-  }).catch(next)
-}
-
 module.exports = {
   getOneBundle,
   getAllArchivedBundles,
   getAllBundles,
   createBundles,
-  removeBundles,
   updateBundles
 }

@@ -57,12 +57,6 @@ function createBundles(body, shopId) {
   })
 }
 
-function removeBundles(bundleId) {
-  return (knex('bundles_items').where({bundles_id: bundleId}).del()).then(data => {
-    return (knex('bundles').where({id: bundleId}).del())
-  })
-}
-
 function updateBundles(bundleId, name, archived, stock, categoryId, productId, steps, items, photo) {
   const toUpdate = {}
   name
@@ -104,6 +98,5 @@ module.exports = {
   getAllArchivedBundles,
   getAllBundles,
   createBundles,
-  removeBundles,
   updateBundles
 }
