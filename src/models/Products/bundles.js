@@ -34,16 +34,16 @@ function getAllArchivedBundles(shopId) {
 
 function createBundles(body, shopId) {
   let stock = body.stock || 0
-  let category = parseInt(body.categoryId) || null
-  let product = body.productId || null
+  let categoryId = body.categoryId || null
+  let productId = body.productId || null
   let photo = body.photo || null
   return (knex('bundles').insert({
     name: body.name,
-    shop_id: shopId,
     stock_qty: stock,
     steps: body.steps,
-    category_id: category,
-    product_id: product,
+    shop_id: shopId,
+    category_id: categoryId,
+    product_id: productId,
     photo: photo
   }).returning('*')).then(bundle => {
     if (body.items) {
@@ -71,7 +71,7 @@ function updateBundles(bundleId, name, archived, stock, categoryId, productId, s
   categoryId
     ? toUpdate.category_id = categoryId
     : null
-  productId
+  productId || productId === null
     ? toUpdate.product_id = productId
     : null
   steps
@@ -84,7 +84,7 @@ function updateBundles(bundleId, name, archived, stock, categoryId, productId, s
     ? toUpdate.archived = archived
     : null
   stock || stock === 0
-    ? toUpdate.stock = stock
+    ? toUpdate.stock_qty = stock
     : null
   return (knex('bundles').update(toUpdate).where({id: bundleId}).returning('*')).then(data => {
     if (items) {
