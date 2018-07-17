@@ -73,7 +73,7 @@ function updateItems(itemId, name, archived, stock, steps, categoryId, productId
   categoryId
     ? toUpdate.category_id = categoryId
     : null
-  productId
+  productId || productId === null
     ? toUpdate.product_id = productId
     : null
   steps
