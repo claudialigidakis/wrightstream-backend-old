@@ -16,5 +16,11 @@ Back-end for https://github.com/wrightaim/wrightstream
 ## ERD
 ![alt text](http://i65.tinypic.com/2egdxed.png)
 
+## Running the tests
+
+Go to the postman link and review tests being run on site
+
 ### Postman Documentation
-Routes: https://documenter.getpostman.com/view/4516090/RWaNQ6fV
+
+Postman has automatic tests built in to test all routes and their BigO is documented too.
+    $ https://documenter.getpostman.com/view/4516090/RWaNQ6fV
