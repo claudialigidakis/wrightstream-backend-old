@@ -13,9 +13,6 @@ Back-end for https://github.com/wrightaim/wrightstream
 - `npm run knex migrate:latest`
 - `npm run knex seed:run`
 
-## ERD
-![alt text](http://i65.tinypic.com/2egdxed.png)
-
 ## Running the tests
 
 Go to the postman link and review tests being run on site
@@ -24,3 +21,6 @@ Go to the postman link and review tests being run on site
 
 Postman has already created tests built to test all routes. The documentation will show the results and I've also documented the BigO for each route too.
 Routes: https://documenter.getpostman.com/view/4516090/RWaNQ6fV
+
+## ERD
+![alt text](http://i65.tinypic.com/2egdxed.png)
