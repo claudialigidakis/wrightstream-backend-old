@@ -1,6 +1,5 @@
 # WrightStream (Back-end)
 Deployed version: http://wrightstream.com/
-
 Back-end for https://github.com/wrightaim/wrightstream
 
 ### Installation
@@ -10,9 +9,12 @@ Back-end for https://github.com/wrightaim/wrightstream
 
 ### Database Setup
 - Make sure you have PostgreSQL
-- Create a database on your local called `wrightstream_dev`
+- Create a database on your local called `wrightstream_db_dev`
 - `npm run knex migrate:latest`
 - `npm run knex seed:run`
 
+## ERD
+![alt text](http://i65.tinypic.com/2egdxed.png)
+
 ### Postman Documentation
-Routes: https://documenter.getpostman.com/view/4516090/RW8FFmFf#7d87909f-4bf7-4710-a4d0-01c143a4194d
+Routes: https://documenter.getpostman.com/view/4516090/RWaNQ6fV
